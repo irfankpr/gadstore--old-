@@ -1,0 +1,65 @@
+from datetime import datetime
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+
+class MyAccountManager(BaseUserManager):
+    def create_user(self,first_name,last_name,phone,email,password=None):
+        if not email:
+            raise ValueError('email required')
+        if not  phone:
+            raise ValueError('phone required')
+        user = self.model(
+            email = self.normalize_email(email),
+            phone=phone,
+            first_name= first_name,
+            last_name=last_name,
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, phone, email,first_name,last_name, password, ):
+        user = self.create_user(
+            email=self.normalize_email(email),
+            phone = phone,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.is_admin = True
+        user.is_active=True
+        user.is_staff = True
+        user.is_superadmin=True
+        user.save()
+        return user
+
+
+
+
+
+
+class userprofiles(AbstractBaseUser):
+    username=None
+    phone = models.CharField(('phone number'), max_length=15, unique=True)
+    email = models.EmailField(blank=False,unique=True, max_length=100)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superadmin = models.BooleanField(default=False)
+    blocked = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = ['email','first_name','last_name',]
+
+    object= MyAccountManager()
+
+    def __str__(self):
+        return self.phone
+    def has_perm(self,perm,obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, add_label):
+        return True
