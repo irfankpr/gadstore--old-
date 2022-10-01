@@ -50,15 +50,12 @@
             </form>
         </div>
         <div id="otp">
-            <form action="login-otp" method="POST">
-                <input class="col-2 py-2 my-3 Linput text-center" type="text" disabled placeholder="+91" />
-                <input class="col-6 py-2 my-3 col-lg-4 Linput px-3" type="text" placeholder="Phone number" />
+            <form action="login-otp" method="GET">
+                <input class="col-2 py-2 my-3 Linput text-center" type="text" value="+91"  />
+                <input class="col-6 py-2 my-3 col-lg-4 Linput px-3" type="text" placeholder="Phone number" name="phone" />
                 <br>
-                <input class="col-4 px-3 py-2 my-4 sendotp" type="button" value="GET OTP"><br />
-                <input class="col-10 col-md-8 col-lg-6 py-2 my-4 Linput px-3" type="text" placeholder="OTP" /><br />
-
                 <div class="col-7 justify-content-center container-fluid">
-                    <button class="px-2 my-4 formsubmit py-2" type="submit">LOG IN</button>
+                    <button class="px-2 my-4 formsubmit py-2" type="submit">GET OTP</button>
                 </div>
             </form>
         </div>
@@ -78,7 +75,10 @@
         document.getElementById("passw").style.display = "block";
         document.getElementById("otp").style.display = "none";
     }
+ 
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

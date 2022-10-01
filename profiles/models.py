@@ -54,7 +54,7 @@ class userprofiles(AbstractBaseUser):
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = ['email','first_name','last_name',]
 
-    object= MyAccountManager()
+    objects= MyAccountManager()
 
     def __str__(self):
         return self.phone

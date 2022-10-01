@@ -8,10 +8,12 @@ urlpatterns = [
     path('sign', views.sign),
     path('signin', views.signin),
     path('log', views.log),
+    path('logotp', views.loginotp),
     path('login-psw', views.login),
     path('home', views.home),
     path('products', views.products),
     path('cart', views.cart),
     path('dtl', views.dtl),
     path('chkout', views.chkout),
+    path('login-otp', views.loginotp),
 ]
