@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>MultiShop - Online Shop Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <link href="{% static 'gadstore.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Topbar Start -->
+    <div class="container-fluid">
+
+
+        <div class="row container-fluid justify-content-between col-12 bg-light py-3 px-xl-5 d-none d-lg-flex">
+            <div class="col-lg-4">
+                <a href="" class="text-decoration-none">
+                    <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
+                </a>
+            </div>
+            {% for msg in messages %}
+        <h5 class="col-6 p-0 my-2 text-info text-center font-weight-bold"> {{msg}} </h5>
+        {% endfor %}
+
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-dark mb-30 topper">
+        <div class="row px-xl-5 ">
+            <div class="col-lg-3 d-none d-lg-block">
+                <a class="btn d-flex align-items-center text-center justify-content-between bg-primary w-100"
+                    data-toggle="collapse" style="height: 65px; padding: 0 30px;">
+                    <h3 class="text-center col-12 m-0 p-0">User Profile</h3>
+                </a>
+
+            </div>
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0 ">
+                    <a href="" class="text-decoration-none d-block d-lg-none">
+                        <img src="{% static 'images/b-ylogo.svg' %}" class="col-4 m-0" alt="">
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <a href="products" class="nav-item nav-link">Shop</a>
+                            <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i
+                                        class="fa fa-angle-down mt-1"></i></a>
+                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
+                                </div>
+                            </div>
+                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                        </div>
+                        <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+
+
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid row m-0 p-0 col-12 bg-light">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Checkout</span>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-4 col-6 text-right float-right">
+            <p class="m-0">Customer Service</p>
+            <h5 class="m-0">+012 345 6789</h5>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Checkout Start -->
+    <div class="container-fluid col-12 row py-0 px-3 m-0 ">
+        <div class="row col-5 ml-3">
+            <div class="col-12 container p-2 m-0 row text-center">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3 h2">User
+                        Details</span></h5>
+                <div class="bg-light col-12 mt-5">
+                    <div class="row text-center container-fluid col-12 justify-content-center ">
+                        <div class="col-12 text-center form-group d-flex row">
+                            <h6 class='col-3'>First Name :</h6>
+                            <input class="border-0 h5" type="text" value="{{ user.first_name }}" readonly>
+                        </div>
+                        <div class="col-12 text-center form-group d-flex row">
+                            <h6 class='col-3'>Last Name :</h6>
+                            <input class="border-0 h5" type="text" value="{{ user.last_name }}" readonly>
+                        </div>
+                        <div class="col-12 text-center form-group d-flex row">
+                            <h6 class='col-3'>Phone :</h6>
+                            <input class="border-0 h5" type="text" value="{{ user.phone }}" readonly>
+                        </div>
+                        <div class="col-12 text-center form-group d-flex row">
+                            <h6 class='col-3'>e mail :</h6>
+                            <input class="border-0 h5" type="text" value="{{ user.email }}" readonly>
+                        </div>
+
+                    </div>
+                    <a class="btn btn-info mt-5"  href="{% url 'password' %}" >Change password</a>
+                </div>
+                
+            </div>
+
+        </div>
+
+
+        <div class="row col-6 position-relative container p-0 m-0 justify-content-center">
+            <div class="col-12">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3 h4">your
+                        address</span></h5>
+                <div class="bg-light col-12 mt-5  text-center">
+                    <div class="row text-center container-fluid col-12 justify-content-between p-0 m-0 ">
+                        {% for a in address %}
+                        <div class="col-6 border border-warning p-3 d-flex m-0 row bg-light rounded">
+                            <h6 class='col-10 h5 text-center text-info'>Address {{forloop.counter}}</h6> <a
+                                href="{% url 'dlt_add' a.id %}" class="btn btn-outline-danger px-2 py-1 ">X</a>
+                            <input class="border-0 h5 col-12 my-1 mx-0 p-0" type="text" value="{{a.full_name}}"
+                                readonly>
+                            <input class="border-0 h5 col-12 my-1 mx-0 p-0" type="text" value="{{ a.phone }}" readonly>
+                            <input class="border-0 h5 col-12 my-1 mx-0 p-0" type="text" value="{{a.postal_PIN}}"
+                                readonly>
+                            <textarea class="border-0 h5 col-12 my-1 mx-0 p-0" name="" cols="10" rows="5"
+                                readonly>{{a.address}}</textarea>
+                        </div>
+                        {% endfor %}
+
+
+
+
+
+                    </div>
+                    <hr class="border border-5 col-12">
+                    <input class="btn btn-info " type="button" onclick="show()" value="Add new address">
+                </div>
+
+            </div>
+
+            <div class="position-absolute  col-12 col-lg-8 container-fluid row border py-3 bg-info  justify-content-around text-center"
+                style="display: none !important; z-index: 100;" id='add'>
+                <div class="col-12 container row">
+                    <h4 class=" text-center col-10 m-0 p-0  ">Add new address</h4><button onclick="hide()"
+                        class="col-1 btn btn-danger m-0 py-1 px-2 ">X</button>
+                    <hr class="col-12  ">
+                </div>
+                <form action="{% url 'newaddr'  %}" method="POST">
+                    <input class="rounded border-0 col-8 my-2 py-2" type="text" name="name" placeholder="Full name">
+                    {% csrf_token %}
+                    <input class="rounded border-0 col-8 my-2 py-2" type="text" name="Phone" placeholder="Phone">
+                    <input class="rounded border-0 col-8 my-2 py-2" type="text" name="pin" placeholder="Post PIN">
+                    <textarea class="rounded border-0 col-8 my-2 py-2" name="address" id="" cols="45" rows="7"
+                        placeholder="Address"></textarea>
+                    <button class="rounded border-0 col-5 mt-4 mb-2 py-2" type="submit">Add address</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Checkout End -->
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+        <div class="row px-xl-5 pt-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                <img src="{% static 'images/b-ylogo.svg' %}" class="col-8 mt-0 mb-4" alt="">
+                <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor.
+                    Rebum tempor no vero est magna amet no</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
+                                Detail</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping
+                                Cart</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
+                                Detail</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping
+                                Cart</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
+                        <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
+                        <form action="">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Your Email Address">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary">Sign Up</button>
+                                </div>
+                            </div>
+                        </form>
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
+                        <div class="d-flex">
+                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <script>
+        function show() {
+            document.getElementById('add').style.display = "block"
+        }
+        function hide() {
+            document.getElementById('add').style.display = "none "
+        }
+    </script>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
+    <script src="{% static 'mail/contact.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

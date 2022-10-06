@@ -32,10 +32,10 @@ def signin(request):
             passw2 = request.POST['Password2']
             email = request.POST['email']
             phone = request.POST['phone']
-            if userprofiles.objects.get(phone=phone):
+            if userprofiles.objects.filter(phone=phone).exists():
                 messages.error(request, 'Phone already exist')
                 return redirect('/sign')
-            if userprofiles.objects.get(email=email):
+            if userprofiles.objects.filter(email=email).exists():
                 messages.error(request, 'e-mail already exist')
                 return redirect('/sign')
             if passw2 == passw1:
@@ -98,7 +98,7 @@ def usr_logout(request):
     return redirect('/')
 
 
-@login_required(login_url='/')
+
 @never_cache
 def sign(request):
     return render(request, 'User-Signin.html')
@@ -139,8 +139,9 @@ def cartv(request):
 # @login_required(login_url='/')
 @never_cache
 def dtl(request, id):
+    count = cart.objects.filter(user_id=request.user.id).count()
     prd = products.objects.filter(id=id)
-    return render(request, 'detail.html', {'product': prd})
+    return render(request, 'detail.html', {'product': prd, 'count': count})
 
 
 @login_required(login_url='/')
@@ -156,3 +157,10 @@ def landing(request):
     cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
     subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
     return render(request, 'gadstore.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})
+
+
+
+@never_cache
+@login_required(login_url='/')
+def checkout(request):
+    return render(request,'checkout.html')

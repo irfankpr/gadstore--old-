@@ -5,7 +5,7 @@ from users import views
 # ...........................users . urls
 urlpatterns = [
     path('', views.index),
-    path('sign', views.sign),
+    path('sign', views.sign,name='sign'),
     path('signin', views.signin),
     path('log', views.log,name="log"),
     path('logotp', views.loginotp),

@@ -69,3 +69,13 @@ class cart(models.Model):
     user_id = models.BigIntegerField(userprofiles, blank=False, unique=False)
     product_id = models.BigIntegerField(products.models.products, blank=False, )
     count = models.IntegerField(default=1)
+
+
+
+class address(models.Model):
+    user=models.ForeignKey(userprofiles,blank=False,on_delete=models.CASCADE)
+    full_name=models.CharField(max_length=50,blank=False)
+    phone = models.CharField(max_length=15,blank=False)
+    postal_PIN = models.CharField(max_length=20,blank=False)
+    address=models.TextField(blank=False)
+
