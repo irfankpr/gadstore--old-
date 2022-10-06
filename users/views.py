@@ -1,10 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
-from profiles.models import userprofiles
+from profiles.models import userprofiles, cart
 from OTP.views import otpgen
+from products.models import categories, products, sub_categories
 
 
 # Create your views here.
@@ -13,11 +16,9 @@ from OTP.views import otpgen
 @never_cache
 def index(request):
     if request.user.is_authenticated:
-        # if request.user.is_superadmin:
-        #    return redirect('/dashbord')
         return redirect('/home')
     else:
-        return redirect('/log')
+        return redirect('landing')
 
 
 # signup module
@@ -31,17 +32,20 @@ def signin(request):
             passw2 = request.POST['Password2']
             email = request.POST['email']
             phone = request.POST['phone']
+            if userprofiles.objects.get(phone=phone):
+                messages.error(request, 'Phone already exist')
+                return redirect('/sign')
+            if userprofiles.objects.get(email=email):
+                messages.error(request, 'e-mail already exist')
+                return redirect('/sign')
             if passw2 == passw1:
-                usr = userprofiles.object.create_user(first_name=Fname, last_name=Sname, password=passw1, email=email,
-                                                      phone=phone)
+                usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname, password=passw1, email=email,
+                                                       phone=phone)
                 usr.save()
                 print("user sign inned successfully")
                 auth.login(request, usr)
                 res = redirect('/home')
-                res.set_cookie('username', Fname + Sname)
-                res.set_cookie('password', passw1)
-                request.session['username'] = Fname + Sname
-                request.session['password'] = passw1
+                res.set_cookie('user_id', usr.id)
                 return res
             else:
                 print("password confirmation failed")
@@ -59,16 +63,16 @@ def login(request):
         if request.POST['phone'] and request.POST['Password']:
             Phone = request.POST['phone']
             password = request.POST['Password']
-            print(Phone, password)
             usr = authenticate(request, phone=Phone, password=password)
+            user = userprofiles.objects.get(phone=Phone)
             if usr is not None:
-                auth.login(request, usr)
+                if user.blocked:
+                    messages.error(request, 'You are restricted by admin')
+                    return redirect('/log')
+                auth.login(request, user)
                 res = redirect('/home')
-                user = userprofiles.object.filter(phone=Phone)
-                res.set_cookie('username', user.first_name + usr.last_name)
-                res.set_cookie('password', password)
-                request.session['username'] = user.first_name + usr.last_name
-                request.session['password'] = password
+                user = userprofiles.objects.get(phone=Phone)
+                res.set_cookie('user_id', user.id)
                 return res
 
             else:
@@ -83,13 +87,18 @@ def login(request):
 
 def loginotp(request):
     if request.method == "GET" and request.GET['phone']:
-        phone = '+91' + request.GET['phone']
+        phone = request.GET['phone']
         otpgen.send_otp(phone)
         messages.error(request, 'OTP sent to ' + phone)
         return redirect('/otp')
 
 
+def usr_logout(request):
+    logout(request)
+    return redirect('/')
 
+
+@login_required(login_url='/')
 @never_cache
 def sign(request):
     return render(request, 'User-Signin.html')
@@ -100,30 +109,50 @@ def log(request):
     return render(request, 'User-Login.html')
 
 
+@login_required(login_url='/')
 @never_cache
 def home(request):
     if request.user.is_authenticated:
-        return render(request, 'index.html')
+        count = cart.objects.filter(user_id=request.user.id).count()
+        new = products.objects.all().order_by('-added_date')[:8]
+        cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
+        subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
+        return render(request, 'index.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})
     else:
         messages.error(request, 'Something went wrong, please try again')
         return redirect('/log')
 
 
+@login_required(login_url='/')
 @never_cache
-def products(request):
+def shop(request):
     return render(request, 'shop.html')
 
 
 @never_cache
-def cart(request):
-    return render(request, 'cart.html')
+def cartv(request):
+    crt = cart.objects.filter(user_id=request.user.id).order_by('product_id')
+    prd = products.objects.filter()
+    return render(request, 'cart.html', {'cart': crt, 'product': prd})
 
 
+# @login_required(login_url='/')
 @never_cache
-def dtl(request):
-    return render(request, 'detail.html')
+def dtl(request, id):
+    prd = products.objects.filter(id=id)
+    return render(request, 'detail.html', {'product': prd})
 
 
+@login_required(login_url='/')
 @never_cache
 def chkout(request):
     return render(request, 'checkout.html')
+
+
+@never_cache
+def landing(request):
+    count = cart.objects.filter(user_id=request.user.id).count()
+    new = products.objects.all().order_by('-added_date')[:8]
+    cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
+    subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
+    return render(request, 'gadstore.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})

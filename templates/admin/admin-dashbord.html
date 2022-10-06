@@ -23,6 +23,7 @@
     <link rel="icon" href=" {% static 'admin/images/favicon.ico" type="image/x-icon' %}">
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- waves.css -->
     <link rel="stylesheet" href=" {% static 'admin/pages/waves/css/waves.min.css' %}" type="text/css" media="all">
     <!-- Required Fremwork -->
@@ -118,7 +119,7 @@
                             </div>
                         </div>
                         <a href="index.html">
-                            <img class="img-fluid" src="{% static 'admin/images/logo.png' %}" alt="Theme-Logo" />
+                            <img class="img-fluid"width="175px" src=" {% static 'images/y-blogo.svg' %}"  />
                         </a>
                         <a class="mobile-options waves-effect waves-light">
                             <i class="ti-more"></i>
@@ -147,88 +148,24 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
-                            <li class="header-notification">
-                                <a href="#!" class="waves-effect waves-light">
-                                    <i class="ti-bell"></i>
-                                    <span class="badge bg-c-red"></span>
-                                </a>
-                                <ul class="show-notification">
-                                    <li>
-                                        <h6>Notifications</h6>
-                                        <label class="label label-danger">New</label>
-                                    </li>
-                                    <li class="waves-effect waves-light">
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius"
-                                                src="{% static 'admin/images/avatar-2.jpg' %}"
-                                                alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">John Doe</h5>
-                                                <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer
-                                                    elit.</p>
-                                                <span class="notification-time">30 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="waves-effect waves-light">
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius"
-                                                src="{% static 'admin/images/avatar-4.jpg' %}"
-                                                alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">Joseph William</h5>
-                                                <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer
-                                                    elit.</p>
-                                                <span class="notification-time">30 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="waves-effect waves-light">
-                                        <div class="media">
-                                            <img class="d-flex align-self-center img-radius"
-                                                src="{% static 'admin/images/avatar-3.jpg' %}"
-                                                alt="Generic placeholder image">
-                                            <div class="media-body">
-                                                <h5 class="notification-user">Sara Soudein</h5>
-                                                <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer
-                                                    elit.</p>
-                                                <span class="notification-time">30 minutes ago</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
                             <li class="user-profile header-notification">
                                 <a href="#!" class="waves-effect waves-light">
-                                    <img src="{% static 'admin/images/avatar-4.jpg' %}" class="img-radius"
-                                        alt="User-Profile-Image">
-                                    <span>John Doe</span>
+                                        <span class="material-symbols-outlined m-0 p-0 cursor-pointer">
+                                            account_circle
+                                            </span>
                                     <i class="ti-angle-down"></i>
                                 </a>
-                                <ul class="show-notification profile-notification">
-                                    <li class="waves-effect waves-light">
-                                        <a href="#!">
-                                            <i class="ti-settings"></i> Settings
-                                        </a>
-                                    </li>
-                                    <li class="waves-effect waves-light">
+                                <ul class="show-notification profile-notification p-2">
+                                   
+                                    <li class="waves-effect waves-light  mb-3">
                                         <a href="user-profile.html">
-                                            <i class="ti-user"></i> Profile
+                                            <i class="ti-user mx-3 mb-4"></i> Profile
                                         </a>
                                     </li>
-                                    <li class="waves-effect waves-light">
-                                        <a href="email-inbox.html">
-                                            <i class="ti-email"></i> My Messages
-                                        </a>
-                                    </li>
-                                    <li class="waves-effect waves-light">
-                                        <a href="auth-lock-screen.html">
-                                            <i class="ti-lock"></i> Lock Screen
-                                        </a>
-                                    </li>
-                                    <li class="waves-effect waves-light">
-                                        <a href="auth-normal-sign-in.html">
-                                            <i class="ti-layout-sidebar-left"></i> Logout
+                                   
+                                    <li class="waves-effect waves-light mb-3">
+                                        <a href="{% url 'admin-logout'  %}">
+                                            <i class="ti-layout-sidebar-left mx-3 mb-4"></i> Logout
                                         </a>
                                     </li>
                                 </ul>
@@ -264,9 +201,23 @@
                                     </a>
                                 </li>
                                 <li class="">
-                                    <a href="category" class="waves-effect waves-dark">
+                                    <a href="{% url 'category' %}" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Categories</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="{% url 'adminproducts' %}" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Products</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="{% url 'users' %}" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Users</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
