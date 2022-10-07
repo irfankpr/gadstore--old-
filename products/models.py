@@ -17,7 +17,7 @@ class sub_categories(models.Model):
 
 
 class products(models.Model):
-    Product_name = models.CharField(max_length=50, blank=False, unique=True)
+    Product_name = models.CharField(max_length=300, blank=False, unique=True)
     slug = models.SlugField(blank=False)
     products_desc = models.TextField()
     products_dyl = models.TextField(blank=False)

@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
-from profiles.models import userprofiles
+from profiles.models import userprofiles, cart
 from products.models import categories, products, prodtct_image, sub_categories
 
 
@@ -57,21 +58,45 @@ def addproduct(request):
             prod = products()
             prod.Product_name = request.POST["name"]
             prod.slug = slugify(prod.Product_name)
-            prod.products_desc = request.POST["hilights"]
-            prod.products_dyl = request.POST["desc"]
+            prod.products_dyl = request.POST["hilights"]
+            prod.products_desc = request.POST["desc"]
             prod.MRP = request.POST["mrp"]
             prod.price = request.POST["price"]
             prod.thumbnail = request.FILES['thumb']
             prod.available_stock = request.POST["count"]
-            print(prod)
+            prod.category_id = request.POST["cat"]
+            ex = products.objects.filter(Product_name=prod.Product_name).exists()
+            if ex:
+                messages.error(request, 'Product named :- ' + prod.Product_name + ' already exists.')
+                return redirect('addproduct')
+
             prod.save()
             messages.error(request, 'New product ' + prod.Product_name + ' added.', extra_tags='added.')
-            return redirect('adminproducts')
+            return redirect('addproduct')
 
 
         else:
             messages.error(request, 'you cannot submit without credentials filled !', extra_tags='added.')
-            return redirect('adminproducts')
+            return redirect('addproduct')
+
+
+def product_up(request):
+    if request.method == 'POST':
+        pid = request.POST['pid']
+        pname = request.POST['pname']
+        obj = products.objects.get(id=pid)
+        obj.Product_name = request.POST['pname']
+        obj.slug = slugify(pname)
+        obj.products_dyl = request.POST['pid']
+        obj.products_desc = request.POST['pid']
+        obj.MRP = request.POST['mrp']
+        obj.price = request.POST['price']
+        obj.category_id = request.POST['catid']
+        if request.FILES['thumbnail']:
+            obj.thumbnail = request.FILES['thumbnail']
+        obj.save()
+        messages.error(request, 'Product updated')
+        return redirect('adminproducts')
 
 
 def deleteproduct(request, id):
@@ -79,8 +104,10 @@ def deleteproduct(request, id):
         pr = products.objects.get(id=id)
         name = pr.Product_name
         pr.delete()
+        cart.objects.filter(product_id=id).delete()
         messages.error(request, 'Product ' + name + ' deleted.', extra_tags='dlt')
         return redirect('adminproducts')
+
 
 @login_required(login_url='admin')
 @never_cache
@@ -90,14 +117,17 @@ def product_dtl(request, pid):
     sub = sub_categories.objects.all()
     return render(request, "admin/product-edit.html", {'prd': prd, 'cat': cat, 'sub': sub})
 
+
 @login_required(login_url='admin')
 @never_cache
 def adminhome(request):
     if request.user.is_authenticated:
         admins = userprofiles.objects.filter(is_staff=True)
-        return render(request, 'admin/admin-dashbord.html', {'admins': admins})
+        p=products.objects.filter(available_stock__lte=10)
+        return render(request, 'admin/admin-dashbord.html', {'admins': admins,'products':p})
     else:
         return redirect('admin')
+
 
 @login_required(login_url='admin')
 @never_cache
@@ -105,20 +135,22 @@ def category(request):
     cat = categories.objects.all()
     return render(request, 'admin/Category.html', {'cat': cat})
 
+
 @login_required(login_url='admin')
 @never_cache
 def adm_products(request):
     if request.method == "GET":
         product = products.objects.filter()
-        p = render(request, 'admin/products.html', {'product': product})
+        cat = categories.objects.all()
+        p = render(request, 'admin/products.html', {'product': product, 'cat': cat})
         return p
+
 
 @login_required(login_url='admin')
 @never_cache
 def add_newproduct(request):
-    return render(request, 'admin/add-product.html')
-
-
+    cat = categories.objects.all()
+    return render(request, 'admin/add-product.html', {'cat': cat})
 
 
 @login_required(login_url='admin')
@@ -128,8 +160,6 @@ def users(request):
     return render(request, 'admin/users.html', {'user': usr})
 
 
-
-
 @login_required(login_url='admin')
 @never_cache
 def block_users(request, bid):
@@ -137,8 +167,34 @@ def block_users(request, bid):
     if usr.blocked:
         usr.blocked = False
     else:
-        usr.blocked  = True
+        usr.blocked = True
     usr.save()
     print(usr.blocked)
-    usr = userprofiles.objects.filter()
     return redirect(users)
+
+
+@login_required(login_url='admin')
+@never_cache
+def cat_edit(request, cid):
+    cat = categories.objects.filter(id=cid)
+    sub = sub_categories.objects.filter(parent_cat_id=cid)
+    return render(request, 'admin/category-edit.html', {'cat': cat, "sub": sub})
+
+
+def cat_up(request):
+    if request.method == "POST":
+        id = request.POST['cid']
+        obj = categories.objects.get(id=id)
+        obj.category_name = request.POST['cname']
+        obj.description = request.POST['desc']
+        obj.category_image = request.FILES['catimg']
+        messages.error(request, 'Category updated ')
+        return redirect('category')
+
+
+def sub_up(request):
+    id = request.POST['sid']
+    sub_categories.objects.get(id=id).delete()
+    messages.error(request, 'Sub-category deleted')
+    return redirect('category')
+

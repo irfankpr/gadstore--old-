@@ -17,4 +17,8 @@ urlpatterns = [
     path('admin/product_dtl/<int:pid>/', views.product_dtl, name="product_dtl"),
     path('admin/users', views.users, name="users"),
     path('admin/block-users/<int:bid>/', views.block_users, name="block-user"),
+    path('product-up', views.product_up, name="product-up"),
+    path('admin/catedit/<int:cid>/', views.cat_edit, name="catedit"),
+    path('cat-up', views.cat_up, name="cat-up"),
+    path('sub-up', views.sub_up, name="sub-up"),
 ]

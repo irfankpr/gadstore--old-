@@ -99,11 +99,11 @@
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" onclick="changeQuantity('{{c.id}}',-1)">
+                                        <button class="btn btn-sm btn-primary btn-minus"  onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',-1)">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text"
+                                    <input type="text" 
                                         class="form-control form-control-sm bg-secondary border-0 text-center"
                                         value="{{ c.count }}" id="c{{forloop.counter}}" readonly onchange="calc('c{{forloop.counter}}','p{{forloop.counter}}','t{{forloop.counter}}')" >
                                     <div class="input-group-btn">
@@ -152,7 +152,7 @@
                             <h5>Total</h5>
                             <h5>₹  160</h5>
                         </div>
-                        <button onclick="window.location = '{% url 'checkout' %}'""
+                        <button onclick="window.location = '{% url 'checkout' %}' "
                             class="btn-outline-dark border-0 btn-block btn-primary font-weight-bold my-3 py-3">Proceed
                             To Checkout</button>
                     </div>

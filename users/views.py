@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
@@ -98,7 +98,6 @@ def usr_logout(request):
     return redirect('/')
 
 
-
 @never_cache
 def sign(request):
     return render(request, 'User-Signin.html')
@@ -123,10 +122,29 @@ def home(request):
         return redirect('/log')
 
 
-@login_required(login_url='/')
 @never_cache
 def shop(request):
-    return render(request, 'shop.html')
+    if request.method == 'GET':
+        if request.GET['key']:
+            key = request.GET['key']
+            q = Q()
+            q &= Q(Product_name__icontains=key) | Q(products_desc__icontains=key)
+            prds = products.objects.filter(q)
+            print(key, "................................")
+            count = cart.objects.filter(user_id=request.user.id).count()
+            cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
+            subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
+            return render(request, 'shop.html',
+                          {'products': prds, 'key': key, 'cat': cat, 'subcat': subcat, 'count': count})
+
+
+        else:
+            count = cart.objects.filter(user_id=request.user.id).count()
+            cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
+            subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
+            prds = products.objects.filter()
+            return render(request, 'shop.html',
+                          {'products': prds, 'key': 'Search products', 'cat': cat, 'subcat': subcat, 'count': count})
 
 
 @never_cache
@@ -136,12 +154,14 @@ def cartv(request):
     return render(request, 'cart.html', {'cart': crt, 'product': prd})
 
 
-# @login_required(login_url='/')
+
 @never_cache
 def dtl(request, id):
     count = cart.objects.filter(user_id=request.user.id).count()
     prd = products.objects.filter(id=id)
-    return render(request, 'detail.html', {'product': prd, 'count': count})
+    d = products.objects.get(id=id)
+    like = products.objects.filter(category_id=d.category_id)
+    return render(request, 'detail.html', {'product': prd, 'count': count,'Like':like})
 
 
 @login_required(login_url='/')
@@ -159,8 +179,7 @@ def landing(request):
     return render(request, 'gadstore.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})
 
 
-
 @never_cache
 @login_required(login_url='/')
 def checkout(request):
-    return render(request,'checkout.html')
+    return render(request, 'checkout.html')

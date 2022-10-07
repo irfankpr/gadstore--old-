@@ -184,8 +184,9 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
+                                
                                 <li class="active">
-                                    <a href="{% url 'adminproducts' %}" class="waves-effect waves-dark">
+                                    <a href="#" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Products</span>
                                         <span class="pcoded-mcaret"></span>
@@ -300,79 +301,110 @@
 
                         </div>
                     </nav>
-                    <div class="pcoded-content d-flex row justify-content-center px-5">
-                        {% for msg in messages %}
+                    <!-- .................................................................................................. -->
+                    <div class="pcoded-content d-flex row justify-content-center">
+                        <div class="col-8 container-fluid row mb-5 mx-0 ">
+                            {% for msg in messages %}
                                         <h4 class="col-12 p-0 my-2 text-info text-center font-weight-bold"> {{msg}}
                                         </h4>
                                         {% endfor %}
-                        <div class="col-10 container mx-5  ">
-                            <div class="card ">
+                            <!-- Basic Form Inputs card start -->
+                            <div class="card col-12 container-fluid ,-0 p-0 justify-content-center text-center">
                                 <div class="card-header">
-                                    <h3>Add new Product</h3>
-                                    <!--<span>Add class of <code>.form-control</code> with <code>&lt;input&gt;</code> tag</span>-->
+                                    <h3>Category Details</h3>
                                 </div>
                                 <div class="card-block">
-                                    <form class="form-material text-center" method="POST" action="addproduct" enctype='multipart/form-data'>
+                                    <div class="col-12 d-flex mx-0 my-5 p-0">
+                                        <h3 class="sub-title col-10">You can aslo edit Ctegoru details here.</h3>
+                                        <input type="button" value="Edit Product" class="btn btn-outline-primary" onclick="edit()">
+                                    </div>
+                                    {% for c in cat %}
+                                    <form action="{% url 'cat-up' %}" method="POST" enctype='multipart/form-data'>
                                         {% csrf_token %}
-                                        <div class="form-group form-default mb-5">
-                                            <input type="text" name="name" class="form-control" required="">
-                                            <span class="form-bar"></span>
-                                            <label class="float-label">Product Name</label>
-                                        </div>
-                                        <div class="form-group form-default mb-5 col-3">
-                                            <input type="number" name="mrp" class="form-control text-danger" required="" >
-                                            <span class="form-bar"></span>
-                                            <label class="float-label text-danger">MPP : ₹</label>
-                                        </div>
-                                        <div class="form-group form-default mb-5 col-3">
-                                            <input type="number" name="price" class="form-control text-success" required="">
-                                            <span class="form-bar"></span>
-                                            <label class="float-label text-success">Selling price : ₹</label>
-                                        </div>
-                                        <div class="form-group form-default mb-5">
-                                            <textarea class="form-control" required=""  name="hilights" ></textarea>
-                                            <span class="form-bar"></span>
-                                            <label class="float-label">Product Details (highlights)</label>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label h6 ">Category Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="number" value="{{ c.id }}" name="cid" hidden>
+                                                <input type="text" name="cname" value="{{c.category_name  }}" class="form-control" readonly id="inp1">
+                                            </div>
                                         </div>
                                         <div class="form-group form-default">
-                                            <textarea class="form-control" required="" name ="desc" ></textarea>
+                                            <textarea class="form-control" required="" name ="desc" cols="10" rows="5" readonly id="inp2">{{ c.description }}</textarea>
                                             <span class="form-bar"></span>
-                                            <label class="float-label">Description (Detailed)</label>
+                                            <label class="float-label h6">Description</label>
                                         </div>
-                                        <div class="form-group form-default mb-5 col-3">
-                                            <input type="number" name="count" class="form-control" required="">
-                                            <span class="form-bar"></span>
-                                            <label class="float-label">Current Stockes</label>
+                                        
+                                        <img src="{{ c.category_image.url }}" height="250px" width="250px" class="m-5">
+                                        <div class="form-group row justify-content-cemter">
+    
+                                            <label class="col-sm-e col-form-label">Update Category image</label>
+                                            <div class="col-10">
+                                                <input type="file" name="catimg" class="form-control" disabled id="img">
+                                            </div>
                                         </div>
-                                        <div class="form-group form-default d-flex mx-0 my-5 px-0 py-3 row">
-                                            <h6 class="form-bar m-0 p-0 col-4">Add Thumnail images :</h6>
-                                            <input type="file" name="thumb" class="col-7"
-                                                placeholder="Add image" required="">
-                                        </div>
-                                        <div class="col-sm-5 ">
-                                            <select name="cat" class="form-control border border-primary" >
-                                                <option >Select Category</option>
-                                                {% for c in cat %}
-                                                <option value="{{ c.id }}">{{ c.category_name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <!-- <div class="form-group form-default d-flex m-0 p-0 row mt-5">
-                                            <h6 class="form-bar m-0 p-0 col-4">Add product images :</h6>
-                                            <input type="file" name="catimage" class="col-7"
-                                                placeholder="Add image" required="" multiple>
-                                        </div> -->
-                                        <button type="submit" class="col-8 rounded py-3 my-5 btn-primary  border-0">ADD
-                                            NEW PRODUCT</button>
+                                        
+                                       <!-- .................................. -->
+                                        
+                                        
+                                       
+                                       <div class="col-12 text-center d-flex mb-5 justify-content-center" >
+                                        <button class="sub-title btn btn-outline-primary mt-5" id="sub" type="submit" style="display: none;">submit changes</button>
+                                    </div>
                                     </form>
+                                    {% endfor %}
+                                    <div class="row">
+
+                                    </div>
+
+
                                 </div>
+
                             </div>
-                            
                         </div>
                     </div>
 
+                    <!-- .................................................................................................. -->
 
+                    <div class="card-block table-border-style col-12 container justify-content-center row">
+                        <div class="table-responsive col-5">
+                            <table class="table table-hover" >
+                                <thead>
+                                    <tr class="d-flex text-center"><th colspan="3" class="text-info d-flex h5"> Sub categories: </th></tr>
+                                    <tr>
+                                        <th>Sl No.</th>
+                                        <th>Sub-category name</th>
+                                        <th>Delete</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in sub %}
+                                   
+                                    <tr>
+                                        <th class="col-1" >{{forloop.counter}}</th>
+                                        <td>{{ s.sub_cat_name }}</td>
+                                        <td><form action=" {% url 'sub-up' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="number" name="sid" value="{{ s.id }}" hidden>
+                                            <button type="submit" class=" bg-danger text-white p-1 border-white">DELETE</button> </form></td>
+                                    </tr>
+                                   
+                                    {% endfor %}
 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                   
+                        <script>
+                                function edit(){
+                                    document.getElementById('inp1').removeAttribute('readonly');
+                                    document.getElementById('inp2').removeAttribute('readonly');
+                                    document.getElementById('img').removeAttribute('disabled');
+                                    document.getElementById('sub').style.display='block'
+                                }
+                        </script>
+                            
                     <!-- Required Jquery -->
                     <script type="text/javascript" src=" {% static 'admin/js/jquery/jquery.min.js' %}"></script>
                     <script type="text/javascript" src=" {% static 'admin/js/jquery-ui/jquery-ui.min.js' %} "></script>

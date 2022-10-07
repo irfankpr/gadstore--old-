@@ -350,7 +350,7 @@
                                                 <tr>
                                                     <th scope="row">{{forloop.counter}}</th>
                                                    
-                                                    <th>{{ c.category_name }}</th>
+                                                    <th> <a href=" {% url 'catedit' c.id %} ">{{ c.category_name }}</a> </th>
                                                     <td> <img src="{{ c.category_image.url}}" height="50px" width="80px"
                                                             alt="" srcset=""> </td>
                                                     

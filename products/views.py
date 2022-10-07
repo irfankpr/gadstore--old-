@@ -36,7 +36,8 @@ def deletecat(request, catid):
     cat = categories.objects.get(id=id)
     name = cat.category_name
     categories.objects.filter(id=id).delete()
-    messages.error(request, 'Category  ' + name + '  deleted !')
+    sub_categories.objects.filter(parent_cat_id=id).delete()
+    messages.error(request, 'Category  ' + name + ' and corresponding sub-categories deleted !')
     return redirect('category')
 
 
@@ -80,4 +81,5 @@ def cart_count(request):
         c=request.GET['count']
         id=request.GET['cart']
         cart.objects.filter(id=id).update(count=F('count') + c)
+        cart.objects.filter(count=0).delete()
         return redirect('cartv')

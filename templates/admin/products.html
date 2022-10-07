@@ -339,6 +339,7 @@
                                                     <th>No.</th>
                                                     <th>Name</th>
                                                     <th>image</th>
+                                                    <th>Category</th>
                                                     <th class="text-danger">MRP</th>
                                                     <th class="text-success">Price</th>
                                                     <th>Stock</th>
@@ -347,16 +348,21 @@
                                             </thead>
                                             <tbody>
                                                 {% for p in product %}
-                                                <tr">
+                                               
+                                                <tr>
                                                     <th >{{forloop.counter}}</th>
                                                     <td> <a href="{% url 'product_dtl' p.id %}"  class="text-primary">{{ p.Product_name }}</a></td>
                                                     <td class="p-0"><img src="{{ p.thumbnail.url}}" height="60px" width="70px"
                                                         alt="" style="object-fit: cover;"></td>
+                                                        <td >{% for c in cat %}
+                                                    {% if c.id == p.category_id %} {{c.category_name}} {% endif %} 
+                                                    {% endfor %}</td>
                                                     <td class="text-danger">{{ p.MRP }}</td>
                                                     <td class="text-success">{{ p.price }}</td>
                                                     <td>{{ p.available_stock }}</td>
                                                     <td><a href="{% url 'delete-product' p.id %}" class=" bg-danger text-white p-3 border-white">DELETE</a></td>
                                                 </tr>
+                                               
                                                 {% endfor %}
 
                                             </tbody>
