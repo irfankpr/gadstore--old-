@@ -91,33 +91,35 @@
                         {% for c in cart %}
                         {% for p in product %}
                         {% if c.product_id == p.id %}
-                        <tr>
+                        <tr >
                             <td class="align-middle"><img src="{{ p.thumbnail.url }}" alt="" style="width: 50px;"></td>
                             <td class="h6"> {{p.Product_name}}</td>
-                            <td><input class="h4 form-control form-control-sm bg-secondary border-0 text-center"
-                                    id='p{{forloop.counter}}' type="text" readonly value="{{ p.price }}"> </td>
+                            <td><input class="h1 form-control form-control-sm bg-secondary border-0 text-center text-success"
+                                    id='p{{forloop.counter}}' type="text" readonly value="₹  {{ p.price }}"> </td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus"  onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',-1)">
+                                        <button class="btn btn-sm btn-primary btn-minus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',-1,'pt{{forloop.counter}}')">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" 
+                                    <span 
                                         class="form-control form-control-sm bg-secondary border-0 text-center"
-                                        value="{{ c.count }}" id="c{{forloop.counter}}" readonly onchange="calc('c{{forloop.counter}}','p{{forloop.counter}}','t{{forloop.counter}}')" >
+                                        id="c{{forloop.counter}}" readonly >
+                                        {{ c.count }}
+                                        </span>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',+1)">
+                                        <button class="btn btn-sm btn-primary btn-plus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',+1,'pt{{forloop.counter}}')">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle"><input id="t{{forloop.counter}}"
+                            <td class="align-middle"><input id="pt{{forloop.counter}}" 
                                     class="h4 form-control form-control-sm bg-secondary border-0 text-center" 
                                     type="text" readonly value=""> </td>
-                            <td class="align-middle"><a href="{% url 'cart-dlt' c.id %}"
-                                    class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a></td>
+                            <td class="align-middle"><a href="{% url 'cart-dlt' c.id %}"  onclick="return confirm( 'Remove {{ p.Product_name }}' )"
+                                    class="btn btn-sm btn-danger"><i class="fa fa-times"  ></i></a></td>
                         </tr>
                         {% endif %}
                         {% endfor %}
@@ -238,16 +240,22 @@
                     count: count,
                     cart: cartId,
                   },
+                  success: (response) => {
+                    if (response.removeProduct) {
+                        alert("Product Removed from cart")
+                        location.reload()
+                    } else {
+                        document.getElementById(proId).innerHTML = quantity + count
+                        document.getElementById('total').innerHTML = response.total
+                        v=parseInt(document.getElementById(proId).innerHTML)
+                        if (v<2){
+                            document.getElementById(proId).innerHTML = quantity + count
+                        }
+                    }
+                }
             })
 
         }
-
-        function calc(c,p,t){
-            p= parseFloat( document.getElementById(p).value)
-            c= parseFloat( document.getElementById(c).value)
-            document.getElementById(t).value=p*c
-        }
-
     </script>
 
     <!-- Back to Top -->

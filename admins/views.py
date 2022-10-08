@@ -156,7 +156,7 @@ def add_newproduct(request):
 @login_required(login_url='admin')
 @never_cache
 def users(request):
-    usr = userprofiles.objects.filter()
+    usr = userprofiles.objects.exclude(is_admin=True).order_by('id')
     return render(request, 'admin/users.html', {'user': usr})
 
 

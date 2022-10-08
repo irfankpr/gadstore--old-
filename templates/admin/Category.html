@@ -354,7 +354,7 @@
                                                     <td> <img src="{{ c.category_image.url}}" height="50px" width="80px"
                                                             alt="" srcset=""> </td>
                                                     
-                                                    <td><a href="{% url 'delete-cat' c.id %}" class=" bg-danger text-white p-3 border-white">DELETE</a></td>
+                                                    <td><a href="{% url 'delete-cat' c.id %}" class=" bg-danger text-white p-3 border-white"  onclick="return confirm( 'Delete category {{ c.category_name }}' )"  >DELETE</a></td>
                                                 </tr>
                                                 {% endfor %}
 

@@ -16,7 +16,10 @@ from products.models import categories, products, sub_categories
 @never_cache
 def index(request):
     if request.user.is_authenticated:
-        return redirect('/home')
+        if request.user.is_admin:
+            return redirect('admin')
+        else:
+            return redirect('/home')
     else:
         return redirect('landing')
 

@@ -360,7 +360,7 @@
                                                     <td class="text-danger">{{ p.MRP }}</td>
                                                     <td class="text-success">{{ p.price }}</td>
                                                     <td>{{ p.available_stock }}</td>
-                                                    <td><a href="{% url 'delete-product' p.id %}" class=" bg-danger text-white p-3 border-white">DELETE</a></td>
+                                                    <td><a href="{% url 'delete-product' p.id %}" class=" bg-danger text-white p-3 border-white" onclick="return confirm( 'Delete {{  p.Product_name }}  ?' )" >DELETE</a></td>
                                                 </tr>
                                                
                                                 {% endfor %}

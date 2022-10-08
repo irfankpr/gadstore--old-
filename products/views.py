@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.db.models import F
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from profiles.models import cart, userprofiles
-from products.models import categories, sub_categories
+from products.models import categories, sub_categories,products
 
 
 # Create your views here.
