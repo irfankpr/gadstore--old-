@@ -81,45 +81,70 @@
                         <tr>
                             <th>Products</th>
                             <th>Name</th>
-                            <th>Price &nbsp; ₹</th>
+                            <th>Price</th>
                             <th>Quantity</th>
-                            <th>Total &nbsp; ₹</th>
+                            <th>Total</th>
                             <th>Remove</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
                         {% for c in cart %}
                         {% for p in product %}
-                        {% if c.product_id == p.id %}
+                        {% if c.product_id_id == p.id %}
                         <tr >
                             <td class="align-middle"><img src="{{ p.thumbnail.url }}" alt="" style="width: 50px;"></td>
-                            <td class="h6"> {{p.Product_name}}</td>
-                            <td><input class="h1 form-control form-control-sm bg-secondary border-0 text-center text-success"
+                            <td class="align-middle h6"> {{p.Product_name}}</td>
+                            <td class="align-middle"><input class="h1 form-control bg-light form-control-sm bg-secondary border-0 text-center text-success"
                                     id='p{{forloop.counter}}' type="text" readonly value="₹  {{ p.price }}"> </td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',-1,'pt{{forloop.counter}}')">
+                                        <button class="btn btn-sm btn-primary btn-minus" id="mmi" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',-1,'pt{{forloop.counter}}','sc{{forloop.counter}}','st{{forloop.counter}}' )">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
                                     <span 
-                                        class="form-control form-control-sm bg-secondary border-0 text-center"
+                                        class="form-control form-control-sm bg-light border-0 text-center"
                                         id="c{{forloop.counter}}" readonly >
                                         {{ c.count }}
                                         </span>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',+1,'pt{{forloop.counter}}')">
+                                        <button class="btn btn-sm btn-primary btn-plus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',+1,'pt{{forloop.counter}}','sc{{forloop.counter}}','st{{forloop.counter}}' )">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle"><input id="pt{{forloop.counter}}" 
-                                    class="h4 form-control form-control-sm bg-secondary border-0 text-center" 
-                                    type="text" readonly value=""> </td>
-                            <td class="align-middle"><a href="{% url 'cart-dlt' c.id %}"  onclick="return confirm( 'Remove {{ p.Product_name }}' )"
+                                    class="h4 form-control form-control-sm bg-light border-0 text-info  text-center" 
+                                    type="text" readonly value="₹ {{ c.total }}" > 
+                                </td>
+
+                            <td class="align-middle"><a  title="Remove from cart"  data-toggle="modal" data-target="#remove{{forloop.counter}}"
                                     class="btn btn-sm btn-danger"><i class="fa fa-times"  ></i></a></td>
+                                    <!-- Modal -->
+<div class="modal fade" id="remove{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content border-secondary">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm removal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-danger h6">
+          Remove product : {{p.Product_name}}   from cart ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <a href="{% url 'cart-dlt' c.id %}" type="button" class="btn btn-outline-danger">Remove</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
                         </tr>
                         {% endif %}
                         {% endfor %}
@@ -136,28 +161,43 @@
                         </div>
                     </div>
                 </form>
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
                         Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
-                    <div class="border-bottom pb-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h6>Subtotal</h6>
-                            <h6>$150</h6>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
+                     <!-- Basic table card start -->
+                <div class="card">
+                    
+                    <div class="card-block table-border-style">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead >
+                                    <tr class="bg-dark text-light" >
+                                        
+                                        <th>Product</th>
+                                        <th>Count</th>
+                                        <th>Tottal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in cart %}
+                        {% for p in product %}
+                        {% if c.product_id_id == p.id %}
+                                    <tr>
+                                        
+                                        <td>{{ p.Product_name }}</td>
+                                        <td class="col-3" id="sc{{forloop.counter}}">{{ c.count }}</td>
+                                        <td class="col-3" id="st{{forloop.counter}}">₹ {{c.total}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endfor %}
+                                   
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="pt-2">
-                        <div class="d-flex justify-content-between mt-2">
-                            <h5>Total</h5>
-                            <h5>₹  160</h5>
-                        </div>
-                        <button onclick="window.location = '{% url 'checkout' %}' "
-                            class="btn-outline-dark border-0 btn-block btn-primary font-weight-bold my-3 py-3">Proceed
-                            To Checkout</button>
-                    </div>
+                </div>
+                <!-- Basic table card end -->
                 </div>
             </div>
         </div>
@@ -209,7 +249,7 @@
                         <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
                         <form action="">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Your Email Address">
+                                <input type="text" class="form-control" placeholder="Your Email Address" >
                                 <div class="input-group-append">
                                     <button class="btn btn-primary">Subscrib</button>
                                 </div>
@@ -230,9 +270,13 @@
     </div>
     <!-- Footer End -->
     <script>
-        function changeQuantity(cartId, proId, count) {
-            let quantity = parseInt(document.getElementById(proId).innerHTML);
+        function changeQuantity(cartId, proId, count,pt,sc,st) {
+            let quantity =  parseInt(document.getElementById(proId).innerHTML);
             count = parseInt(count);
+
+            if (quantity == 1 && count== -1){
+                   return true 
+            }
 
             $.ajax({
                 url: "/cart-count",
@@ -246,16 +290,19 @@
                         location.reload()
                     } else {
                         document.getElementById(proId).innerHTML = quantity + count
-                        document.getElementById('total').innerHTML = response.total
-                        v=parseInt(document.getElementById(proId).innerHTML)
-                        if (v<2){
-                            document.getElementById(proId).innerHTML = quantity + count
-                        }
+                        c =  parseInt(document.getElementById(proId).innerHTML)
+                        document.getElementById(pt).value ="₹ "+ c * response.price
+
+                        document.getElementById(sc).innerHTML=document.getElementById(proId).innerHTML
+                        document.getElementById(st).innerHTML= document.getElementById(pt).value
+                       
+                        
                     }
                 }
             })
-
+            
         }
+       
     </script>
 
     <!-- Back to Top -->

@@ -10,7 +10,7 @@ urlpatterns = [
     path('log', views.log,name="log"),
     path('logotp', views.loginotp),
     path('login-psw', views.login),
-    path('home', views.home),
+    path('home', views.home,name = 'home'),
     path('shop', views.shop,name='shop'),
     path('cartv', views.cartv,name='cartv'),
     path('detail/<int:id>', views.dtl,name='detail'),

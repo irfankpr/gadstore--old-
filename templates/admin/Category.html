@@ -354,7 +354,29 @@
                                                     <td> <img src="{{ c.category_image.url}}" height="50px" width="80px"
                                                             alt="" srcset=""> </td>
                                                     
-                                                    <td><a href="{% url 'delete-cat' c.id %}" class=" bg-danger text-white p-3 border-white"  onclick="return confirm( 'Delete category {{ c.category_name }}' )"  >DELETE</a></td>
+                                                    <td><a  class=" bg-danger text-white p-3 border-white" data-toggle="modal" data-target="#delete{{forloop.counter}}"  >DELETE</a></td>
+                                                     <!--block Modal  start-->
+<div class="modal fade" id="delete{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content border-secondary">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm deletion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body h5">
+          Delete category : {{ c.category_name }}
+          <h6 class="text-danger mt-4" >" All products under this category will be deleted "</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <a href="{% url 'delete-cat' c.id %}" type="button" class="btn btn-outline-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+                                                        <!--block Modal  start-->
                                                 </tr>
                                                 {% endfor %}
 

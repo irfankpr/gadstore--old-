@@ -22,3 +22,14 @@ function changeQuantity(cartId, proId, userId, count) {
         }
     })
 }
+
+
+<div class="form-group row text-danger">
+    <label class="col-sm-2 col-form-label  h6 text-success">Stock</label>
+    <div class="col-sm-3">
+        <input type="text" name="stock" value="{{ p.available_stock }}" class="form-control text-danger text-success" readonly id="inp4">
+    </div>
+</div>
+{% for c in cat %}
+                                        <p class="h6 text-left col-4 text-center mx-2"> {% if c.id == p.category_id %} Category : {{c.category_name }} {% endif %} </p>
+                                        {% endfor %}

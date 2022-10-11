@@ -16,7 +16,7 @@ class otpgen():
 
     def send_otp(phone):
         account_ssid = 'ACe6367b4e0523f007dac124700c291ac2'
-        auth_token = '8b90f9e0b0595cd3a02c021a8fdb5e7d'
+        auth_token = 'ae7050b8e79dbc675d7bb8b9bec9c257'
         target_number = '+91' + phone
         print(phone)
         twilio_number = '+19035679739'
@@ -50,7 +50,7 @@ def loginotp(request):
             return redirect('/home')
         else:
             messages.error(request, 'Invalid otp, try again !')
-            return redirect('/log')
+            return redirect('otp')
     else:
         messages.error(request, 'Something went wrong, please try again')
-        return redirect('/log')
+        return redirect('otp')

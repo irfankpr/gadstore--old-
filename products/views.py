@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from profiles.models import cart, userprofiles
-from products.models import categories, sub_categories,products
+from products.models import categories, sub_categories, products
 
 
 # Create your views here.
@@ -46,6 +46,10 @@ def addsubcat(request):
     if request.POST['cat'] and request.POST['subcat']:
         cat = request.POST['cat']
         subcat = request.POST['subcat']
+        if sub_categories.objects.filter(sub_cat_name=subcat):
+            messages.error(request, 'Sub category ' + subcat + " alredy exists.")
+            return redirect('category')
+
         obj = sub_categories()
         obj.sub_cat_name = subcat
         obj.slug = slugify(subcat)
@@ -61,14 +65,17 @@ def addsubcat(request):
 def addto_cart(request, id):
     if request.user.is_authenticated:
         obj = cart()
-        if cart.objects.filter(user_id=request.user.id, product_id=id).exists():
-            cart.objects.filter(user_id=request.user.id, product_id=id).update(count=F('count') + 1)
-            return redirect('/')
+        if cart.objects.filter(user_id_id=request.user.id, product_id_id=id).exists():
+            messages.error(request, 'Product is alredy listed in cart')
+            return redirect('home')
         else:
-            obj.user_id = request.user.id
-            obj.product_id = id
+            obj.user_id = userprofiles.objects.get(id=request.user.id)
+            obj.product_id = products.objects.get(id=id)
+            pr = products.objects.get(id=id)
+            obj.total = pr.price
             obj.save()
-            return redirect('/')
+            messages.error(request, 'Product listed in cart')
+            return redirect('home')
 
 
 def cart_dlt(request, id):
@@ -79,8 +86,14 @@ def cart_dlt(request, id):
 
 def cart_count(request):
     if request.method == 'GET':
-        c=request.GET['count']
-        id=request.GET['cart']
+        c = request.GET['count']
+        id = request.GET['cart']
         cart.objects.filter(id=id).update(count=F('count') + c)
-        cart.objects.filter(count=0).delete()
-        return redirect('cartv')
+        item = cart.objects.get(id=id)
+        pr = products.objects.get(id=item.product_id_id)
+        cart.objects.filter(id=id).update(total=F('total') + pr.price)
+        if cart.objects.filter(count=0):
+            cart.objects.filter(count=0).delete()
+            return JsonResponse({'removeProduct': True})
+        else:
+            return JsonResponse({'price': pr.price})

@@ -66,9 +66,10 @@ class userprofiles(AbstractBaseUser):
 
 
 class cart(models.Model):
-    user_id = models.BigIntegerField(userprofiles, blank=False, unique=False)
-    product_id = models.BigIntegerField(products.models.products, blank=False, )
+    user_id = models.ForeignKey(userprofiles, blank=False, on_delete=models.CASCADE,unique=False)
+    product_id = models.ForeignKey(products.models.products,on_delete=models.CASCADE ,blank=False, )
     count = models.IntegerField(default=1)
+    total = models.BigIntegerField(default=0)
 
 
 

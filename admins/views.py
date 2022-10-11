@@ -24,7 +24,7 @@ def login(request):
             Phone = request.POST['phone']
             password = request.POST['Password']
             print(Phone, password)
-            usr = authenticate(request, phone=Phone, password=password, is_staff=True)
+            usr = authenticate(request, phone=Phone, password=password, is_staff=True,is_admin=True)
             if usr is not None:
                 auth.login(request, usr)
                 res = redirect('adminhome')
@@ -85,15 +85,18 @@ def product_up(request):
         pid = request.POST['pid']
         pname = request.POST['pname']
         obj = products.objects.get(id=pid)
+        thumb=obj.thumbnail
         obj.Product_name = request.POST['pname']
         obj.slug = slugify(pname)
-        obj.products_dyl = request.POST['pid']
-        obj.products_desc = request.POST['pid']
+        obj.products_dyl = request.POST['hilights']
+        obj.products_desc = request.POST['desc']
         obj.MRP = request.POST['mrp']
         obj.price = request.POST['price']
-        obj.category_id = request.POST['catid']
-        if request.FILES['thumbnail']:
+        obj.category_id = request.POST['cat']
+        if 'thumbnail' in request:
             obj.thumbnail = request.FILES['thumbnail']
+        else:
+            obj.thumbnail = thumb
         obj.save()
         messages.error(request, 'Product updated')
         return redirect('adminproducts')
@@ -123,8 +126,8 @@ def product_dtl(request, pid):
 def adminhome(request):
     if request.user.is_authenticated:
         admins = userprofiles.objects.filter(is_staff=True)
-        p=products.objects.filter(available_stock__lte=10)
-        return render(request, 'admin/admin-dashbord.html', {'admins': admins,'products':p})
+        p = products.objects.filter(available_stock__lte=10)
+        return render(request, 'admin/admin-dashbord.html', {'admins': admins, 'products': p})
     else:
         return redirect('admin')
 
@@ -197,4 +200,3 @@ def sub_up(request):
     sub_categories.objects.get(id=id).delete()
     messages.error(request, 'Sub-category deleted')
     return redirect('category')
-

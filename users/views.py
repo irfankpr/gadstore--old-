@@ -16,10 +16,7 @@ from products.models import categories, products, sub_categories
 @never_cache
 def index(request):
     if request.user.is_authenticated:
-        if request.user.is_admin:
-            return redirect('admin')
-        else:
-            return redirect('/home')
+        return redirect('/home')
     else:
         return redirect('landing')
 
@@ -66,12 +63,13 @@ def login(request):
         if request.POST['phone'] and request.POST['Password']:
             Phone = request.POST['phone']
             password = request.POST['Password']
-            usr = authenticate(request, phone=Phone, password=password)
-            user = userprofiles.objects.get(phone=Phone)
-            if usr is not None:
-                if user.blocked:
-                    messages.error(request, 'You are restricted by admin')
-                    return redirect('/log')
+            usr = authenticate(request, phone=Phone, password=password, is_admin=False)
+            if usr:
+                user = userprofiles.objects.get(phone=Phone)
+                if usr is not None:
+                    if user.blocked:
+                        messages.error(request, 'You are restricted by admin')
+                        return redirect('/log')
                 auth.login(request, user)
                 res = redirect('/home')
                 user = userprofiles.objects.get(phone=Phone)
@@ -131,9 +129,8 @@ def shop(request):
         if request.GET['key']:
             key = request.GET['key']
             q = Q()
-            q &= Q(Product_name__icontains=key) | Q(products_desc__icontains=key)
+            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key)
             prds = products.objects.filter(q)
-            print(key, "................................")
             count = cart.objects.filter(user_id=request.user.id).count()
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
@@ -157,14 +154,13 @@ def cartv(request):
     return render(request, 'cart.html', {'cart': crt, 'product': prd})
 
 
-
 @never_cache
 def dtl(request, id):
     count = cart.objects.filter(user_id=request.user.id).count()
     prd = products.objects.filter(id=id)
     d = products.objects.get(id=id)
     like = products.objects.filter(category_id=d.category_id)
-    return render(request, 'detail.html', {'product': prd, 'count': count,'Like':like})
+    return render(request, 'detail.html', {'product': prd, 'count': count, 'Like': like})
 
 
 @login_required(login_url='/')

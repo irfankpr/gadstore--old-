@@ -320,6 +320,7 @@
                                     {% for p in prd %}
                                     <form action="{% url 'product-up' %}" method="POST" enctype='multipart/form-data'>
                                         {% csrf_token %}
+                                        <img src="{{ p.thumbnail.url }}" height="220px" width="220px" class="m-5" style="object-fit: scale-down;" >
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label h6 ">Name</label>
                                             <div class="col-sm-10">
@@ -339,36 +340,44 @@
                                                 <input type="text" name="price" value="{{ p.price }}" class="form-control text-danger text-success" readonly id="inp3">
                                             </div>
                                         </div>
-                                        <div class="form-group row text-danger">
-                                            <label class="col-sm-2 col-form-label  h6 text-success">Stock</label>
+                                        <div class="form-group row ">
+                                            <label class="col-sm-2 col-form-label  h6 ">Stock</label>
                                             <div class="col-sm-3">
-                                                <input type="text" name="stock" value="{{ p.available_stock }}" class="form-control text-danger text-success" readonly id="inp4">
+                                                <input type="text" name="stock" value="{{ p.available_stock }}" class="form-control h2 " readonly id="inp4">
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label h6">Category</label>
-                                            <div class="col-sm-5">
-                                                <select name="catid" class="form-control" disabled id="sl">
-                                                    {% for c in cat %}
-                                                    <option value="{{ c.id }}" selected>{{ c.category_name }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                        <div class="form-group row ">
+                                            <label class="col-sm-2 col-form-label  h6 ">Category : </label>
+                                            <div class="col-sm-3">
+                                                {% for c in cat %}
+                                                {% if c.id == p.category_id %}
+                                                <input type="text"  value="{{c.category_name }}" class="form-control  h4" readonly >
+                                                {% endif %}
+                                                {% endfor %}
                                             </div>
                                         </div>
                                         
+                                        <div class="col-sm-5 ">
+                                            <label class="float-left text-left ">Change category</label>
+                                            <select name="cat" class="form-control border border-secondary mb-5 mt-1" id="sl" disabled >
+                                                {% for c in cat %}
+                                                <option value="{{ c.id }}">{{ c.category_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
                                         <div class="form-group form-default mb-5">
+                                            <label class="float-label h6">Product Details (highlights)</label>
                                             <textarea class="form-control" required=""  name="hilights"  cols="10" rows="5"  readonly id="inp5">{{ p.products_dyl }}</textarea>
                                             <span class="form-bar"></span>
-                                            <label class="float-label h6">Product Details (highlights)</label>
                                         </div>
                                         <div class="form-group form-default">
+                                            <label class="float-label h6">Description (Detailed)</label>
                                             <textarea class="form-control" required="" name ="desc" cols="10" rows="5" readonly id="inp6">{{ p.products_desc }}</textarea>
                                             <span class="form-bar"></span>
-                                            <label class="float-label h6">Description (Detailed)</label>
                                         </div>
-                                        <img src="{{ p.thumbnail.url }}" height="250px" width="250px" class="m-5" style="object-fit: scale-down;" >
-                                        <div class="form-group row justify-content-cemter">
-    
+                                        
+                                        <div class="form-group row justify-content-cemter mx-4 my-5">
                                             <label class="col-sm-e col-form-label">Update Thumnail</label>
                                             <div class="col-10">
                                                 <input type="file" name="thumbnail" class="form-control" disabled id="img">

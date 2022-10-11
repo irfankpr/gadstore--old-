@@ -641,8 +641,8 @@
                                                                         <th>
                                                                             No
                                                                         </th>
-                                                                        <th>Product</th>
                                                                         <th>Image</th>
+                                                                        <th>Product</th>
                                                                         <th>Stock</th>
                                                                         
                                                                     </tr>
@@ -654,29 +654,21 @@
                                                                         <td>
                                                                             <div class="d-inline-block align-middle">
                                                                                 <img src="{{ p.thumbnail.url }}"
-                                                                                    alt="user image"
-                                                                                    class="img-radius img-40 align-top m-r-15">
-                                                                                <div class="d-inline-block">
-                                                                                    <h6>John Deo</h6>
-                                                                                    <p class="text-muted m-b-0">Graphics
-                                                                                        Designer</p>
-                                                                                </div>
+                                                                                    height='80px' width='80px' style="object-fit: scale-down;" >
+                                                                               
                                                                             </div>
                                                                         </td>
-                                                                        <td>Able Pro</td>
-                                                                        <td>Jun, 26</td>
-                                                                        <td class="text-right"><label
-                                                                                class="label label-danger">Low</label>
+                                                                        <td><a href="{% url 'product_dtl' p.id %}"  class="text-primary">{{ p.Product_name }}</a></td>
+                                                                        <td>{{p.available_stock}}</td>
+                                                                        <td class="text-right"><span
+                                                                                class="btn btn-danger p-2">{{p.available_stock}}</span>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}
                                                                    
                                                                 </tbody>
                                                             </table>
-                                                            <div class="text-right m-r-20">
-                                                                <a href="#!" class=" b-b-primary text-primary">View all
-                                                                    Projects</a>
-                                                            </div>
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
