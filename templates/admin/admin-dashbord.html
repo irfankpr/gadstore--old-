@@ -221,6 +221,13 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
+                                <li class="">
+                                    <a href="{% url 'orders' %}" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Orders</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
                                 <li class="pcoded-hasmenu">
                                     <a href="javascript:void(0)" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
@@ -649,7 +656,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     {% for p in products %}
-                                                                    <tr>
+                                                                    <tr class="align-middle">
                                                                         <th>{{ forloop.counter }}</th>
                                                                         <td>
                                                                             <div class="d-inline-block align-middle">
@@ -658,9 +665,9 @@
                                                                                
                                                                             </div>
                                                                         </td>
-                                                                        <td><a href="{% url 'product_dtl' p.id %}"  class="text-primary">{{ p.Product_name }}</a></td>
-                                                                        <td>{{p.available_stock}}</td>
-                                                                        <td class="text-right"><span
+                                                                        <td class="align-middle h4" ><a href="{% url 'product_dtl' p.id %}"  class="text-primary">{{ p.Product_name }}</a></td>
+                                                                       
+                                                                        <td class="text-center"><span
                                                                                 class="btn btn-danger p-2">{{p.available_stock}}</span>
                                                                         </td>
                                                                     </tr>

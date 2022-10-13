@@ -74,7 +74,7 @@
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="#">Home</a>
                     <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active">Shopping Cart</span>
+                    <span class="breadcrumb-item active font-weight-bolder">My orders</span>
                 </nav>
             </div>
         </div>
@@ -84,130 +84,45 @@
 
     <!-- Cart Start -->
     <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class="col-lg-8 table-responsive mb-5">
+        <div class="row px-xl-5 justify-content-center">
+            <div class="col-lg-11 table-responsive mb-5">
                 <table class="table table-light table-borderless table-hover text-center mb-0">
                     <thead class="thead-dark">
                         <tr>
+                            <th>No.</th>
                             <th>Products</th>
                             <th>Name</th>
-                            <th>Price</th>
+                            <th>Amount</th>
                             <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Remove</th>
+                            <th>Date</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        {% for c in cart %}
-                        
-                        <tr >
-                            <td class="align-middle"><img src="{{c.product_id.thumbnail.url }}" alt="" style="width: 50px;"></td>
-                            <td class="align-middle h6"> {{c.product_id.Product_name}}</td>
-                            <td class="align-middle"><input class="h1 form-control bg-light form-control-sm bg-secondary border-0 text-center text-success"
-                                    id='p{{forloop.counter}}' type="text" readonly value="₹  {{ c.product_id.price }}"> </td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" id="mmi" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',-1,'pt{{forloop.counter}}','sc{{forloop.counter}}','st{{forloop.counter}}' )">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <span 
-                                        class="form-control form-control-sm bg-light border-0 text-center"
-                                        id="c{{forloop.counter}}" readonly >
-                                        {{ c.count }}
-                                        </span>
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus" onclick="changeQuantity('{{c.id}}','c{{forloop.counter}}',+1,'pt{{forloop.counter}}','sc{{forloop.counter}}','st{{forloop.counter}}' )">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        {% for o in orders %}
+                        <tr  >
+                            <th class="align-middle h6" style="width:50px">{{forloop.counter}}</th>
+                            <td class="align-middle"><img src="{{o.product.thumbnail.url }}" alt="" style="width: 80px;"></td>
+                            <td class="align-middle h5">{{o.product.Product_name}}</td>
+                            <td class="align-middle text-success h6">₹&nbsp; {{o.Total}} /-</td>
+                            <td class="align-middle">{{o.quantity}}</td>
+                            <td class="align-middle h6">{{o.date.date}}</td>
+                            <td class="align-middle h6">{{o.payment}}</td>
+                            <td class="align-middle h5 font-weight-bolder ">{{o.status}}</td>
+                            <td class="align-middle h5 font-weight-bolder text-info" >
+                                {% if o.status == 'Deliveried' %}<a href="" class="btn btn-outline-info rounded h5">Return</a>
+                                {% else %}<a href="" class="btn btn-outline-danger rounded h5">Cancel</a>
+                                
+                                {% endif %}
                             </td>
-                            <td class="align-middle"><input id="pt{{forloop.counter}}" 
-                                    class="h4 form-control form-control-sm bg-light border-0 text-info  text-center" 
-                                    type="text" readonly value="₹ {{ c.total }}" > 
-                                </td>
-
-                            <td class="align-middle"><a  title="Remove from cart"  data-toggle="modal" data-target="#remove{{forloop.counter}}"
-                                    class="btn btn-sm btn-danger"><i class="fa fa-times"  ></i></a></td>
-                                    <!-- Modal -->
-<div class="modal fade" id="remove{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content border-secondary">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Confirm removal</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body text-danger h6">
-          Remove product : {{p.Product_name}}   from cart ?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <a href="{% url 'cart-dlt' c.id %}" type="button" class="btn btn-outline-danger">Remove</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
                         </tr>
-                        
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-4">
-                <form class="mb-30" action="">
-                    <div class="input-group">
-                        <input type="text" class="form-control border-1 border-dark p-4" placeholder="Coupon Code">
-                        <div class="input-group-append">
-                            <button class="btn btn-primarybtn btn-warning btn-outline-dark">Apply Coupon</button>
-                        </div>
-                    </div>
-                </form>
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
-                        Summary</span></h5>
-                <div class="bg-light p-30 mb-5">
-                     <!-- Basic table card start -->
-                <div class="card">
-                    
-                    <div class="card-block table-border-style">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead >
-                                    <tr class="bg-dark text-light" >
-                                        
-                                        <th>Product</th>
-                                        <th>Count</th>
-                                        <th>Tottal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for c in cart %}
-                       
-                                    <tr>
-                                        
-                                        <td>{{ c.product_id.Product_name }}</td>
-                                        <td class="col-3" id="sc{{forloop.counter}}">{{ c.count }}</td>
-                                        <td class="col-3" id="st{{forloop.counter}}">₹ {{c.total}}</td>
-                                    </tr>
-                                    
-                                    {% endfor %}
-                                   <tr class="m-0 p-0">
-                                    <td colspan="3" class="p-0 "><a href="{% url 'chkout' %}" class="btn btn-block btn-warning font-weight-bold m-0 py-3">Proceed To Checkout</a></td>
-                                   </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <!-- Basic table card end -->
-                </div>
-            </div>
+         
         </div>
     </div>
     <!-- Cart End -->

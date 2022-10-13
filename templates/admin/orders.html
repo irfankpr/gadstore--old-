@@ -183,8 +183,8 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
-                                <li class="active">
-                                    <a href="#" class="waves-effect waves-dark">
+                                <li class="">
+                                    <a href="{% url 'adminproducts' %}" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Products</span>
                                         <span class="pcoded-mcaret"></span>
@@ -197,10 +197,14 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
-                               
-
-                                    </ul>
+                                <li class="active">
+                                    <a href="" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Orders</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
                                 </li>
+                           
                             </ul>
                             <!-- <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Forms &amp; Tables</div>
                             
@@ -218,8 +222,8 @@
                             <!-- Hover table card start -->
                             <div class="card col-12">
                                 <div class="card-header">
-                                    <h3>Available Products</h3>
-                                    <span>All the available products are listed here. Click product name for more details and edit product</span>
+                                    <h3>Orders</h3>
+                                    <span>manage all orders here</span>
                                     <div class="card-header-right">
                                         <ul class="list-unstyled card-option">
                                             <li><i class="fa fa fa-wrench open-card-option"></i></li>
@@ -238,60 +242,48 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-2 m-0 p-0"><a href="addnewproduct" class="btn btn-outline-info">Add new product</a></div>
+                              
                                     {% for msg in messages %}
                                 <h4 class="col-12 p-0 my-2 text-danger text-center font-weight-bold"> {{msg}} </h4>
                                 {% endfor %}
                                 </div>
                                 
-                                <div class="card-block table-border-style">
+                                <div class="card-block ">
                                     <div class="table-responsive">
-                                        <table class="table table-striped align-middle" >
-                                            <thead>
+                                        <table class="table border-dark border  align-middle h6" >
+                                            <thead class="thead-dark bg-dark text-light">
                                                 <tr>
-                                                    <th>No.</th>
-                                                    <th>Name</th>
-                                                    <th>image</th>
-                                                    <th>Category</th>
-                                                    <th class="text-danger">MRP</th>
-                                                    <th class="text-success">Price</th>
-                                                    <th>Stock</th>
-                                                    <th>Delete</th>
+                                                    <th style="width: 50px;">No.</th>
+                                                    <th>Product</th>
+                                                    <th></th>
+                                                    <th>Quantity</th>
+                                                    <th class="text-success">Amound</th>
+                                                    <th>date</th>
+                                                    <th>payment</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                {% for p in product %}
+                                            <tbody >
+                                                {% for o in orders %}
                                                
                                                 <tr>
-                                                    <th class=" align-middle h6" >{{forloop.counter}}</th>
-                                                    <td class="p-0 m-0 align-middle h3"> <a href="{% url 'product_dtl' p.id %}"  class="text-primary">{{ p.Product_name }}</a></td>
-                                                    <td class="p-0 align-middle "><img src="{{ p.thumbnail.url}}" height="100px" width="100px"
+                                                    <th style="width: 50px;" class=" align-middle  h6" >{{forloop.counter}}</th>
+                                                    <td class="p-0 m-0 align-middle h3"> <a href=""  class="text-primary">{{o.product.Product_name}}</a></td>
+                                                    <td class="p-0 align-middle "><img src="{{ o.product.thumbnail.url}}" height="100px" width="100px"
                                                         style="object-fit: scale-down;"></td>
-                                                        <td class=" align-middle h6" >{{p.category.category_name}} </td>
-                                                    <td class=" align-middle text-danger h6">{{ p.MRP }}</td>
-                                                    <td class=" align-middle text-success h6">{{ p.price }}</td>
-                                                    <td class=" align-middle h6 " >{{ p.available_stock }}</td>
-                                                    <td class=" align-middle h6 "><a  data-toggle="modal" data-target="#delete{{forloop.counter}}" class=" bg-danger rounded text-white p-3 border-white" >DELETE</a></td>
-                                                    <!-- Modal -->
-<div class="modal fade" id="delete{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Confirm delete</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body text-danger">
-          Are you sure to delete product : <span class="h5">{{p.Product_name}}</span>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" href="{% url 'delete-product' p.id %}">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
+                                                        <td class=" align-middle h6" >{{o.quantity}} </td>
+                                                    <td class=" align-middle text-success h6">{{ o.Total }}</td>
+                                                    <td class=" align-middle  h6">{{o.date.date }}</td>
+                                                    <td class=" align-middle h6 " >{{ o.payment }}</td>
+                                                    <td class=" align-middle h6 "> 
+                                                    <select name="status" id="status{{forloop.counter}}" class="border-0 h6" onchange="statusup('#status{{forloop.counter}}')" style="opacity: 1;
+                                                    " >
+                                                       <option disabled value="{{o.id}}" {% if o.status == 'Placed' %}selected{% endif %} >Placed</option>
+                                                       <option value="{{o.id}}" {% if o.status == 'Shipped' %}selected{% endif %} >Shipped</option>
+                                                       <option value="{{o.id}}" {% if o.status == 'Out for delivery' %}selected{% endif %} >Out for delivery</option>
+                                                       <option value="{{o.id}}" {% if o.status == 'Deliveried' %}selected{% endif %} >Deliveried</option>
+                                                       <option value="{{o.id}}" {% if o.status == 'Canceled' %}selected{% endif %} >Canceled</option> 
+                                                    </select> </td>
                                                 </tr>
                                                 {% endfor %}
 
@@ -306,9 +298,34 @@
                     </div>
                 </div>
             </div>
+            <script>
+                function statusup(sl) {
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'order-up' %}",
+                        data: {
+                            status :  $(sl).children("option:selected").text(),
+                            order:$(sl).children("option:selected").val(),
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            dataType: "json",
+                        },
+                        success: (response) => {
+                            if (response.ordered) {
+                                st=$(sl).children("option:selected").text(),
+                                swal("Order status updated", st, "success");
+                            } 
+                            
+                        }
+                    });
+                    return false; 
+                   
+                    
+                }
+               
+            </script>
 
-
-           
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
              <!-- Required Jquery -->
              <script type="text/javascript" src=" {% static 'admin/js/jquery/jquery.min.js' %}"></script>
              <script type="text/javascript" src=" {% static 'admin/js/jquery-ui/jquery-ui.min.js' %} "></script>

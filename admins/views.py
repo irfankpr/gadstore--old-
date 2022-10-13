@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
+from orders.models import orders
 from profiles.models import userprofiles, cart
 from products.models import categories, products, prodtct_image, sub_categories
 
@@ -24,7 +25,7 @@ def login(request):
             Phone = request.POST['phone']
             password = request.POST['Password']
             print(Phone, password)
-            usr = authenticate(request, phone=Phone, password=password, is_staff=True,is_admin=True)
+            usr = authenticate(request, phone=Phone, password=password, is_staff=True, is_admin=True)
             if usr is not None:
                 auth.login(request, usr)
                 res = redirect('adminhome')
@@ -85,7 +86,7 @@ def product_up(request):
         pid = request.POST['pid']
         pname = request.POST['pname']
         obj = products.objects.get(id=pid)
-        thumb=obj.thumbnail
+        thumb = obj.thumbnail
         obj.Product_name = request.POST['pname']
         obj.slug = slugify(pname)
         obj.products_dyl = request.POST['hilights']
@@ -168,10 +169,12 @@ def users(request):
 def block_users(request, bid):
     usr = userprofiles.objects.get(id=bid)
     if usr.blocked:
+        print(bid)
         usr.blocked = False
+        usr.save()
     else:
         usr.blocked = True
-    usr.save()
+        usr.save()
     print(usr.blocked)
     return redirect(users)
 
@@ -200,3 +203,8 @@ def sub_up(request):
     sub_categories.objects.get(id=id).delete()
     messages.error(request, 'Sub-category deleted')
     return redirect('category')
+
+
+def order(request):
+    ord = orders.objects.all().order_by('date')
+    return render(request, 'admin/orders.html',{'orders':ord})

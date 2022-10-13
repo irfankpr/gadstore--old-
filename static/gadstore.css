@@ -1,57 +1,67 @@
-.formbox{
+.formbox {
     background: #eaeae4;
     color: #3D464D;
     border: solid 20px #ffd333;
 }
-.formbody{
+
+.formbody {
     background: #9c9b9b;
 }
-.form-adv{
+
+.form-adv {
     color: #eaeae4;
     background-color: #ffd333;
 }
-.formbox input{
+
+.formbox input {
     border: solid 2px #444444;
     outline: none;
     border-radius: 20px;
     color: dimgrey;
 }
 
-#otpbtn{
+#otpbtn {
     display: none;
 }
-#passw{
+
+#passw {
     display: none;
 }
-.topper{
+
+.topper {
     position: sticky;
     top: 0px;
     z-index: 100;
 }
-.tlbtn{
+
+.tlbtn {
     cursor: pointer;
-    border:none;
+    border: none;
     font-weight: 800;
     color: #3D464D;
     background: none;
     font-weight: 700;
     outline: none;
 }
-.tlbtn:hover{
+
+.tlbtn:hover {
     color: #FF0056;
 }
-.formbox button{
+
+.formbox button {
     border: #3D464D solid 3px;
     background: #eaeae4;
     font-weight: 700;
     border-radius: 10px;
 }
-.formbox button:hover{
+
+.formbox button:hover {
     border: 3px solid #ffd333;
     background: #ffd333;
     color: black;
 }
-.sendotp{
+
+.sendotp {
     border: #8e969c solid 3px;
     background: #0f0f0f;
     color: #ffffff;
@@ -59,7 +69,8 @@
     border-radius: 10px;
     outline: none;
 }
-.sendotp:hover{
+
+.sendotp:hover {
     border: 2px solid #ffd333;
     background: #ffd333;
     color: black;

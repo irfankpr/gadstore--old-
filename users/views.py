@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
+from orders.models import orders
 from profiles.models import userprofiles, cart
 from OTP.views import otpgen
 from products.models import categories, products, sub_categories
@@ -66,7 +67,7 @@ def login(request):
             usr = authenticate(request, phone=Phone, password=password, is_admin=False)
             if usr:
                 user = userprofiles.objects.get(phone=Phone)
-                if usr is not None:
+                if usr:
                     if user.blocked:
                         messages.error(request, 'You are restricted by admin')
                         return redirect('/log')
@@ -150,8 +151,7 @@ def shop(request):
 @never_cache
 def cartv(request):
     crt = cart.objects.filter(user_id=request.user.id).order_by('product_id')
-    prd = products.objects.filter()
-    return render(request, 'cart.html', {'cart': crt, 'product': prd})
+    return render(request, 'cart.html', {'cart': crt})
 
 
 @never_cache
@@ -161,12 +161,6 @@ def dtl(request, id):
     d = products.objects.get(id=id)
     like = products.objects.filter(category_id=d.category_id)
     return render(request, 'detail.html', {'product': prd, 'count': count, 'Like': like})
-
-
-@login_required(login_url='/')
-@never_cache
-def chkout(request):
-    return render(request, 'checkout.html')
 
 
 @never_cache
@@ -180,5 +174,6 @@ def landing(request):
 
 @never_cache
 @login_required(login_url='/')
-def checkout(request):
-    return render(request, 'checkout.html')
+def myorders(request):
+    o = orders.objects.filter(user_id=request.user.id).order_by('date')
+    return render(request, 'my-orders.html', {'orders': o, })

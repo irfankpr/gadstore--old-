@@ -12,9 +12,11 @@
     <!-- Favicon -->
     <link href="{% static 'img/favicon.ico' %}" rel="icon">
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+ <!-- Google Web Fonts -->
+ <link rel="preconnect" href="https://fonts.gstatic.com">
+ <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -30,33 +32,46 @@
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid">
-      
-        <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
-            <div class="col-lg-4">
-                <a href="" class="text-decoration-none">
-                    <img src="{% static 'images/b-ylogo.svg' %}" class="col-8 m-0" alt="">
-                </a>
+        <!-- Topbar Start -->
+        <div class="container-fluid ">
+       
+           
+            <div class="row container-fluid justify-content-between col-12 bg-secondary py-3 px-xl-5 d-none d-lg-flex border-bottom p-0 border-warning">
+                <div class="col-lg-4">
+                    <a href="" class="text-decoration-none">
+                        <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
+                    </a>
+                </div>
+               
+                <div class="col-lg-1 col-6 text-right ">
+                    <div class="btn-group mx-2">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle p-0 m-0" data-toggle="dropdown"><h3 class="material-symbols-outlined m-0 p-0 cursor-pointer">
+                            account_circle
+                            </h3></button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dark rounded px-5 py-3">
+                            <a class="dropdown-item  text-warning" type="button" href="my-profile">Profile</a>
+                            <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
+                            <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
+                            <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
+                            <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
-            <div class="col-lg-4 col-6 text-left">
-                
-            </div>
-            
         </div>
-    </div>
-    <!-- Topbar End -->
+        <!-- Topbar End -->
 
 
-    
+
     <!-- Navbar End -->
 
 
     <!-- Breadcrumb Start -->
-    <div class="container-fluid row m-0 p-0 col-12 topper bg-light">
+    <div class="container-fluid row m-0 p-0 col-12 topper bg-secondary">
         <div class="row px-xl-5">
             <div class="col-12">
-                <nav class="breadcrumb bg-light mb-30">
+                <nav class="breadcrumb bg-secondary mb-30">
                     <a class="breadcrumb-item text-dark" href="#">Home</a>
                     <a class="breadcrumb-item text-dark" href="#">Shop</a>
                     <span class="breadcrumb-item active">Checkout</span>
@@ -72,182 +87,137 @@
 
 
     <!-- Checkout Start -->
-    <div class="container-fluid">
+    <div class="container-fluid ">
         <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Your Address</span></h5>
-                <div class="bg-light p-30 mb-5">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>First Name</label>
+            <div class="col-lg-8 ">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Select
+                        your Address</span></h5>
+                <div class="bg-secondary p-30 mb-5  container">
+                    <div class="row col-12 ">
+                        {% if address %}
+                        {% for a in address %}
+                        <div style="background: #FFD333;" class="col-5 border border-warning rounded p-2 m-1 d-flex m-0 row  text-center rounded position-relative "> 
+                           <input type="radio" name="address" value="{{a.id}}" class="col-1  " style="accent-color: rgb(143, 140, 62);"> 
+                           <h6 class='col-10  h5 text-center text-info'>Address {{forloop.counter}}</h6> 
+                           <p class="col-11 h6">{{a.full_name}}</p>
+                           <p class="col-11 h6">{{ a.phone }}</p>
+                           <p class="col-11 h6">{{a.postal_PIN}}</p>
+                           <p class="col-11 h6">{{a.address}}</p>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <h3 class="text-danger" >You have no saved addresses</h3>
+                        {% endif %}
+                    </div>
+
+                    <div class="row col-12 justify-content-center mt-5 text-center border border-warning" style="background: #FFD333;" >
+                        <h5 class="section-title position-relative col-12 text-uppercase my-5 h3">Deliver to new Address</h5>
+                        <div class="col-md-7 form-group">
+                            <label>Full name</label>
                             <input class="form-control" type="text" placeholder="John">
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
-                        </div>
-                        <div class="col-md-6 form-group">
+
+
+                        <div class="col-md-7 form-group">
                             <label>Mobile No</label>
                             <input class="form-control" type="text" placeholder="+123 456 789">
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
+                        <div class="col-md-7 form-group">
+                            <label>Postal <i class="fas fa-pinterest-p    "></i></label>
                             <input class="form-control" type="text" placeholder="123 Street">
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
+                        <div class="col-md-7 form-group">
+                            <textarea class="rounded  col-12 my-2 py-2" name="address" id="" cols="45" rows="7"
+                        placeholder="Address"></textarea>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123">
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="newaccount">
-                                <label class="custom-control-label" for="newaccount">Create an account</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="shipto">
-                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
-                <div class="collapse mb-5" id="shipping-address">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
-                    <div class="bg-light p-30">
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>First Name</label>
-                                <input class="form-control" type="text" placeholder="John">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Last Name</label>
-                                <input class="form-control" type="text" placeholder="Doe">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>E-mail</label>
-                                <input class="form-control" type="text" placeholder="example@email.com">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Mobile No</label>
-                                <input class="form-control" type="text" placeholder="+123 456 789">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Address Line 1</label>
-                                <input class="form-control" type="text" placeholder="123 Street">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Address Line 2</label>
-                                <input class="form-control" type="text" placeholder="123 Street">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>Country</label>
-                                <select class="custom-select">
-                                    <option selected>United States</option>
-                                    <option>Afghanistan</option>
-                                    <option>Albania</option>
-                                    <option>Algeria</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>City</label>
-                                <input class="form-control" type="text" placeholder="New York">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>State</label>
-                                <input class="form-control" type="text" placeholder="New York">
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label>ZIP Code</label>
-                                <input class="form-control" type="text" placeholder="123">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+           
             </div>
-            <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
-                <div class="bg-light p-30 mb-5">
-                    <div class="border-bottom">
-                        <h6 class="mb-3">Products</h6>
+            <div class="col-lg-4"  >
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
+                        Total</span></h5>
+                <div class="bg-secondary p-30 mb-5">
+                    <div class="border-bottom border-warning">
+                        <h6 class="mb-4 h4">Products</h6>
+                        <hr class="col-12 border-warning">
+
+                        {% for i in items %}
                         <div class="d-flex justify-content-between">
-                            <p>Product Name 1</p>
-                            <p>$150</p>
+                            <p class="text-dark h6">{{i.product_id.Product_name}}<i class="h6 mx-2 p-0 txt-dark"> ×
+                                    {{i.count}}</i></p>
+                            <p class="text-success bolder h6">₹ <span id="{{forloop.counter}}"> {{i.total}}</span> /-</p>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 2</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Product Name 3</p>
-                            <p>$150</p>
-                        </div>
+                        {% endfor %}
+
                     </div>
-                    <div class="border-bottom pt-3 pb-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h6>Subtotal</h6>
-                            <h6>$150</h6>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
-                        </div>
-                    </div>
+
                     <div class="pt-2">
+
                         <div class="d-flex justify-content-between mt-2">
-                            <h5>Total</h5>
-                            <h5>$160</h5>
+                            <h5>Total : </h5>
+                            <h5 class="text-info"> ₹ {{total}}</h5>
                         </div>
                     </div>
                 </div>
                 <div class="mb-5">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
-                    <div class="bg-light p-30">
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                <label class="custom-control-label" for="paypal">Paypal</label>
+                    <form action="">
+                        <h5 class="section-title position-relative text-uppercase mb-3"><span
+                                class="bg-secondary pr-3">Payment</span></h5>
+
+
+                        <div class="bg-secondary p-30 text-dark h6">
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <input value="paypal" type="radio" class="custom-control-input" onclick="pmd()"
+                                        name="payment" id="paypal">
+                                    <label class="custom-control-label" for="paypal">Paypal</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <input value="razorpay" type="radio" class="custom-control-input" onclick="pmd()"
+                                        name="payment" id="directcheck">
+                                    <label class="custom-control-label" for="directcheck">Razor pay</label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <div class="custom-control custom-radio">
+                                    <input value="COD" type="radio" class="custom-control-input" onclick="pmd()"
+                                        name="payment" id="banktransfer">
+                                    <label class="custom-control-label " for="banktransfer">Cash on delivery</label>
+                                </div>
+                            </div>
+                            <button type="button" disabled id="placebtn"
+                                class="btn btn-block btn-primary font-weight-bold py-3" data-toggle="modal"
+                                data-target="#exampleModal">Place Order</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">proceed to payment</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body h6">
+                                            Are you sure to continue with <span id="modal-pay"
+                                                class="h5  mx-3 text-info"></span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cancel</button>
+                                            <button type="button" onclick="placeorder()"
+                                                class="btn btn-primary">Continue</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                                <label class="custom-control-label" for="directcheck">Direct Check</label>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                            </div>
-                        </div>
-                        <button class="btn col-12 btn-outline-dark btn-warning border-0 font-weight-bold py-3">Place Order</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -260,7 +230,8 @@
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                 <img src="{% static 'images/b-ylogo.svg' %}" class="col-8 mt-0 mb-4" alt="">
-                <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor. Rebum tempor no vero est magna amet no</p>
+                <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor.
+                    Rebum tempor no vero est magna amet no</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
                 <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
@@ -272,8 +243,10 @@
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
+                                Detail</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping
+                                Cart</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
                             <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
                         </div>
@@ -283,8 +256,10 @@
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
+                                Detail</a>
+                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping
+                                Cart</a>
                             <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
                             <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
                         </div>
@@ -311,22 +286,44 @@
                 </div>
             </div>
         </div>
-        <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary" href="#">Domain</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
-                    <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="{% static 'img/payments.png' %}" alt="">
-            </div>
-        </div>
+        
     </div>
     <!-- Footer End -->
+    <script>
+        function pmd() {
+            v = $("input[type='radio'][name='payment']:checked").val();
+            document.getElementById('placebtn').removeAttribute('disabled')
+            document.getElementById('modal-pay').innerHTML = v
+        }
 
+
+        function placeorder() {
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'place-order' %}",
+                data: {
+                    paym: $("input[type='radio'][name='payment']:checked").val(),
+                    add_id : $("input[type='radio'][name='address']:checked").val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    dataType: "json",
+                },
+                success: (response) => {
+                    if (response.placed==true) {
+                        swal("Order placed", "Order will be deliveried soon", "success");
+                        
+                    } else if(response.placed==false) {
+                       
+                        swal("Address missing", "Add delivery address", "error");
+                    }
+                    
+                }
+            });
+            return false; //<---- move it here
+
+
+        }
+    </script>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
@@ -337,7 +334,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'lib/easing/easing.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Contact Javascript File -->
     <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
     <script src="{% static 'mail/contact.js' %}"></script>
