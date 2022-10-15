@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v5$%8=sr!j#44*32q)+rgqq4cqt$x*gb4w+5t2-!v_z0(85^(e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -138,3 +138,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'profiles.userprofiles'
+
+RAZOR_PAY_KEY_ID = 'rzp_test_PhZWg0KKgRh6je'
+KEY_SECRETE = '75NGiMTB9h3M6AtKP0Iybc4v'
+

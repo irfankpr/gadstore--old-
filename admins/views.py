@@ -25,7 +25,7 @@ def login(request):
             Phone = request.POST['phone']
             password = request.POST['Password']
             print(Phone, password)
-            usr = authenticate(request, phone=Phone, password=password, is_staff=True, is_admin=True)
+            usr = authenticate(request, email=Phone, password=password, is_staff=True, is_admin=True)
             if usr is not None:
                 auth.login(request, usr)
                 res = redirect('adminhome')
@@ -206,5 +206,5 @@ def sub_up(request):
 
 
 def order(request):
-    ord = orders.objects.all().order_by('date')
+    ord = orders.objects.all().order_by('-date')
     return render(request, 'admin/orders.html',{'orders':ord})

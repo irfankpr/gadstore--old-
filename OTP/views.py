@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
 from profiles.models import userprofiles
@@ -54,3 +55,8 @@ def loginotp(request):
     else:
         messages.error(request, 'Something went wrong, please try again')
         return redirect('otp')
+
+
+def reotp(request):
+    otpgen.send_otp(request.user.phone)
+    return JsonResponse({'sent':True})

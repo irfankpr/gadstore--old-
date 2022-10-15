@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
-
+import razorpay
 from orders.models import orders
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -17,7 +17,7 @@ def chkout(request):
     add = address.objects.filter(user_id=request.user.id)
     for i in items:
         total = total + i.total
-    return render(request, 'checkout.html', {'items': items, 'total': total, 'address': add})
+    return render(request, 'checkout.html', {'items': items, 'ttl': total, 'address': add})
 
 
 @login_required(login_url='/')
@@ -32,7 +32,20 @@ def place_order(request):
         for c in citems:
             orders(user=c.user_id, product=c.product_id, quantity=c.count, address=add, status='placed',
                    Total=c.total, payment='COD').save()
+        cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'placed': True})
+    elif request.POST['paym'] == 'razorpay':
+        citems = cart.objects.filter(user_id_id=request.user.id)
+        add_id = request.POST['add_id']
+        add = address.objects.get(id=add_id)
+        print(request.user.id,'......................................................................................')
+        for c in citems:
+            orders(user=c.user_id, product=c.product_id, quantity=c.count, address=add, status='placed',
+                   Total=c.total, payment='Razorpay').save()
+        cart.objects.filter(user_id_id=request.user.id).delete()
+        return JsonResponse({'placed': True})
+
+
 
 
 @login_required(login_url='/')

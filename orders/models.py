@@ -12,7 +12,7 @@ class orders(models.Model):
     user = models.ForeignKey(userprofiles, on_delete=models.CASCADE)
     address = models.ForeignKey(address, on_delete=models.CASCADE)
     quantity = models.IntegerField()
-    Total = models.BigIntegerField()
+    Total = models.FloatField()
     payment = models.CharField(max_length=100, default='COD')
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, default='Pending')

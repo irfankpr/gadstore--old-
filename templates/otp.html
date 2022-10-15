@@ -23,7 +23,7 @@
                 <!-- box div starts here -->
                 <div class="card  divcolor " style="border-radius: 1rem; width :100%;">
                     <div class="card-body p-5 text-center bg-warning">
-                        <form method="post" action="verify-otp" >
+                        <form method="post" action="verify-otp">
                             {% csrf_token %}
                             <div class="mb-md-3 mt-md-4 ">
 
@@ -39,9 +39,10 @@
                                         {% endfor %}
 
                                     </div>
-                                    <div class="col-6 d-flex row mt-5 text-center justify-content-center">
-                                        
-                                        <input type="text" maxlength="4" id="inp1" class="form-control rounded col" name="otp" />
+                                    <div class="col-10 col-md-6 d-flex row mt-5 text-center justify-content-center">
+
+                                        <input type="text" maxlength="4" id="inp1" class="form-control rounded col"
+                                            name="otp" />
 
                                     </div>
                                 </div>
@@ -55,11 +56,12 @@
                                     <div class="col-6">
 
                                     </div>
-                                    <div class="col-5 mt-3 text-end ">
-                                        <p class="mb-0"> <a href="" class="text-black-50 hovers text-end float-right"
-                                                style="text-decoration: None;">(Resend OTP)</a>
-                                        </p>
+                                    <div class="my-5 ">
+                                        <button class="btn btn-dark" disabled id="resnd"> Resend OTP in <span
+                                                class="h5 text-danger mx-3" id="countdowntimer">10</span>
+                                            Seconds</button>
                                     </div>
+
                                 </div>
                             </div>
                         </form>
@@ -69,5 +71,34 @@
         </div>
     </div>
 </body>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript">
+
+    var timeleft = 10;
+    var downloadTimer = setInterval(function () {
+        timeleft--;
+        document.getElementById("countdowntimer").textContent = timeleft;
+        if (timeleft <= 0){
+            clearInterval(downloadTimer);
+            document.getElementById("resnd").innerHTML = "resend"  
+            document.getElementById('resnd').removeAttribute('disabled')
+        }
+    
+    }, 1000);
+
+    function ReSendOTP(username, mess_id) {
+
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'resendotp' %}",
+            data: { usr: request.user.Phone },
+            success: function (data) {
+                mess.innerText = data;
+            }
+        })
+    }
+
+</script>
 
 </html>

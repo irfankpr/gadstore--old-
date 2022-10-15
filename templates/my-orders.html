@@ -104,8 +104,8 @@
                         {% for o in orders %}
                         <tr  >
                             <th class="align-middle h6" style="width:50px">{{forloop.counter}}</th>
-                            <td class="align-middle"><img src="{{o.product.thumbnail.url }}" alt="" style="width: 80px;"></td>
-                            <td class="align-middle h5">{{o.product.Product_name}}</td>
+                            <td class="align-middle"><img src="{{o.product.thumbnail.url }}" alt="" style="width: 100px; object-fit: scale-down;"></td>
+                            <td class="align-middle h5 col-4">{{o.product.Product_name}}</td>
                             <td class="align-middle text-success h6">₹&nbsp; {{o.Total}} /-</td>
                             <td class="align-middle">{{o.quantity}}</td>
                             <td class="align-middle h6">{{o.date.date}}</td>
@@ -192,42 +192,7 @@
 
     </div>
     <!-- Footer End -->
-    <script>
-        function changeQuantity(cartId, proId, count,pt,sc,st) {
-            let quantity =  parseInt(document.getElementById(proId).innerHTML);
-            count = parseInt(count);
-
-            if (quantity == 1 && count== -1){
-                   return true 
-            }
-
-            $.ajax({
-                url: "/cart-count",
-                data: {
-                    count: count,
-                    cart: cartId,
-                  },
-                  success: (response) => {
-                    if (response.removeProduct) {
-                        alert("Product Removed from cart")
-                        location.reload()
-                    } else {
-                        document.getElementById(proId).innerHTML = quantity + count
-                        c =  parseInt(document.getElementById(proId).innerHTML)
-                        document.getElementById(pt).value ="₹ "+ c * response.price
-
-                        document.getElementById(sc).innerHTML=document.getElementById(proId).innerHTML
-                        document.getElementById(st).innerHTML= document.getElementById(pt).value
-                       
-                        
-                    }
-                }
-            })
-            
-        }
-       
-    </script>
-
+  
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 

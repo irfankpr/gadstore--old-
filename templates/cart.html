@@ -98,10 +98,11 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
+                        <tr><th colspan="6" class="text-center">{% if not cart %} <p class="h2 text-info">Cart is empty</p> {% endif %}</th></tr>
                         {% for c in cart %}
                         
                         <tr >
-                            <td class="align-middle"><img src="{{c.product_id.thumbnail.url }}" alt="" style="width: 50px;"></td>
+                            <td class="align-middle"><img src="{{c.product_id.thumbnail.url }}" alt="" style="width: 150px;object-fit: scale-down;"></td>
                             <td class="align-middle h6"> {{c.product_id.Product_name}}</td>
                             <td class="align-middle"><input class="h1 form-control bg-light form-control-sm bg-secondary border-0 text-center text-success"
                                     id='p{{forloop.counter}}' type="text" readonly value="₹  {{ c.product_id.price }}"> </td>

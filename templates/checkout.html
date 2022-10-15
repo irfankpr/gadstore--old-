@@ -12,10 +12,11 @@
     <!-- Favicon -->
     <link href="{% static 'img/favicon.ico' %}" rel="icon">
 
- <!-- Google Web Fonts -->
- <link rel="preconnect" href="https://fonts.gstatic.com">
- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 
     <!-- Font Awesome -->
@@ -32,35 +33,38 @@
 </head>
 
 <body>
-        <!-- Topbar Start -->
-        <div class="container-fluid ">
-       
-           
-            <div class="row container-fluid justify-content-between col-12 bg-secondary py-3 px-xl-5 d-none d-lg-flex border-bottom p-0 border-warning">
-                <div class="col-lg-4">
-                    <a href="" class="text-decoration-none">
-                        <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
-                    </a>
-                </div>
-               
-                <div class="col-lg-1 col-6 text-right ">
-                    <div class="btn-group mx-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle p-0 m-0" data-toggle="dropdown"><h3 class="material-symbols-outlined m-0 p-0 cursor-pointer">
+    <!-- Topbar Start -->
+    <div class="container-fluid ">
+
+
+        <div
+            class="row container-fluid justify-content-between col-12 bg-secondary py-3 px-xl-5 d-none d-lg-flex border-bottom p-0 border-warning">
+            <div class="col-lg-4">
+                <a href="" class="text-decoration-none">
+                    <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
+                </a>
+            </div>
+
+            <div class="col-lg-1 col-6 text-right ">
+                <div class="btn-group mx-2">
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle p-0 m-0" data-toggle="dropdown">
+                        <h3 class="material-symbols-outlined m-0 p-0 cursor-pointer">
                             account_circle
-                            </h3></button>
-                        <div class="dropdown-menu dropdown-menu-right bg-dark rounded px-5 py-3">
-                            <a class="dropdown-item  text-warning" type="button" href="my-profile">Profile</a>
-                            <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
-                            <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
-                            <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
-                            <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
-                        </div>
+                        </h3>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right bg-dark rounded px-5 py-3">
+                        <a class="dropdown-item  text-warning" type="button" href="my-profile">Profile</a>
+                        <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
+                        <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
+                        <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
+                        <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
                     </div>
-                    
                 </div>
+
             </div>
         </div>
-        <!-- Topbar End -->
+    </div>
+    <!-- Topbar End -->
 
 
 
@@ -96,22 +100,26 @@
                     <div class="row col-12 ">
                         {% if address %}
                         {% for a in address %}
-                        <div style="background: #FFD333;" class="col-5 border border-warning rounded p-2 m-1 d-flex m-0 row  text-center rounded position-relative "> 
-                           <input type="radio" name="address" value="{{a.id}}" class="col-1  " style="accent-color: rgb(143, 140, 62);"> 
-                           <h6 class='col-10  h5 text-center text-info'>Address {{forloop.counter}}</h6> 
-                           <p class="col-11 h6">{{a.full_name}}</p>
-                           <p class="col-11 h6">{{ a.phone }}</p>
-                           <p class="col-11 h6">{{a.postal_PIN}}</p>
-                           <p class="col-11 h6">{{a.address}}</p>
+                        <div style="background: #FFD333;"
+                            class="col-5 border border-warning rounded p-2 m-1 d-flex m-0 row  text-center rounded position-relative ">
+                            <input type="radio" name="address" value="{{a.id}}" class="col-1  "
+                                style="accent-color: rgb(143, 140, 62);">
+                            <h6 class='col-10  h5 text-center text-info'>Address {{forloop.counter}}</h6>
+                            <p class="col-11 h6">{{a.full_name}}</p>
+                            <p class="col-11 h6">{{ a.phone }}</p>
+                            <p class="col-11 h6">{{a.postal_PIN}}</p>
+                            <p class="col-11 h6">{{a.address}}</p>
                         </div>
                         {% endfor %}
                         {% else %}
-                        <h3 class="text-danger" >You have no saved addresses</h3>
+                        <h3 class="text-danger">You have no saved addresses</h3>
                         {% endif %}
                     </div>
 
-                    <div class="row col-12 justify-content-center mt-5 text-center border border-warning" style="background: #FFD333;" >
-                        <h5 class="section-title position-relative col-12 text-uppercase my-5 h3">Deliver to new Address</h5>
+                    <div class="row col-12 justify-content-center mt-5 text-center border border-warning"
+                        style="background: #FFD333;">
+                        <h5 class="section-title position-relative col-12 text-uppercase my-5 h3">Deliver to new Address
+                        </h5>
                         <div class="col-md-7 form-group">
                             <label>Full name</label>
                             <input class="form-control" type="text" placeholder="John">
@@ -128,14 +136,14 @@
                         </div>
                         <div class="col-md-7 form-group">
                             <textarea class="rounded  col-12 my-2 py-2" name="address" id="" cols="45" rows="7"
-                        placeholder="Address"></textarea>
+                                placeholder="Address"></textarea>
                         </div>
 
                     </div>
                 </div>
-           
+
             </div>
-            <div class="col-lg-4"  >
+            <div class="col-lg-4">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
                         Total</span></h5>
                 <div class="bg-secondary p-30 mb-5">
@@ -145,9 +153,11 @@
 
                         {% for i in items %}
                         <div class="d-flex justify-content-between">
-                            <p class="text-dark h6">{{i.product_id.Product_name}}<i class="h6 mx-2 p-0 txt-dark"> ×
+                            <p class="text-dark h6" style="width: 300px;">{{i.product_id.Product_name}}<i
+                                    class="h6 mx-2 p-0 txt-dark"> ×
                                     {{i.count}}</i></p>
-                            <p class="text-success bolder h6">₹ <span id="{{forloop.counter}}"> {{i.total}}</span> /-</p>
+                            <p class="text-success bolder h6">₹ <span id="{{forloop.counter}}"> {{i.total}}</span> /-
+                            </p>
                         </div>
                         {% endfor %}
 
@@ -157,7 +167,7 @@
 
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total : </h5>
-                            <h5 class="text-info"> ₹ {{total}}</h5>
+                            <h5 class="text-info"> ₹ {{ttl}} /-</h5>
                         </div>
                     </div>
                 </div>
@@ -170,30 +180,31 @@
                         <div class="bg-secondary p-30 text-dark h6">
                             <div class="form-group">
                                 <div class="custom-control custom-radio">
-                                    <input value="paypal" type="radio" class="custom-control-input" onclick="pmd()"
-                                        name="payment" id="paypal">
+                                    <input value="paypal" type="radio" class="custom-control-input"
+                                        onclick="pmd('#ppl')" name="payment" id="paypal">
                                     <label class="custom-control-label" for="paypal">Paypal</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-radio">
-                                    <input value="razorpay" type="radio" class="custom-control-input" onclick="pmd()"
-                                        name="payment" id="directcheck">
-                                    <label class="custom-control-label" for="directcheck">Razor pay</label>
+                                    <input value="razorpay" type="radio" class="custom-control-input"
+                                        onclick="pmd('#razorpay')" name="payment" id="directcheck">
+                                    <label class="custom-control-label" for="directcheck">Razor Pay</label>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <div class="custom-control custom-radio">
-                                    <input value="COD" type="radio" class="custom-control-input" onclick="pmd()"
+                                    <input value="COD" type="radio" class="custom-control-input" onclick="pmd('#cod')"
                                         name="payment" id="banktransfer">
                                     <label class="custom-control-label " for="banktransfer">Cash on delivery</label>
                                 </div>
                             </div>
                             <button type="button" disabled id="placebtn"
-                                class="btn btn-block btn-primary font-weight-bold py-3" data-toggle="modal"
-                                data-target="#exampleModal">Place Order</button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                class="btn btn-block btn-primary font-weight-bold py-3" data-toggle="modal">Place
+                                Order</button>
+
+                            <!-- Modal for cod -->
+                            <div class="modal fade" id="cod" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -204,8 +215,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body h6">
-                                            Are you sure to continue with <span id="modal-pay"
-                                                class="h5  mx-3 text-info"></span>
+                                            Are you sure to continue with <span class="h5  mx-3 text-info">COD</span>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -216,6 +226,60 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+                            <!-- Modal for razorpay -->
+                            <div class="modal fade" id="razorpay" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">proceed to payment</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body h6">
+                                            Are you sure to continue with <span
+                                                class="h5  mx-3 text-info">Razorpay</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cancel</button>
+                                            <button id="rzp-button1" class="btn btn-warning ro">Pay</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Modal  for paypal -->
+                            <div class="modal fade" id="ppl" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">roceed to payment</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure to continue with <span class="h5  mx-3 text-info">PayPal</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- all payment modals ends -->
                         </div>
                     </form>
                 </div>
@@ -286,45 +350,131 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <!-- Footer End -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-        function pmd() {
+        function pmd(m) {
             v = $("input[type='radio'][name='payment']:checked").val();
             document.getElementById('placebtn').removeAttribute('disabled')
-            document.getElementById('modal-pay').innerHTML = v
+            document.getElementById('placebtn').setAttribute('data-target', m)
         }
 
 
         function placeorder() {
-
-            $.ajax({
-                type: "POST",
-                url: "{% url 'place-order' %}",
-                data: {
-                    paym: $("input[type='radio'][name='payment']:checked").val(),
-                    add_id : $("input[type='radio'][name='address']:checked").val(),
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    dataType: "json",
-                },
-                success: (response) => {
-                    if (response.placed==true) {
-                        swal("Order placed", "Order will be deliveried soon", "success");
-                        
-                    } else if(response.placed==false) {
-                       
-                        swal("Address missing", "Add delivery address", "error");
+            if (document.querySelector( 'input[name="address"]:checked')){
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'place-order' %}",
+                    data: {
+                        paym: $("input[type='radio'][name='payment']:checked").val(),
+                        add_id: $("input[type='radio'][name='address']:checked").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        dataType: "json",
+                    },
+                    success: (response) => {
+                        if (response.placed == true) {
+                            swal("Order placed", "Order will be deliveried soon", "success").then(function () { window.location = " {% url 'my-orders' %} " })
+    
+                        } else if (response.placed == false) {
+    
+                            swal("Address missing", "Add delivery address", "error");
+                        }
+    
                     }
-                    
-                }
-            });
-            return false; //<---- move it here
+                });
+                return false; //<---- move it here
+                
+            }else{
+                
+                swal("Address is not delected", "Select an delivery address.").then( function(){window.location.reload()} )
+                e.preventDefault();
+            }
 
+        
 
         }
     </script>
-
+      <!-- payment cdn scripts -->
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      <script>
+        var options = {
+            "key": "rzp_test_JE819fRVM9Npbt", // Enter the Key ID generated from the Dashboard
+            "amount": '100', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                console.log(
+                    {
+                    razorpay_payment_id : response.razorpay_payment_id,
+                    razorpay_order_id : response.razorpay_order_id,
+                    razorpay_signature : response.razorpay_signature,
+                    }
+                    )
+                    $.ajax( {
+                        type: "POST",
+                        url: "{% url 'place-order' %}",
+                        data: {
+                            paym: $("input[type='radio'][name='payment']:checked").val(),
+                            add_id: $("input[type='radio'][name='address']:checked").val(),
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            dataType: "json",
+                        },
+                        success: (response) => {
+                            if (response.placed) {
+                                swal("Order placed", "will be deliveried soon", "success").then(function () { window.location="{% url 'my-orders' %}" })
+                            } else {
+                                swal("Payment failed", "Try again.").then( function(){window.location.reload()} )
+                                
+                            }
+                        }
+                    
+                    
+                    })
+                        
+            },
+            "prefill": {
+                "name": '{{user.first_name}}',
+                "email": '{{user.email}}',
+                "contact": '{{user.phone}}',
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+                console.log(
+                    {
+                        error_code : response.error.code,
+                        error_description : response.error.description,
+                        error_source : response.error.source,
+                        error_step : response.error.step,
+                        error_reason : response.error.reason,
+                        error_metadata_order_id : response.error.metadata.order_id,
+                        error_metadata_payment_id: response.error.metadata.payment_id,
+                    }
+                )
+                swal("Payment failed", "Order pending", "error").then(function () { window.location.reload() })
+        });
+        document.getElementById('rzp-button1').onclick = function(e){
+            if (document.querySelector( 'input[name="address"]:checked')){
+                rzp1.open();
+                e.preventDefault();
+            }else{
+                e.preventDefault();
+                swal("Address is not delected", "Select an delivery address.").then( function(){window.location.reload()} )
+            }
+        }
+        </script>
+      
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
@@ -334,13 +484,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'lib/easing/easing.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+   
     <!-- Contact Javascript File -->
     <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
     <script src="{% static 'mail/contact.js' %}"></script>
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+
 </body>
 
 </html>

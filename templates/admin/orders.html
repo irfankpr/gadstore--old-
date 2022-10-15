@@ -278,7 +278,7 @@
                                                     <td class=" align-middle h6 "> 
                                                     <select name="status" id="status{{forloop.counter}}" class="border-0 h6" onchange="statusup('#status{{forloop.counter}}')" style="opacity: 1;
                                                     " >
-                                                       <option disabled value="{{o.id}}" {% if o.status == 'Placed' %}selected{% endif %} >Placed</option>
+                                                       <option value="{{o.id}}" {% if o.status == 'Placed' %}selected{% endif %} >Placed</option>
                                                        <option value="{{o.id}}" {% if o.status == 'Shipped' %}selected{% endif %} >Shipped</option>
                                                        <option value="{{o.id}}" {% if o.status == 'Out for delivery' %}selected{% endif %} >Out for delivery</option>
                                                        <option value="{{o.id}}" {% if o.status == 'Deliveried' %}selected{% endif %} >Deliveried</option>

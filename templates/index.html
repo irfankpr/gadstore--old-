@@ -86,7 +86,7 @@
                     <div class="navbar-nav w-100">
                         {% for c in cat %}
                         <div class="nav-item dropdown dropright">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ c.category_name }}<i class="fa fa-angle-right float-right mt-1"></i></a>
+                            <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ c.category_name }}<i class="fa fa-angle-right float-right mt-1"></i></a>
                             
                                     <div class="dropdown-menu position-absolute rounded-0 border-0 m-0"> 
                                         {% for s in subcat %}
@@ -159,7 +159,7 @@
                             <img class="position-absolute w-100 h-100" src="{% static 'img/carousel-1.jpg' %}" style="object-fit: cover;">
                             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3" style="max-width: 700px;">
-                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Men Fashion</h1>
+                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">GAD sales</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam</p>
                                     <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
                                 </div>
@@ -169,7 +169,7 @@
                             <img class="position-absolute w-100 h-100" src="{% static 'img/carousel-2.jpg' %}" style="object-fit: cover;">
                             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3" style="max-width: 700px;">
-                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Women Fashion</h1>
+                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Accessories</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam</p>
                                     <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
                                 </div>
@@ -179,7 +179,7 @@
                             <img class="position-absolute w-100 h-100" src="{% static 'img/carousel-3.jpg' %}" style="object-fit: cover;">
                             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                 <div class="p-3" style="max-width: 700px;">
-                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Kids Fashion</h1>
+                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">GAD tech</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam</p>
                                     <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop Now</a>
                                 </div>
@@ -255,7 +255,7 @@
                             <img class="img-thumbnail h-100" src="{{ c.category_image.url}}" style="object-fit: cover;" >
                         </div>
                         <div class="flex-fill pl-3">
-                            <h6>{{ c.category_name }}</h6>
+                            <h6 class="h5">{{ c.category_name }}</h6>
                             <small class="text-body">{{ c.cat_count }}</small>
                         </div>
                     </div>
