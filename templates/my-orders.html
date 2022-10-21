@@ -112,9 +112,11 @@
                             <td class="align-middle h6">{{o.payment}}</td>
                             <td class="align-middle h5 font-weight-bolder ">{{o.status}}</td>
                             <td class="align-middle h5 font-weight-bolder text-info" >
-                                {% if o.status == 'Deliveried' %}<a href="" class="btn btn-outline-info rounded h5">Return</a>
-                                {% else %}<a href="" class="btn btn-outline-danger rounded h5">Cancel</a>
-                                
+                                {% if o.status == 'Deliveried' %} <a href="" class="btn btn-outline-info rounded h5">Return</a>
+                                {% else %}
+                                {% if o.status != 'Canceled' %}
+                                <a href="{% url 'cancel-order' o.id %}" class="btn btn-outline-danger rounded h5">Cancel</a>
+                                {% endif %}
                                 {% endif %}
                             </td>
                         </tr>

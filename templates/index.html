@@ -86,12 +86,12 @@
                     <div class="navbar-nav w-100">
                         {% for c in cat %}
                         <div class="nav-item dropdown dropright">
-                            <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ c.category_name }}<i class="fa fa-angle-right float-right mt-1"></i></a>
+                            <a class="nav-link dropdown-toggle text-dark btn btn-outline-waring" data-toggle="dropdown">{{ c.category_name }}<i class="fa fa-angle-right float-right mt-1"></i></a>
                             
-                                    <div class="dropdown-menu position-absolute rounded-0 border-0 m-0"> 
+                                    <div class="dropdown-menu position-absolute rounded border-0 m-0"> 
                                         {% for s in subcat %}
                                 {% if s.parent_cat_id == c.id %}
-                                        <a href="" class="dropdown-item btn btn-outline-waring">   {{ s.sub_cat_name }}   </a>
+                                        <a on="srch('{{ s.sub_cat_name }}')" class="dropdown-item btn btn-outline-waring">   {{ s.sub_cat_name }}   </a>
                                         {% endif %}
                             {% endfor %}
                                     </div>
@@ -263,16 +263,6 @@
             </div>
             {% endfor %}
 
-            
-            
-            
-           
-           
-            
-           
-           
-           
-           
         </div>
     </div>
     <!-- Categories End -->

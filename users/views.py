@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
@@ -40,7 +42,7 @@ def signin(request):
                 messages.error(request, 'e-mail already exist')
                 return redirect('/sign')
             if passw2 == passw1:
-                usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname, password=passw1, email=email,
+                usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname,ref_id=Fname+Sname+phone[-4:] ,password=passw1, email=email,
                                                        phone=phone)
                 usr.save()
                 print("user sign inned successfully")
@@ -130,7 +132,7 @@ def shop(request):
         if request.GET['key']:
             key = request.GET['key']
             q = Q()
-            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key)
+            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key)
             prds = products.objects.filter(q)
             count = cart.objects.filter(user_id=request.user.id).count()
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
@@ -146,6 +148,23 @@ def shop(request):
             prds = products.objects.filter()
             return render(request, 'shop.html',
                           {'products': prds, 'key': 'Search products', 'cat': cat, 'subcat': subcat, 'count': count})
+
+
+@never_cache
+def cshop(request):
+    if request.method == 'GET':
+        if request.GET['key']:
+            key = request.GET['key']
+            print(key,'........................................................................')
+            q = Q()
+            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key)
+            prds = products.objects.filter(q)
+            count = cart.objects.filter(user_id=request.user.id).count()
+            cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
+            subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
+            html = render_to_string('shop.html',
+                                    {'products': prds, 'key': key, 'cat': cat, 'subcat': subcat, 'count': count})
+            return HttpResponse(html)
 
 
 @never_cache

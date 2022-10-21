@@ -43,6 +43,7 @@ class userprofiles(AbstractBaseUser):
     email = models.EmailField(blank=False, unique=True, max_length=100)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
+    ref_id = models.CharField(max_length=300,blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -50,8 +51,8 @@ class userprofiles(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
     blocked = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'phone'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', ]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [ 'first_name', 'last_name', ]
 
     objects = MyAccountManager()
 

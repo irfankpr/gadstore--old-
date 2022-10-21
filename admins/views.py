@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
@@ -29,7 +30,7 @@ def login(request):
             if usr is not None:
                 auth.login(request, usr)
                 res = redirect('adminhome')
-                user = userprofiles.objects.get(phone=Phone)
+                user = userprofiles.objects.get(email=Phone)
                 res.set_cookie('username', user.first_name + usr.last_name)
                 res.set_cookie('password', password)
                 request.session['username'] = user.first_name + usr.last_name
@@ -128,7 +129,13 @@ def adminhome(request):
     if request.user.is_authenticated:
         admins = userprofiles.objects.filter(is_staff=True)
         p = products.objects.filter(available_stock__lte=10)
-        return render(request, 'admin/admin-dashbord.html', {'admins': admins, 'products': p})
+        dates = orders.objects.values('date__date').annotate(sales=Count('id')).order_by('date__date')
+        returns = orders.objects.values('date__date').annotate(returns= Count('id', filter=Q(status='Canceled'))).order_by(
+            'date__date')
+        print(returns)
+
+        return render(request, 'admin/admin-dashbord.html',
+                      {'admins': admins, 'products': p, 'dates': dates, 'returns': returns})
     else:
         return redirect('admin')
 
@@ -207,4 +214,4 @@ def sub_up(request):
 
 def order(request):
     ord = orders.objects.all().order_by('-date')
-    return render(request, 'admin/orders.html',{'orders':ord})
+    return render(request, 'admin/orders.html', {'orders': ord})

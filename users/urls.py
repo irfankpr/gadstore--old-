@@ -18,4 +18,5 @@ urlpatterns = [
     path('usr-logout', views.usr_logout),
     path('landing', views.landing, name='landing'),
     path('my-orders', views.myorders, name='my-orders'),
+    path('cshop', views.cshop, name='cshop'),
 ]

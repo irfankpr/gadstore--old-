@@ -98,7 +98,11 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <tr><th colspan="6" class="text-center">{% if not cart %} <p class="h2 text-info">Cart is empty</p> {% endif %}</th></tr>
+                        <tr><th colspan="6" class="text-center">{% if not cart %} 
+                            <div class="col-8 container p-0 m-0" >
+                                <img src="{% static 'images/empty_cart.webp' %}"  srcset="">
+                            </div>
+                            {% endif %}</th></tr>
                         {% for c in cart %}
                         
                         <tr >
@@ -199,7 +203,7 @@
                                     
                                     {% endfor %}
                                    <tr class="m-0 p-0">
-                                    <td colspan="3" class="p-0 "><a href="{% url 'chkout' %}" class="btn btn-block btn-warning font-weight-bold m-0 py-3">Proceed To Checkout</a></td>
+                                    <td colspan="3" class="p-0 "><a {% if cart %}href="{% url 'chkout' %}"{% endif %} class="btn btn-block btn-warning font-weight-bold m-0 py-3">Proceed To Checkout</a></td>
                                    </tr>
                                 </tbody>
                             </table>
