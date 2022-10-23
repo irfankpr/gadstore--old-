@@ -14,6 +14,7 @@ class MyAccountManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             phone=phone,
+            ref_id = first_name + last_name + phone[:4],
             first_name=first_name,
             last_name=last_name,
         )

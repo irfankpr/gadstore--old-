@@ -62,21 +62,21 @@ def addsubcat(request):
         return redirect('category')
 
 
-def addto_cart(request, id):
-    if request.user.is_authenticated:
-        obj = cart()
-        if cart.objects.filter(user_id_id=request.user.id, product_id_id=id).exists():
-            messages.error(request, 'Product is alredy listed in cart')
-            return redirect('home')
-        else:
-            obj.user_id = userprofiles.objects.get(id=request.user.id)
-            obj.product_id = products.objects.get(id=id)
-            pr = products.objects.get(id=id)
-            obj.total = pr.price
-            obj.save()
-            messages.error(request, 'Product listed in cart')
-            return redirect('home')
 
+def add_cart(request):
+    id = request.GET['proid']
+
+    if cart.objects.filter(user_id_id=request.user.id, product_id_id=id).exists():
+        print('exists ......................................................................')
+        return JsonResponse({'added': False})
+    obj = cart()
+    obj.user_id = userprofiles.objects.get(id=request.user.id)
+    obj.product_id = products.objects.get(id=id)
+    pr = products.objects.get(id=id)
+    obj.total = pr.price
+    obj.save()
+    print('added ......................................................................')
+    return  JsonResponse ({'added': True})
 
 def cart_dlt(request, id):
     if request.method == 'GET':

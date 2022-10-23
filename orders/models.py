@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Model
-from products.models import products,categories
+from products.models import products, categories
 from profiles.models import userprofiles, address
 
 
@@ -14,8 +14,6 @@ class Coupons(models.Model):
     discount_type = models.CharField(max_length=50, default='FLAT', choices=(('FLAT', 'FLAT'), ('UPTO', 'UPTO')))
 
 
-
-
 class orders(models.Model):
     product = models.ForeignKey(products, on_delete=models.CASCADE)
     user = models.ForeignKey(userprofiles, on_delete=models.CASCADE)
@@ -26,15 +24,6 @@ class orders(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, default='Pending')
     payment_id = models.CharField(max_length=500, null=True)
-    Offer_applied = models.CharField(max_length=100, default=False)
-    Coupon_applied = models.ForeignKey(Coupons, on_delete=models.CASCADE,null=True,default=False)
+    Offer_applied = models.CharField(max_length=100, blank=True)
+    Coupon_applied = models.ForeignKey(Coupons, on_delete=models.CASCADE, blank=True)
     discount_rate = models.FloatField(default=0)
-
-
-
-
-
-
-
-
-

@@ -42,7 +42,8 @@ def signin(request):
                 messages.error(request, 'e-mail already exist')
                 return redirect('/sign')
             if passw2 == passw1:
-                usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname,ref_id=Fname+Sname+phone[-4:] ,password=passw1, email=email,
+                usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname,
+                                                        password=passw1, email=email,
                                                        phone=phone)
                 usr.save()
                 print("user sign inned successfully")
@@ -155,7 +156,7 @@ def cshop(request):
     if request.method == 'GET':
         if request.GET['key']:
             key = request.GET['key']
-            print(key,'........................................................................')
+            print(key, '........................................................................')
             q = Q()
             q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key)
             prds = products.objects.filter(q)

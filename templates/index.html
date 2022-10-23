@@ -125,14 +125,18 @@
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+                            <a href="" class="btn my-auto mx-3 ">
+                                <span class="material-symbols-outlined text-warning">
+                                    account_balance_wallet
+                                    </span>
+                            </a>
                             <a href="" class="btn px-0">
                                 <i class="fas fa-heart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
                             </a>
                             <a href="{% url 'cartv' %} " class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{ count }}</span>
+                                <span class="badge text-secondary border border-secondary rounded-circle" id ="cartcount" style="padding-bottom: 2px;">{{ count }}</span>
                                
                             </a>
                         </div>
@@ -278,7 +282,7 @@
                     <div class="product-img position-relative overflow-hidden">
                         <img class="img-fluid w-100" src="{{ p.thumbnail.url}}" alt="">
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href="{% url 'addto-cart' p.id %}"><i class="fa fa-shopping-cart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" onclick=" addcart({{p.id}}) " ><i class="fa fa-shopping-cart"></i></a>
                             <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                             <a class="btn btn-outline-dark btn-square py-4 px-4" href="">BUY NOW</i></a>
                         </div>
@@ -608,6 +612,45 @@
         
     </div>
     <!-- Footer End -->
+
+
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <!-- Semantic UI theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
+
+    <script>
+
+        function addcart(pid) {
+            event.stopPropagation();
+
+            $.ajax({
+                url: "{% url 'add-cart' %}",
+                data: {
+                    proid: pid,
+                },
+                success: (response) => {
+                    if (response.added) {
+                        c = parseInt (document.getElementById("cartcount").innerHTML)
+                        document.getElementById('cartcount').innerHTML=c+1,
+                        alertify.set('notifier', 'position', 'top-right');
+                        alertify.success('Product added to cart');
+                    } else {
+                        alertify.set('notifier','position', 'top-right');
+                        alertify.success('Already existed in cart');
+                    }
+                }
+            })
+        }
+    </script>
+
 
 
     <!-- Back to Top -->

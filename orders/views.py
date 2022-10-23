@@ -39,14 +39,13 @@ def place_order(request):
         add_id = request.POST['add_id']
         payment_id = request.POST['payment_id']
         add = address.objects.get(id=add_id)
-        print(request.user.id,'......................................................................................')
+        print(request.user.id, '......................................................................................')
         for c in citems:
-            orders(user=c.user_id, product=c.product_id,payment_id= payment_id ,quantity=c.count, address=add, status='placed',
+            orders(user=c.user_id, product=c.product_id, payment_id=payment_id, quantity=c.count, address=add,
+                   status='placed',
                    Total=c.total, payment='Razorpay').save()
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'placed': True})
-
-
 
 
 @login_required(login_url='/')
@@ -60,9 +59,10 @@ def order_up(request):
         o.save()
         return JsonResponse({'ordered': True})
 
+
 @login_required(login_url='/')
-def cancel_order(request,id):
+def cancel_order(request, id):
     o = orders.objects.get(id=id)
-    o.status="Canceled"
+    o.status = "Canceled"
     o.save()
     return redirect('my-orders')

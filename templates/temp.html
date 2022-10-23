@@ -1,35 +1,42 @@
-<div class="mb-5">
-    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
-    <div class="bg-light p-30">
-        <div class="form-group">
-            <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                <label class="custom-control-label" for="paypal">Paypal</label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                <label class="custom-control-label" for="directcheck">Direct Check</label>
-            </div>
-        </div>
-        <div class="form-group mb-4">
-            <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-            </div>
-        </div>
-        <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
-    </div>
-</div>
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer", {
+		theme: "light2",
+		title:{
+			text: "Print Chart using print() method"              
+		},
+		data: [              
+		{
+			type: "column",
+			dataPoints: [
+				{ label: "apple",  y: 10  },
+				{ label: "orange", y: 15  },
+				{ label: "banana", y: 25  },
+				{ label: "mango",  y: 30  },
+				{ label: "grape",  y: 28  }
+			]
+		}
+		]
+	});
+  
+	chart.render();
+  	document.getElementById("printChart").addEventListener("click",function(){
+    	chart.print();
+    });  	
+}
+</script>
 
 
 
-<div class="card-2">
-    <div class="content d-flex justify-content-center align-items-center">
-        <span>Didn't
-            get the code?</span> <button id="myBtn" onclick="resendOTP();"
-            class="btn u btn-light ml-3" disabled>Resend OTP in</button>
-        <p class="btn btn-link mt-3" id="myTimer"></p>
-    </div>
-</div>
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer" style="height: 275px; width: 100%;"></div>
+  <button id="printChart">Print Chart</button>
+</body>
+</html>

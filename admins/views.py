@@ -1,6 +1,8 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
@@ -9,7 +11,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
 from orders.models import orders
 from profiles.models import userprofiles, cart
-from products.models import categories, products, prodtct_image, sub_categories
+from products.models import categories, products, sub_categories
 
 
 @never_cache
@@ -129,13 +131,23 @@ def adminhome(request):
     if request.user.is_authenticated:
         admins = userprofiles.objects.filter(is_staff=True)
         p = products.objects.filter(available_stock__lte=10)
-        dates = orders.objects.values('date__date').annotate(sales=Count('id')).order_by('date__date')
-        returns = orders.objects.values('date__date').annotate(returns= Count('id', filter=Q(status='Canceled'))).order_by(
+
+        # daily Product sales report graph
+        today = datetime.datetime.now()
+        dates = orders.objects.filter(date__month=today.month).values('date__date').annotate(orders=Count('id')).order_by('date__date')
+        returns = orders.objects.filter(date__month=today.month).values('date__date').annotate(
+            returns=Count('id', filter=Q(status='Canceled'))).order_by(
             'date__date')
-        print(returns)
+        sales = orders.objects.values('date__date').annotate(sales=Count('id', filter=Q(status='Deliveried'))).order_by(
+            '-date__date')
+
+        # monthly sales
+        months = orders.objects.values('date__date__month').annotate(
+            sales=Sum('Total', filter=Q(status='Deliveried'))).order_by('-date__date__month')[:6]
 
         return render(request, 'admin/admin-dashbord.html',
-                      {'admins': admins, 'products': p, 'dates': dates, 'returns': returns})
+                      {'admins': admins, 'products': p, 'dates': dates, 'returns': returns, 'sales': sales,
+                       'months': months})
     else:
         return redirect('admin')
 

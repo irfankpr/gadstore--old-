@@ -356,12 +356,9 @@
                                             <div class="col-xl-8 col-md-12">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5>Sales Analytics</h5>
-                                                        <span class="text-muted">Get 15% Off on <a
-                                                                
-                                                                target="_blank">amCharts</a> licences. Use code
-                                                            "codedthemes" and get the discount.</span>
+                                                        <h5>This month sales Analytics</h5>
                                                         <div class="card-header-right">
+                                                            
                                                             <ul class="list-unstyled card-option">
                                                                 <li><i class="fa fa fa-wrench open-card-option"></i>
                                                                 </li>
@@ -372,8 +369,8 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="card-block">
-                                                        <canvas id="line-chart" width="800" height="450"></canvas>
+                                                    <div class="card-block container row col-12 m-0 p-0  align-middle">
+                                                        <canvas id="line-chart" width="800" height="450"  class="container row col-12 position-inherit"></canvas>
                                                         <script>
                                                             new Chart(document.getElementById("line-chart"), {
                                                                 type: 'line',
@@ -383,22 +380,23 @@
                                                                   ],
 
                                                                   datasets: [{ 
-                                                                      data: [],
-                                                                      label: "Sales",
+                                                                      data: [ {% for s in sales %} {{ s.sales }}, {% endfor %} ],
+                                                                      label: "Soled",
                                                                       borderColor: "green",
-                                                                      fill: false
+                                                                      fill: true
                                                                     }, { 
                                                                       data: [
-                                                                        {% for o in dates  %} {{o.sales}}, {% endfor %}
+                                                                        {% for o in dates  %} {{ o.orders }}, {% endfor %}
                                                                       ],
-                                                                      label: "Tottal orders",
+                                                                      label: "Orders placed",
                                                                       borderColor: "skyblue",
-                                                                      fill: false
+                        
+                                                                      fill: true,
                                                                     },  { 
                                                                       data: [ {% for r in returns %} {{ r.returns }} , {% endfor %} ],
-                                                                      label: "Retuens",
+                                                                      label: "Returned",
                                                                       borderColor: "red",
-                                                                      fill: false
+                                                                      fill: true
                                                                     },
                                                                   ]
                                                                 },
@@ -411,28 +409,47 @@
                                                                 }
                                                               });
                                                         </script>
-                                                       
+                                                     
+                                                        <button onclick="download('line-chart')" class=" btn btn-outline-dark my-2 mr-2 ml-auto p-1 rounded" title="Download"><a class="material-symbols-outlined bolder float-right">
+                                                            download_for_offline
+                                                            </a></button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4 col-md-12">
                                                 <div class="card">
                                                     <div class="card-block">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h4>$256.23</h4>
-                                                                <p class="text-muted">This Month</p>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <label class="label label-success">+20%</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-sm-8">
-                                                                <canvas id="this-month" style="height: 150px;"></canvas>
-                                                        
-                                                            </div>
-                                                        </div>
+                                                        <p class="h5 text-dark">Last 6 months Turnover</p>
+                                                        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<script>
+var xValues = [ {% for m in months reversed %} '{{ m.date__date__month }}', {% endfor %} ];
+var yValues = [ {% for m in months reversed %} {{ m.sales }}, {% endfor %} ];
+var barColors = [
+  "#ffb927",
+  "#b91d47",
+  "#00ffff",
+  "#e8c3b9",
+  "#1e7145"
+];
+
+new Chart("myChart", {
+  type: "doughnut",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+    }
+  }
+});
+</script>
+
                                                     </div>
                                                 </div>
                                                 <div class="card quater-card">
@@ -575,50 +592,12 @@
     </div>
     </div>
     <!-- Warning Section Starts -->
-    <!-- Older IE warning message -->
-    <!--[if lt IE 10]>
-    <div class="ie-warning">
-        <h1>Warning!!</h1>
-        <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers to access this website.</p>
-        <div class="iew-container">
-            <ul class="iew-download">
-                <li>
-                    <a href="http://www.google.com/chrome/">
-                        <img src="{% static 'admin/images/browser/chrome' %}' %}" alt="Chrome">
-                        <div>Chrome</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.mozilla.org/en-US/firefox/new/">
-                        <img src="{% static 'admin/images/browser/firefox.png' %}" alt="Firefox">
-                        <div>Firefox</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://www.opera.com">
-                        <img src="{% static 'admin/images/browser/opera.png' %}" alt="Opera">
-                        <div>Opera</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.apple.com/safari/">
-                        <img src="{% static 'admin/images/browser/safari.png' %}" alt="Safari">
-                        <div>Safari</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                        <img src="{% static 'admin/images/browser/ie.png' %}" alt="">
-                        <div>IE (9 & above)</div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <p>Sorry for the inconvenience!</p>
-    </div>
-    <![endif]-->
-    <!-- Warning Section Ends -->
+  <script>
+function download(id){
+    document.getElementById("line-chart").print();
+}
 
+  </script>
     <!-- Required Jquery -->
     <script type="text/javascript" src="{% static 'admin/js/jquery/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'admin/js/jquery-ui/jquery-ui.min.js' %} "></script>
