@@ -15,6 +15,8 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -118,35 +120,44 @@
 
     <!-- Checkout Start -->
     <div class="container-fluid col-12 row py-0 px-3 m-0 ">
-        <div class="row col-5 ml-3">
-            <div class="col-12 container p-2 m-0 row text-center">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3 h4 text-info">User
-                        Details</span></h5>
-                <div class="bg-light col-12 mt-5">
-                    <div class="row text-center container-fluid col-12 justify-content-center ">
-                        <div class="col-12 text-center form-group d-flex row">
-                            <h6 class='col-3'>First Name :</h6>
-                            <input class="border-0 h5" type="text" value="{{ user.first_name }}" readonly>
-                        </div>
-                        <div class="col-12 text-center form-group d-flex row">
-                            <h6 class='col-3'>Last Name :</h6>
-                            <input class="border-0 h5" type="text" value="{{ user.last_name }}" readonly>
-                        </div>
-                        <div class="col-12 text-center form-group d-flex row">
-                            <h6 class='col-3'>Phone :</h6>
-                            <input class="border-0 h5" type="text" value="{{ user.phone }}" readonly>
-                        </div>
-                        <div class="col-12 text-center form-group d-flex row">
-                            <h6 class='col-3'>e mail :</h6>
-                            <input class="border-0 h5" type="text" value="{{ user.email }}" readonly>
-                        </div>
-                        <div class="col-12 text-center form-group d-flex row">
-                            <h6 class='col-3'>Ref_id :</h6>
-                            <input class="border-0 h5" type="text" value="{{ user.ref_id }}" readonly>
-                        </div>
-
-                    </div>
-                    <a class="btn btn-info mt-5"  href="{% url 'password' %}" >Change password</a>
+        <div class="row col-4 ml-3 mr-3">
+            <div class="col-12 container p-0 m-0 row text-center ">
+                <div class="bg-light col-12 border border-warning ">
+                    <div class="container text-center p-0 m-0 ">
+							<img
+								src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+								class="rounded-circle img-fluid m-0 p-0"
+								style="width: 150px"/>
+					
+						<h3 class="">{{request.user.first_name}} &nbsp;{{request.user.last_name}}</h3>
+						<p class="text-muted h6">
+							{{request.user.email}} <span class="mx-3">|</span>
+							<i>{{request.user.phone}}</i>
+						</p>
+						<div class="d-flex justify-content-center mt-5">
+							<span class="material-symbols-outlined text-warning h1 p-0 ">
+                                monetization_on
+                            </span>&nbsp;
+                            <span class="text-dark h1 text-middle ">{{request.user.wallet}}</span>
+							
+						</div>
+						<div class="d-flex justify-content-between text-center  my-5">
+                            <div>
+                                <p class="mb-2 h5">8471</p>
+								<p class="text-muted mb-0">Wallets Balance</p>
+							</div>
+							<div class="px-3">
+                                <p class="mb-2 h5">8512</p>
+								<p class="text-muted mb-0">Income amounts</p>
+							</div>
+							<div>
+                                <p class="mb-2 h5">4751</p>
+								<p class="text-muted mb-0">Total Transactions</p>
+							</div>
+						</div>
+                        <a class="btn btn-info my-4"  href="{% url 'password' %}" >Change password</a>
+					</div>
+                   
                 </div>
                 
             </div>
@@ -154,14 +165,14 @@
         </div>
 
 
-        <div class="row col-6 position-relative container p-0 m-0 justify-content-center">
+        <div class="row col-7 position-relative container p-0 m-0 justify-content-center">
             <div class="col-12">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3 h4">your
                         address</span></h5>
                 <div class="bg-light col-12 mt-5  text-center">
                     <div class="row text-center container-fluid col-12 justify-content-between p-0 m-0 ">
                         {% for a in address %}
-                        <div class="col-6 border border-warning p-3 d-flex m-0 row bg-light rounded">
+                        <div class="col-6 col-lg-4 border border-warning px-4 py-3 d-flex m-0 row bg-light ">
                             <h6 class='col-10 h5 text-center text-info'>Address {{forloop.counter}}</h6> <a
                                 href="{% url 'dlt_add' a.id %}" class="btn btn-outline-danger px-2 py-1 ">X</a>
                             <input class="border-0 h5 col-12 my-1 mx-0 p-0" type="text" value="{{a.full_name}}"
@@ -173,35 +184,54 @@
                                 readonly>{{a.address}}</textarea>
                         </div>
                         {% endfor %}
-
-
-
-
-
                     </div>
                     <hr class="border border-5 col-12">
-                    <input class="btn btn-info " type="button" onclick="show()" value="Add new address">
-                </div>
+                  
+                    <button type="button" class="btn btn-outline-info h4 bolder rounded" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Add address</button>
+                            <!-- add address modal start-->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">New Address</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body p-5">
+                                      <form action="{% url 'newaddr'  %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                          <input type="text" class="form-control border border-warning " id="recipient-name" name="name" placeholder="Full name">
+                                        </div>
+                                        <div class="form-group">
+                                          <input type="text" class="form-control border border-warning my-4" id="recipient-name"  name="Phone" placeholder="Phone">
+                                        </div>
+                                       
+                                          <input type="text" class="form-control border border-warning my-4" id="recipient-name" name="pin" placeholder="Post PIN">
+                                          <textarea placeholder="Address" name="address" cols="45" rows="6" class="form-control border border-warning  my-4" id="message-text"></textarea>
+                                          <button type="submit" class="btn btn-info mx-auto">Add Address</button>
+                                      </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                      
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
 
-            </div>
+                               <!-- add address modal end-->
+                </div>
 
             <div class="position-absolute  col-12 col-lg-8 container-fluid row border py-3 bg-info  justify-content-around text-center"
                 style="display: none !important; z-index: 100;" id='add'>
                 <div class="col-12 container row">
-                    <h4 class=" text-center col-10 m-0 p-0  ">Add new address</h4><button onclick="hide()"
-                        class="col-1 btn btn-danger m-0 py-1 px-2 ">X</button>
-                    <hr class="col-12  ">
-                </div>
-                <form action="{% url 'newaddr'  %}" method="POST">
-                    <input class="rounded border-0 col-8 my-2 py-2" type="text" name="name" placeholder="Full name">
-                    {% csrf_token %}
-                    <input class="rounded border-0 col-8 my-2 py-2" type="text" name="Phone" placeholder="Phone">
-                    <input class="rounded border-0 col-8 my-2 py-2" type="text" name="pin" placeholder="Post PIN">
-                    <textarea class="rounded border-0 col-8 my-2 py-2" name="address" id="" cols="45" rows="7"
-                        placeholder="Address"></textarea>
-                    <button class="rounded border-0 col-5 mt-4 mb-2 py-2" type="submit">Add address</button>
-                </form>
+                   
 
+                    
+                    <hr class="col-12 ">
+                </div>
             </div>
         </div>
 

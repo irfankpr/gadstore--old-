@@ -53,6 +53,7 @@ class userprofiles(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
     blocked = models.BooleanField(default=False)
     wallet = models.FloatField(null=True)
+    people = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = ['first_name', 'last_name', ]
@@ -82,3 +83,11 @@ class address(models.Model):
     phone = models.CharField(max_length=15, blank=False)
     postal_PIN = models.CharField(max_length=20, blank=False)
     address = models.TextField(blank=False)
+
+
+class walletTrans(models.Model):
+    user = models.ForeignKey(userprofiles, blank=False, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    quantity = models.FloatField(default=0)
+    CrDr = models.CharField(max_length=20, choices=(('Credited', 'Credited'), ('Debited', 'Debited')))
+    desc = models.TextField()

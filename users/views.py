@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
 from orders.models import orders
-from profiles.models import userprofiles, cart
+from profiles.models import userprofiles, cart, walletTrans
 from OTP.views import otpgen
 from products.models import categories, products, sub_categories
 
@@ -46,13 +46,17 @@ def signin(request):
                     refid = request.POST['refid']
                     ref = userprofiles.objects.get(ref_id=refid)
                     if ref:
-                        userprofiles.objects.filter(ref_id=refid).update(wallet=F('wallet') + 50)
+                        userprofiles.objects.filter(ref_id=refid).update(wallet=F('wallet') + 50, people=F('people') + 1)
+                        refr = userprofiles.objects.get(ref_id=refid)
+                        walletTrans(quantity=50, CrDr='Credited', desc='For reffering - ' + Fname + " " + Sname,
+                                    user=refr).save()
+
                     else:
                         messages.error(request, 'Invalid refferal id')
                         return redirect('/sign')
 
                 usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname,
-                                                        password=passw1, email=email,
+                                                       password=passw1, email=email,
                                                        phone=phone)
                 usr.save()
                 print("user sign inned successfully")
@@ -206,3 +210,12 @@ def landing(request):
 def myorders(request):
     o = orders.objects.filter(user_id=request.user.id).order_by('date')
     return render(request, 'my-orders.html', {'orders': o, })
+
+
+@never_cache
+@login_required(login_url='/')
+def wallet(request):
+    if request.user.is_admin == False:
+        trans = walletTrans.objects.filter(user_id=request.user.id).order_by('-date')
+        count = cart.objects.filter(user_id=request.user.id).count()
+        return render(request, 'wallet.html', {'count': count, 'trans': trans})
