@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -42,6 +42,15 @@ def signin(request):
                 messages.error(request, 'e-mail already exist')
                 return redirect('/sign')
             if passw2 == passw1:
+                if 'refid' in request.POST:
+                    refid = request.POST['refid']
+                    ref = userprofiles.objects.get(ref_id=refid)
+                    if ref:
+                        userprofiles.objects.filter(ref_id=refid).update(wallet=F('wallet') + 50)
+                    else:
+                        messages.error(request, 'Invalid refferal id')
+                        return redirect('/sign')
+
                 usr = userprofiles.objects.create_user(first_name=Fname, last_name=Sname,
                                                         password=passw1, email=email,
                                                        phone=phone)
@@ -68,6 +77,7 @@ def login(request):
             Phone = request.POST['phone']
             password = request.POST['Password']
             usr = authenticate(request, phone=Phone, password=password, is_admin=False)
+            print(usr)
             if usr:
                 user = userprofiles.objects.get(phone=Phone)
                 if usr:
@@ -79,7 +89,6 @@ def login(request):
                 user = userprofiles.objects.get(phone=Phone)
                 res.set_cookie('user_id', user.id)
                 return res
-
             else:
                 messages.error(request, 'Invalid credentials.')
                 return redirect('/log')

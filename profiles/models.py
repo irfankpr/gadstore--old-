@@ -14,9 +14,10 @@ class MyAccountManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             phone=phone,
-            ref_id = first_name + last_name + phone[:4],
+            ref_id=first_name + last_name + phone[:4],
             first_name=first_name,
             last_name=last_name,
+            wallet=0,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -44,16 +45,17 @@ class userprofiles(AbstractBaseUser):
     email = models.EmailField(blank=False, unique=True, max_length=100)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
-    ref_id = models.CharField(max_length=300,blank=True)
+    ref_id = models.CharField(max_length=300, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superadmin = models.BooleanField(default=False)
     blocked = models.BooleanField(default=False)
+    wallet = models.FloatField(null=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ 'first_name', 'last_name', ]
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = ['first_name', 'last_name', ]
 
     objects = MyAccountManager()
 
@@ -68,17 +70,15 @@ class userprofiles(AbstractBaseUser):
 
 
 class cart(models.Model):
-    user_id = models.ForeignKey(userprofiles, blank=False, on_delete=models.CASCADE,unique=False)
-    product_id = models.ForeignKey(products.models.products,on_delete=models.CASCADE ,blank=False, )
+    user_id = models.ForeignKey(userprofiles, blank=False, on_delete=models.CASCADE, unique=False)
+    product_id = models.ForeignKey(products.models.products, on_delete=models.CASCADE, blank=False, )
     count = models.IntegerField(default=1)
     total = models.BigIntegerField(default=0)
 
 
-
 class address(models.Model):
-    user=models.ForeignKey(userprofiles,blank=False,on_delete=models.CASCADE)
-    full_name=models.CharField(max_length=50,blank=False)
-    phone = models.CharField(max_length=15,blank=False)
-    postal_PIN = models.CharField(max_length=20,blank=False)
-    address=models.TextField(blank=False)
-
+    user = models.ForeignKey(userprofiles, blank=False, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=50, blank=False)
+    phone = models.CharField(max_length=15, blank=False)
+    postal_PIN = models.CharField(max_length=20, blank=False)
+    address = models.TextField(blank=False)

@@ -25,5 +25,5 @@ class orders(models.Model):
     status = models.CharField(max_length=50, default='Pending')
     payment_id = models.CharField(max_length=500, null=True)
     Offer_applied = models.CharField(max_length=100, blank=True)
-    Coupon_applied = models.ForeignKey(Coupons, on_delete=models.CASCADE, blank=True)
+    Coupon_applied = models.ForeignKey(Coupons, on_delete=models.CASCADE, null=True)
     discount_rate = models.FloatField(default=0)

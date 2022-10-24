@@ -96,7 +96,7 @@
                             </a>
                             <a href="{% url 'cartv' %}" class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle"
+                                <span id="cct" class="badge text-secondary border border-secondary rounded-circle"
                                     style="padding-bottom: 2px;">{{ count }}</span>
                             </a>
                         </div>
@@ -146,8 +146,8 @@
                         </div>
                         <small class="pt-1">(99 Reviews)</small>
                     </div>
-                    <h3 class="font-weight-semi-bold mb-4 text-danger col float-left">₹ {{ p.MRP }} /-</h3>
-                    <h3 class="font-weight-semi-bold mb-4 text-success col"><del>₹ {{ p.MRP }}/-</del></h3>
+                    <h3 class="font-weight-semi-bold mb-4 text-danger col float-left"><del>₹ {{ p.MRP }} /-</del></h3>
+                    <h3 class="font-weight-semi-bold mb-4 text-success col">₹ {{ p.MRP }}/-</h3>
                     <p class="mb-4 h6">{{ p.products_dyl }}</p>
 
 
@@ -450,11 +450,13 @@
                 },
                 success: (response) => {
                     if (response.added) {
+                        c = parseInt (document.getElementById("cct").innerHTML)
+                        document.getElementById('cct').innerHTML=  c+1,
                         alertify.set('notifier', 'position', 'top-right');
                         alertify.success('Product added to cart');
-                    } else {
+                    }  else {
                         alertify.set('notifier','position', 'top-right');
-                        alertify.success('Already existed in cart');
+                        alertify.success('Already exists in the cart');
                     }
                 }
             })
