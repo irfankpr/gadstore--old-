@@ -10,7 +10,8 @@ from django.contrib.auth.models import auth
 from orders.models import orders
 from profiles.models import userprofiles, cart, walletTrans
 from OTP.views import otpgen
-from products.models import categories, products, sub_categories
+from products.models import categories, products, sub_categories, prodtct_image
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 
 
 # Create your views here.
@@ -46,7 +47,8 @@ def signin(request):
                     refid = request.POST['refid']
                     ref = userprofiles.objects.get(ref_id=refid)
                     if ref:
-                        userprofiles.objects.filter(ref_id=refid).update(wallet=F('wallet') + 50, people=F('people') + 1)
+                        userprofiles.objects.filter(ref_id=refid).update(wallet=F('wallet') + 50,
+                                                                         people=F('people') + 1)
                         refr = userprofiles.objects.get(ref_id=refid)
                         walletTrans(quantity=50, CrDr='Credited', desc='For reffering - ' + Fname + " " + Sname,
                                     user=refr).save()
@@ -131,7 +133,7 @@ def log(request):
 def home(request):
     if request.user.is_authenticated:
         count = cart.objects.filter(user_id=request.user.id).count()
-        new = products.objects.all().order_by('-added_date')[:8]
+        new = products.objects.all().order_by('-added_date')[:12]
         cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
         subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
         return render(request, 'index.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})
@@ -143,16 +145,21 @@ def home(request):
 @never_cache
 def shop(request):
     if request.method == 'GET':
-        if request.GET['key']:
+        if 'key' in request.GET:
             key = request.GET['key']
             q = Q()
-            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key)
+            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key)| Q(category__category_name=key)
             prds = products.objects.filter(q)
             count = cart.objects.filter(user_id=request.user.id).count()
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
+            paging = Paginator(prds, 9)
+            page = request.GET.get('page')
+            paged = paging.get_page(page)
+            prd_count = prds.count()
             return render(request, 'shop.html',
-                          {'products': prds, 'key': key, 'cat': cat, 'subcat': subcat, 'count': count})
+                          {'products': paged, 'prd_count': prd_count, 'key': '', 'cat': cat, 'subcat': subcat,
+                           'count': count})
 
 
         else:
@@ -160,8 +167,12 @@ def shop(request):
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
             prds = products.objects.filter()
+            paging = Paginator(prds, 9)
+            page = request.GET.get('page')
+            paged = paging.get_page(page)
+            prd_count = prds.count()
             return render(request, 'shop.html',
-                          {'products': prds, 'key': 'Search products', 'cat': cat, 'subcat': subcat, 'count': count})
+                          {'products': paged, 'prd_count':prd_count ,'key': '', 'cat': cat, 'subcat': subcat, 'count': count})
 
 
 @never_cache
@@ -193,7 +204,8 @@ def dtl(request, id):
     prd = products.objects.filter(id=id)
     d = products.objects.get(id=id)
     like = products.objects.filter(category_id=d.category_id)
-    return render(request, 'detail.html', {'product': prd, 'count': count, 'Like': like})
+    images = prodtct_image.objects.filter(prodtct_name_id=id)
+    return render(request, 'detail.html', {'product': prd, 'count': count, 'Like': like, 'images': images})
 
 
 @never_cache

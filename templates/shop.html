@@ -43,7 +43,7 @@
         <div class="col-lg-4 col-6 text-left">
             <form action="">
                 <div class="input-group border border-dark">
-                    <input name="key" type="search" class="form-control h6" value="{{key}}">
+                    <input name="key" type="search" class="form-control h6" placeholder="Search products" value="{{key}}">
                     <div class="input-group-append bg-warning">
                         <button type="submit" class="input-group-text bg-transparent  text-dark">
                             <i class="fa fa-search"></i>
@@ -364,14 +364,28 @@
 
                 <div class="col-12">
                     <nav>
+                        {% if products.has_other_pages %}
                         <ul class="pagination justify-content-center">
-                            <li class="page-item disabled"><a class="page-link text-dark" href="#">Previous</span></a>
+                            {% if products.has_previous %}
+                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" href="?page={{ products.previous_page_number }}">Previous</span></a>
+                                {% else %}
+                                <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" disabled >Previous</span></a>
+                                {% endif %}
                             </li>
-                            <li class="page-item active"><a class="page-link text-dark" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+                           {% for p in products.paginator.page_range %}
+                           {% if products.number == p %}
+                            <li class="page-item active"><a class="page-link text-dark" href="?page={{p}}">{{p}}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link text-dark" href="?page={{p}}">{{p}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if products.has_next %}
+                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" href="?page={{ products.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark">Next</a></li>
+                            {% endif %}
                         </ul>
+                        {% endif %}
                     </nav>
                 </div>
             </div>

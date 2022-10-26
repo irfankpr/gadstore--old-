@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 import razorpay
+from products.models import products
 from orders.models import orders
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -39,11 +40,11 @@ def place_order(request):
         add_id = request.POST['add_id']
         payment_id = request.POST['payment_id']
         add = address.objects.get(id=add_id)
-        print(request.user.id, '......................................................................................')
         for c in citems:
             orders(user=c.user_id, product=c.product_id, payment_id=payment_id, quantity=c.count, address=add,
                    status='placed',
                    Total=c.total, payment='Razorpay').save()
+            products.objects.filter(id=c.product_id_id).update(available_stock=F('available_stock') - c.count)
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'placed': True})
 

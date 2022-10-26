@@ -353,7 +353,7 @@
                                             <!-- task, page, download counter  end -->
 
                                             <!--  sale analytics start -->
-                                            <div class="col-xl-8 col-md-12">
+                                            <div class="col-xl-8 col-md-12 m-0">
                                                 <div class="card">
                                                     <div class="card-header">
                                                         <h5>This month sales Analytics</h5>
@@ -416,7 +416,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-4 col-md-12">
+                                            <div class="col-xl-4 col-md-12 mt-0">
                                                 <div class="card">
                                                     <div class="card-block">
                                                         <p class="h5 text-dark">Last 6 months Turnover</p>
@@ -594,7 +594,8 @@ new Chart("myChart", {
     <!-- Warning Section Starts -->
   <script>
 function download(id){
-    document.getElementById("line-chart").print();
+    var today = new Date();
+    document.getElementById(id).save();
 }
 
   </script>

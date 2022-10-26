@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
 from orders.models import orders
 from profiles.models import userprofiles, cart
-from products.models import categories, products, sub_categories
+from products.models import categories, products, sub_categories, prodtct_image
 
 
 @never_cache
@@ -75,6 +75,16 @@ def addproduct(request):
                 return redirect('addproduct')
 
             prod.save()
+            prd = products.objects.get(Product_name=prod.Product_name)
+            if 'pimages' in request.FILES:
+                images = request.FILES.getlist('pimages')
+                for i in images:
+                    sv = prodtct_image()
+                    sv.image = i
+                    print(i)
+                    sv.prodtct_name = prd
+                    sv.save()
+
             messages.error(request, 'New product ' + prod.Product_name + ' added.', extra_tags='added.')
             return redirect('addproduct')
 
@@ -96,7 +106,7 @@ def product_up(request):
         obj.products_desc = request.POST['desc']
         obj.MRP = request.POST['mrp']
         obj.price = request.POST['price']
-        obj.category_id = request.POST['cat']
+        obj.category = categories.objects.get(id=request.POST['cat'])
         if 'thumbnail' in request:
             obj.thumbnail = request.FILES['thumbnail']
         else:
@@ -134,12 +144,13 @@ def adminhome(request):
 
         # daily Product sales report graph
         today = datetime.datetime.now()
-        dates = orders.objects.filter(date__month=today.month).values('date__date').annotate(orders=Count('id')).order_by('date__date')
+        dates = orders.objects.filter(date__month=today.month).values('date__date').annotate(
+            orders=Count('id')).order_by('date__date')
         returns = orders.objects.filter(date__month=today.month).values('date__date').annotate(
             returns=Count('id', filter=Q(status='Canceled'))).order_by(
             'date__date')
         sales = orders.objects.values('date__date').annotate(sales=Count('id', filter=Q(status='Deliveried'))).order_by(
-            '-date__date')
+            'date__date')
 
         # monthly sales
         months = orders.objects.values('date__date__month').annotate(
