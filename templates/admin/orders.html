@@ -251,7 +251,7 @@
                                 <div class="card-block ">
                                     <div class="table-responsive">
                                         <table class="table border-dark border  align-middle h6" >
-                                            <thead class="thead-dark bg-dark text-light">
+                                            <thead class="thead-dark bg-dark text-center text-light">
                                                 <tr>
                                                     <th style="width: 50px;">No.</th>
                                                     <th>Product</th>
@@ -268,22 +268,37 @@
                                                
                                                 <tr>
                                                     <th style="width: 50px;" class=" align-middle  h6" >{{forloop.counter}}</th>
-                                                    <td class="p-0 m-0 align-middle h3"> <a href=""  class="text-primary">{{o.product.Product_name}}</a></td>
+                                                    <td class="p-0 m-0 align-middle col-3"> <a href=""  class="text-primary">{{o.product.Product_name}}</a></td>
                                                     <td class="p-0 align-middle "><img src="{{ o.product.thumbnail.url}}" height="100px" width="100px"
                                                         style="object-fit: scale-down;"></td>
-                                                        <td class=" align-middle h6" >{{o.quantity}} </td>
+                                                        <td class=" align-middle h6 text-center" >{{o.quantity}} </td>
                                                     <td class=" align-middle text-success h6">{{ o.Total }}</td>
                                                     <td class=" align-middle  h6">{{o.date.date }}</td>
                                                     <td class=" align-middle h6 " >{{ o.payment }}</td>
                                                     <td class=" align-middle h6 "> 
-                                                    <select name="status" id="status{{forloop.counter}}" class="border-0 h6" onchange="statusup('#status{{forloop.counter}}')" style="opacity: 1;
-                                                    " >
-                                                       <option value="{{o.id}}" {% if o.status == 'Placed' %}selected{% endif %} >Placed</option>
-                                                       <option value="{{o.id}}" {% if o.status == 'Shipped' %}selected{% endif %} >Shipped</option>
-                                                       <option value="{{o.id}}" {% if o.status == 'Out for delivery' %}selected{% endif %} >Out for delivery</option>
-                                                       <option value="{{o.id}}" {% if o.status == 'Deliveried' %}selected{% endif %} >Deliveried</option>
-                                                       <option value="{{o.id}}" {% if o.status == 'Canceled' %}selected{% endif %} >Canceled</option> 
-                                                    </select> </td>
+                                                        <select name="status" id="status{{forloop.counter}}" class="border-0 h6 col" onchange="statusup('#status{{forloop.counter}}')" style="opacity: 1;" >
+                                                            <option value="{{o.id}}" selected >{{o.status}}</option>
+                                                           {% if o.status == 'Placed' %}
+                                                           <option value="{{o.id}}" >Shipped</option> 
+                                                           {% elif o.status == 'Shipped' %}
+                                                           <option value="{{o.id}}" >Out for delivery</option> 
+                                                           {% elif o.status == 'Out for delivery' %}
+                                                           <option value="{{o.id}}" >Delivered</option> 
+                                                           {% elif o.status == 'Returned' %}
+                                                           <option value="{{o.id}}" >Return confirmed</option> 
+                                                           <option value="{{o.id}}" >Return Rejected</option> 
+                                                           {% elif o.status == 'Return Rejected' %}
+                                                           <option value="{{o.id}}" >Return confirmed</option> 
+                                                           {% elif o.status == 'Return confirmed' %}
+                                                           <option value="{{o.id}}" >Picking up Today</option> 
+                                                           {% elif o.status == 'Picking up Today' %}
+                                                           <option value="{{o.id}}" >Refund initiated</option> 
+                                                           {% elif o.status == 'Refund initiated' %}
+                                                           <option value="{{o.id}}" >Refunded</option> 
+                                                           {% endif %}
+                                                            
+                                                         </select>                            
+                                                     </td>
                                                 </tr>
                                                 {% endfor %}
 
@@ -313,7 +328,7 @@
                         success: (response) => {
                             if (response.ordered) {
                                 st=$(sl).children("option:selected").text(),
-                                swal("Order status updated", st, "success");
+                                swal("Order status updated", st, "success").then( function(){window.location.reload()} )
                             } 
                             
                         }

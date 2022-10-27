@@ -29,7 +29,7 @@ def newaddress(request):
         name = request.POST['name']
         Phone = request.POST['Phone']
         pin = request.POST['pin']
-        add = request.POST['address']
+        add = request.POST['addressarea']
         obj = address()
         print(id, name, Phone, pin, add)
         obj.user_id = id
@@ -38,7 +38,10 @@ def newaddress(request):
         obj.postal_PIN = pin
         obj.address = add
         obj.save()
-        return redirect('my-profile')
+        if 'chkout' in request.POST:
+            return redirect('chkout')
+        else:
+            return redirect('my-profile')
 
 
 @never_cache

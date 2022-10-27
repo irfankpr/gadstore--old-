@@ -330,7 +330,7 @@
                                 </div>
                             </div>
                             <div class="text-center py-4">
-                                <a class="h5 text-decoration-none text-truncate" href="">{{ p.Product_name }}</a>
+                                <span class="h6 d-inline-block text-truncate col">{{ p.Product_name }}</span>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <h5 class="text-success mx-2">₹ {{p.price}} /-</h5>
                                     <h6 class="text-muted ml-2"><del class="text-danger mx-2">₹ {{ p.MRP }} /-</del>
@@ -367,20 +367,20 @@
                         {% if products.has_other_pages %}
                         <ul class="pagination justify-content-center">
                             {% if products.has_previous %}
-                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" href="?page={{ products.previous_page_number }}">Previous</span></a>
+                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" href="?page={{ products.previous_page_number }}&key={{key}}">Previous</span></a>
                                 {% else %}
                                 <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" disabled >Previous</span></a>
                                 {% endif %}
                             </li>
                            {% for p in products.paginator.page_range %}
                            {% if products.number == p %}
-                            <li class="page-item active"><a class="page-link text-dark" href="?page={{p}}">{{p}}</a></li>
+                            <li class="page-item active"><a class="page-link text-dark" href="?page={{p}}&key={{key}}">{{p}}</a></li>
                             {% else %}
-                            <li class="page-item"><a class="page-link text-dark" href="?page={{p}}">{{p}}</a></li>
+                            <li class="page-item"><a class="page-link text-dark" href="?page={{p}}&key={{key}}">{{p}}</a></li>
                             {% endif %}
                             {% endfor %}
                             {% if products.has_next %}
-                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" href="?page={{ products.next_page_number }}">Next</a></li>
+                            <li class="page-item rounded h6 p-0 "><a class="page-link text-dark" href="?page={{ products.next_page_number }}&key={{key}}">Next</a></li>
                             {% else %}
                             <li class="page-item rounded h6 p-0 "><a class="page-link text-dark">Next</a></li>
                             {% endif %}

@@ -33,38 +33,48 @@
 </head>
 
 <body>
-    <!-- Topbar Start -->
-    <div class="container-fluid ">
-
-
-        <div
-            class="row container-fluid justify-content-between col-12 bg-secondary py-3 px-xl-5 d-none d-lg-flex border-bottom p-0 border-warning">
-            <div class="col-lg-4">
-                <a href="" class="text-decoration-none">
-                    <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
-                </a>
-            </div>
-
-            <div class="col-lg-1 col-6 text-right ">
-                <div class="btn-group mx-2">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle p-0 m-0" data-toggle="dropdown">
-                        <h3 class="material-symbols-outlined m-0 p-0 cursor-pointer">
-                            account_circle
-                        </h3>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right bg-dark rounded px-5 py-3">
-                        <a class="dropdown-item  text-warning" type="button" href="my-profile">Profile</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
-                        <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
+   <!-- Topbar Start -->
+   <div class="container-fluid">
+       
+           
+    <div class="row container-fluid justify-content-between col-12 bg-light py-3 px-xl-5 d-none d-lg-flex">
+        <div class="col-lg-4">
+            <a href="" class="text-decoration-none">
+                <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
+            </a>
+        </div>
+        <div class="col-lg-6 col-6 text-left">
+            <form action="shop">
+                <div class="input-group border border-dark">
+                    <input name="key" type="search" class="form-control h6" placeholder="Search for products">
+                    <div class="input-group-append bg-warning">
+                        <button type="submit" class="input-group-text bg-transparent  text-dark">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
-
+            </form>
+        </div>
+        <div class="col-lg-1 col-6 text-right ">
+            <div class="btn-group mx-2">
+                <button type="button" class="btn btn-sm btn-light dropdown-toggle p-0 m-0" data-toggle="dropdown"><h3 class="material-symbols-outlined m-0 p-0 cursor-pointer">
+                    account_circle
+                    </h3></button>
+                <div class="dropdown-menu dropdown-menu-right bg-dark rounded px-5 py-3">
+                    <a class="dropdown-item  text-warning" type="button" href="{% url 'home' %}">Home</a>
+                    <a class="dropdown-item  mt-4 text-warning" type="button" href="my-profile">Profile</a>
+                    <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
+                    <a href="{% url 'my-orders' %}" class="dropdown-item mt-4 text-warning" type="button">My orders</a>
+                    <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
+                    <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
+                    <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
+                </div>
             </div>
+            
         </div>
     </div>
-    <!-- Topbar End -->
+</div>
+<!-- Topbar End -->
 
 
 
@@ -115,31 +125,45 @@
                         <h3 class="text-danger">You have no saved addresses</h3>
                         {% endif %}
                     </div>
+                        <div class="d-flex justify-content-center mt-5">
+                    <button type="button" class="btn btn-outline-info h4 bolder rounded" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Add New address</button>
+                            <!-- add address modal start-->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">New Address</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body p-5">
+                                      <form action="{% url 'newaddr'  %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                          <input type="text" class="form-control border border-warning " id="recipient-name" name="name" placeholder="Full name">
+                                        </div>
+                                        <div class="form-group">
+                                          <input type="text" class="form-control border border-warning my-4" id="recipient-name"  name="Phone" placeholder="Phone">
+                                        </div>
+                                        <input type="hidden" value="chkout" name="chkout">
+                                       
+                                          <input type="text" class="form-control border border-warning my-4" id="recipient-name" name="pin" placeholder="Post PIN">
+                                          <textarea placeholder="Address" name="addressarea" cols="45" rows="6" class="form-control border border-warning  my-4" id="message-text"></textarea>
+                                          <button type="submit" class="btn btn-info mx-auto">Add Address</button>
+                                      </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                      
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
 
-                    <div class="row col-12 justify-content-center mt-5 text-center border border-warning"
-                        style="background: #FFD333;">
-                        <h5 class="section-title position-relative col-12 text-uppercase my-5 h3">Deliver to new Address
-                        </h5>
-                        <div class="col-md-7 form-group">
-                            <label>Full name</label>
-                            <input class="form-control" type="text" placeholder="John">
-                        </div>
+                            </div>
 
-
-                        <div class="col-md-7 form-group">
-                            <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789">
-                        </div>
-                        <div class="col-md-7 form-group">
-                            <label>Postal <i class="fas fa-pinterest-p    "></i></label>
-                            <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
-                        <div class="col-md-7 form-group">
-                            <textarea class="rounded  col-12 my-2 py-2" name="address" id="" cols="45" rows="7"
-                                placeholder="Address"></textarea>
-                        </div>
-
-                    </div>
+                               <!-- add address modal end-->
                 </div>
 
             </div>
@@ -199,9 +223,11 @@
                                     <label class="custom-control-label " for="banktransfer">Cash on delivery</label>
                                 </div>
                             </div>
+                            {% if items %}
                             <button type="button" disabled id="placebtn"
                                 class="btn btn-block btn-primary font-weight-bold py-3" data-toggle="modal">Place
                                 Order</button>
+                                {% endif %}
 
                             <!-- Modal for cod -->
                             <div class="modal fade" id="cod" tabindex="-1" role="dialog"
@@ -374,11 +400,10 @@
                         dataType: "json",
                     },
                     success: (response) => {
-                        if (response.placed == true) {
+                        if (response.Placed == true) {
                             swal("Order placed", "Order will be deliveried soon", "success").then(function () { window.location = " {% url 'my-orders' %} " })
     
-                        } else if (response.placed == false) {
-    
+                        } else if (response.Placed == false) {
                             swal("Address missing", "Add delivery address", "error");
                         }
     
@@ -426,7 +451,7 @@
                             dataType: "json",
                         },
                         success: (response) => {
-                            if (response.placed) {
+                            if (response.Placed) {
                                 swal("Order placed", "will be deliveried soon", "success").then(function () { window.location="{% url 'my-orders' %}" })
                             } else {
                                 swal("Payment failed", "Try again.").then( function(){window.location.reload()} )

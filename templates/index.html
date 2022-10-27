@@ -112,7 +112,7 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <a href="{% url 'home' %}" class="nav-item nav-link active">Home</a>
                             <a href="products" class="nav-item nav-link">Shop</a>
                             <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
@@ -279,7 +279,8 @@
             {% for p in new %}
             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4" onclick="window.location = '{% url 'detail' p.id %}'">
-                    <div class="product-img position-relative overflow-hidden">
+                    <div class="product-img  position-relative overflow-hidden">
+                        <a class="bg-danger position-absolute text-light bolder py-1 px-2 rounded m-2 h6">20% OFF</a>
                         <img class="img-fluid w-100" src="{{ p.thumbnail.url}}" alt="">
                         <div class="product-action">
                             <a class="btn btn-outline-dark btn-square" onclick=" addcart({{p.id}}) " ><i class="fa fa-shopping-cart"></i></a>
@@ -299,6 +300,7 @@
                             <small class="fa fa-star text-primary mr-1"></small>
                             <small class="fa fa-star text-primary mr-1"></small>
                             <small>(99)</small>
+                           
                         </div>
                     </div>
                 </div>

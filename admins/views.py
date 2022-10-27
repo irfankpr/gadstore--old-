@@ -149,12 +149,12 @@ def adminhome(request):
         returns = orders.objects.filter(date__month=today.month).values('date__date').annotate(
             returns=Count('id', filter=Q(status='Canceled'))).order_by(
             'date__date')
-        sales = orders.objects.values('date__date').annotate(sales=Count('id', filter=Q(status='Deliveried'))).order_by(
+        sales = orders.objects.filter(date__month=today.month).values('date__date').annotate(sales=Count('id', filter=Q(status='Delivered'))).order_by(
             'date__date')
 
         # monthly sales
         months = orders.objects.values('date__date__month').annotate(
-            sales=Sum('Total', filter=Q(status='Deliveried'))).order_by('-date__date__month')[:6]
+            sales=Sum('Total', filter=Q(status='Delivered'))).order_by('-date__date__month')[:6]
 
         return render(request, 'admin/admin-dashbord.html',
                       {'admins': admins, 'products': p, 'dates': dates, 'returns': returns, 'sales': sales,

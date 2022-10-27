@@ -31,10 +31,10 @@ def place_order(request):
         add_id = request.POST['add_id']
         add = address.objects.get(id=add_id)
         for c in citems:
-            orders(user=c.user_id, product=c.product_id, quantity=c.count, address=add, status='placed',
+            orders(user=c.user_id, product=c.product_id, quantity=c.count, address=add, status='Placed',
                    Total=c.total, payment='COD').save()
         cart.objects.filter(user_id_id=request.user.id).delete()
-        return JsonResponse({'placed': True})
+        return JsonResponse({'Placed': True})
     elif request.POST['paym'] == 'razorpay':
         citems = cart.objects.filter(user_id_id=request.user.id)
         add_id = request.POST['add_id']
@@ -42,11 +42,11 @@ def place_order(request):
         add = address.objects.get(id=add_id)
         for c in citems:
             orders(user=c.user_id, product=c.product_id, payment_id=payment_id, quantity=c.count, address=add,
-                   status='placed',
+                   status='Placed',
                    Total=c.total, payment='Razorpay').save()
             products.objects.filter(id=c.product_id_id).update(available_stock=F('available_stock') - c.count)
         cart.objects.filter(user_id_id=request.user.id).delete()
-        return JsonResponse({'placed': True})
+        return JsonResponse({'Placed': True})
 
 
 @login_required(login_url='/')
@@ -64,6 +64,14 @@ def order_up(request):
 @login_required(login_url='/')
 def cancel_order(request, id):
     o = orders.objects.get(id=id)
-    o.status = "Canceled"
+    o.status = "Cancelled"
+    o.save()
+    return redirect('my-orders')
+
+
+@login_required(login_url='/')
+def return_order(request, id):
+    o = orders.objects.get(id=id)
+    o.status = "Returned"
     o.save()
     return redirect('my-orders')

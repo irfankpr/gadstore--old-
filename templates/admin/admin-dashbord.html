@@ -354,7 +354,7 @@
 
                                             <!--  sale analytics start -->
                                             <div class="col-xl-8 col-md-12 m-0">
-                                                <div class="card">
+                                                <div class="card" >
                                                     <div class="card-header">
                                                         <h5>This month sales Analytics</h5>
                                                         <div class="card-header-right">
@@ -369,11 +369,12 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="card-block container row col-12 m-0 p-0  align-middle">
+                                                    <div  class="card-block container row col-12 m-0 p-0  align-middle">
                                                         <canvas id="line-chart" width="800" height="450"  class="container row col-12 position-inherit"></canvas>
                                                         <script>
                                                             new Chart(document.getElementById("line-chart"), {
                                                                 type: 'line',
+                                                                responsive: true,
                                                                 data: {
                                                                   labels: [
                                                                     {% for d in dates %} "{{ d.date__date }}", {% endfor %}
@@ -382,37 +383,37 @@
                                                                   datasets: [{ 
                                                                       data: [ {% for s in sales %} {{ s.sales }}, {% endfor %} ],
                                                                       label: "Soled",
-                                                                      borderColor: "green",
+                                                                      lineTension:0,
+                                                                      borderColor: "#38E54D",
                                                                       fill: true
                                                                     }, { 
                                                                       data: [
                                                                         {% for o in dates  %} {{ o.orders }}, {% endfor %}
                                                                       ],
                                                                       label: "Orders placed",
-                                                                      borderColor: "skyblue",
-                        
+                                                                      borderColor: "#00EAD3",
+                                                                      lineTension:0,
                                                                       fill: true,
                                                                     },  { 
                                                                       data: [ {% for r in returns %} {{ r.returns }} , {% endfor %} ],
                                                                       label: "Returned",
-                                                                      borderColor: "red",
+                                                                      lineTension:0,
+                                                                      borderColor: "#FF1E1E",
                                                                       fill: true
                                                                     },
                                                                   ]
                                                                 },
                                                                 options: {
+                                                                    
                                                                   title: {
                                                                     display: true,
-                                                                    text: 'Last 30 days sales report'
-                                                                
+                                                                    text: " This month sales repost",
                                                                   }
                                                                 }
                                                               });
                                                         </script>
                                                      
-                                                        <button onclick="download('line-chart')" class=" btn btn-outline-dark my-2 mr-2 ml-auto p-1 rounded" title="Download"><a class="material-symbols-outlined bolder float-right">
-                                                            download_for_offline
-                                                            </a></button>
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -423,14 +424,21 @@
                                                         <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
 <script>
-var xValues = [ {% for m in months reversed %} '{{ m.date__date__month }}', {% endfor %} ];
-var yValues = [ {% for m in months reversed %} {{ m.sales }}, {% endfor %} ];
+    function getMonthName(monthNumber) {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+      
+        return date.toLocaleString('en-US', { month: 'long' });
+      } 
+var xValues = [ {% for m in months reversed %} getMonthName( {{ m.date__date__month}} ),{% endfor %} ];
+var yValues = [ {% for m in months reversed %} {% if  m.sales  %}{{ m.sales }}, {% else %} 0,   {% endif %} {% endfor %} ];
 var barColors = [
   "#ffb927",
   "#b91d47",
   "#00ffff",
   "#e8c3b9",
-  "#1e7145"
+  "#1e7145",
+  "00ABB3",
 ];
 
 new Chart("myChart", {
@@ -451,6 +459,7 @@ new Chart("myChart", {
 </script>
 
                                                     </div>
+                                                   
                                                 </div>
                                                 <div class="card quater-card">
                                                     <div class="card-block">
@@ -593,11 +602,7 @@ new Chart("myChart", {
     </div>
     <!-- Warning Section Starts -->
   <script>
-function download(id){
-    var today = new Date();
-    document.getElementById(id).save();
-}
-
+    
   </script>
     <!-- Required Jquery -->
     <script type="text/javascript" src="{% static 'admin/js/jquery/jquery.min.js' %}"></script>

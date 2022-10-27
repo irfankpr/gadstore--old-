@@ -45,7 +45,7 @@ def signin(request):
             if passw2 == passw1:
                 if 'refid' in request.POST:
                     refid = request.POST['refid']
-                    ref = userprofiles.objects.get(ref_id=refid)
+                    ref = userprofiles.objects.filter(ref_id=refid)
                     if ref:
                         userprofiles.objects.filter(ref_id=refid).update(wallet=F('wallet') + 50,
                                                                          people=F('people') + 1)
@@ -153,12 +153,12 @@ def shop(request):
             count = cart.objects.filter(user_id=request.user.id).count()
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
-            paging = Paginator(prds, 9)
+            paging = Paginator(prds, 3)
             page = request.GET.get('page')
             paged = paging.get_page(page)
             prd_count = prds.count()
             return render(request, 'shop.html',
-                          {'products': paged, 'prd_count': prd_count, 'key': '', 'cat': cat, 'subcat': subcat,
+                          {'products': paged, 'prd_count': prd_count, 'key': key, 'cat': cat, 'subcat': subcat,
                            'count': count})
 
 
@@ -167,7 +167,7 @@ def shop(request):
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
             prds = products.objects.filter()
-            paging = Paginator(prds, 9)
+            paging = Paginator(prds, 3)
             page = request.GET.get('page')
             paged = paging.get_page(page)
             prd_count = prds.count()
@@ -220,7 +220,7 @@ def landing(request):
 @never_cache
 @login_required(login_url='/')
 def myorders(request):
-    o = orders.objects.filter(user_id=request.user.id).order_by('date')
+    o = orders.objects.filter(user_id=request.user.id).order_by('-date')
     return render(request, 'my-orders.html', {'orders': o, })
 
 
