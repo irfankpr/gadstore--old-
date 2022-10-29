@@ -75,6 +75,7 @@ class cart(models.Model):
     product_id = models.ForeignKey(products.models.products, on_delete=models.CASCADE, blank=False, )
     count = models.IntegerField(default=1)
     total = models.BigIntegerField(default=0)
+    discount = models.FloatField(default=0)
 
 
 class address(models.Model):

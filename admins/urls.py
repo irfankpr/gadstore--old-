@@ -21,5 +21,8 @@ urlpatterns = [
     path('admin/catedit/<int:cid>/', views.cat_edit, name="catedit"),
     path('cat-up', views.cat_up, name="cat-up"),
     path('sub-up', views.sub_up, name="sub-up"),
-    path('orders', views.order, name="orders"),
+    path('admin/orders', views.order, name="orders"),
+    path('admin/Coupons', views.Couponspage, name="Coupons"),
+    path('admin/addcoupons', views.addcoupon, name="addcoupon"),
+    path('admin/delete-coupon/<int:id>/', views.dlt_coupon, name="delete-coupon"),
 ]

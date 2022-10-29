@@ -1,15 +1,13 @@
 import datetime
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q, Sum
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
-from orders.models import orders
+from orders.models import orders,Coupons
 from profiles.models import userprofiles, cart
 from products.models import categories, products, sub_categories, prodtct_image
 
@@ -113,7 +111,7 @@ def product_up(request):
             obj.thumbnail = thumb
         obj.save()
         messages.error(request, 'Product updated')
-        return redirect('adminproducts')
+        return redirect('admin/product_dtl/' + pid)
 
 
 def deleteproduct(request, id):
@@ -147,9 +145,10 @@ def adminhome(request):
         dates = orders.objects.filter(date__month=today.month).values('date__date').annotate(
             orders=Count('id')).order_by('date__date')
         returns = orders.objects.filter(date__month=today.month).values('date__date').annotate(
-            returns=Count('id', filter=Q(status='Canceled'))).order_by(
+            returns=Count('id', filter=Q(status='Cancelled'))).order_by(
             'date__date')
-        sales = orders.objects.filter(date__month=today.month).values('date__date').annotate(sales=Count('id', filter=Q(status='Delivered'))).order_by(
+        sales = orders.objects.filter(date__month=today.month).values('date__date').annotate(
+            sales=Count('id', filter=Q(status='Delivered'))).order_by(
             'date__date')
 
         # monthly sales
@@ -223,9 +222,11 @@ def cat_up(request):
         obj = categories.objects.get(id=id)
         obj.category_name = request.POST['cname']
         obj.description = request.POST['desc']
-        obj.category_image = request.FILES['catimg']
+        if 'catimg' in request.FILES:
+            obj.category_image = request.FILES['catimg']
+        obj.save()
         messages.error(request, 'Category updated ')
-        return redirect('category')
+        return redirect('admin/catedit/' + id)
 
 
 def sub_up(request):
@@ -235,6 +236,34 @@ def sub_up(request):
     return redirect('category')
 
 
+@login_required(login_url='/')
+@never_cache
 def order(request):
     ord = orders.objects.all().order_by('-date')
-    return render(request, 'admin/orders.html', {'orders': ord})
+    return render(request, 'admin/Coupons.html', {'orders': ord})
+
+
+@login_required(login_url='/')
+@never_cache
+def Couponspage(request):
+    coupons = Coupons.objects.all()
+    return render(request, 'admin/Coupons.html',{'coupons':coupons})
+
+@login_required(login_url='/')
+def addcoupon(request):
+    if request.method == 'POST':
+        if Coupons.objects.filter(Coupon_code=request.POST['code']).exists():
+            messages.error(request, 'Coupon code alredy exists !')
+            return redirect('Coupons')
+        Coupons.objects.create(Coupon_code=request.POST['code'],
+                               minimum=request.POST['min'],
+                               maxlimit=request.POST['limit'],
+                               discount_rate=request.POST['rate'],
+                               )
+    return redirect('Coupons')
+
+
+def dlt_coupon(request,id):
+    if request.method=="GET":
+        Coupons.objects.filter(id=id).delete()
+        return redirect('Coupons')

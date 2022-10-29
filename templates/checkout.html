@@ -19,12 +19,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
@@ -169,8 +164,17 @@
             </div>
             <div class="col-lg-4">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order
-                        Total</span></h5>
-                <div class="bg-secondary p-30 mb-5">
+                        Summary</span></h5>
+                       
+                            <div class="input-group">
+                                <input oninput="coup()" type="text"  class="form-control border-1 border-dark p-4" id="ccode" placeholder="Coupon Code" list="Coupons">
+                                <div class="input-group-append">
+                                    <button onclick="APLYcoupon()" id="coupbtn" disabled class="btn btn-primarybtn btn-warning btn-outline-dark">Apply Coupon</button>
+                                </div>
+                                <p id="aplyed" class="text-success h6 m-0 p-0 col-12 text-center text-monospace "  style="display:none;">Coupon applied</p>
+                            </div>
+                        
+                <div class="bg-secondary p-2 mt-3">
                     <div class="border-bottom border-warning">
                         <h6 class="mb-4 h4">Products</h6>
                         <hr class="col-12 border-warning">
@@ -188,14 +192,20 @@
                     </div>
 
                     <div class="pt-2">
-
-                        <div class="d-flex justify-content-between mt-2">
-                            <h5>Total : </h5>
-                            <h5 class="text-info"> ₹ {{ttl}} /-</h5>
+                        <div id="coupondiv" class="row justify-content-between mt-2"  style="display:none;" >
+                           
+                            <h5 class="text-success" >You Saved : </h5>
+                            <h5 class="text-success h5" id="saved"></h5>
+                            
+                        </div>
+                        <div class="d-flex row justify-content-between mt-2">
+                            <h5 >Total : </h5>
+                            <h5 id="total" class="text-info"> ₹ {{ttl}} /-</h5>
                         </div>
                     </div>
                 </div>
-                <div class="mb-5">
+                
+                <div class="my-5">
                     <form action="">
                         <h5 class="section-title position-relative text-uppercase mb-3"><span
                                 class="bg-secondary pr-3">Payment</span></h5>
@@ -225,7 +235,7 @@
                             </div>
                             {% if items %}
                             <button type="button" disabled id="placebtn"
-                                class="btn btn-block btn-primary font-weight-bold py-3" data-toggle="modal">Place
+                                class="btn btn-block btn-primary font-weight-bold py-3" onclick="add_coup()" data-toggle="modal">Place
                                 Order</button>
                                 {% endif %}
 
@@ -379,6 +389,17 @@
 
     </div>
     <!-- Footer End -->
+    <!-- data list for coupons -->
+    <datalist id="Coupons">
+        {% for c in coupons %}
+        <option >{{c.Coupon_code}}</option>
+        {% endfor %}
+        
+    </datalist>
+
+    <!-- data list ends -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>  
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         function pmd(m) {
@@ -389,11 +410,11 @@
 
 
         function placeorder() {
-            if (document.querySelector( 'input[name="address"]:checked')){
                 $.ajax({
                     type: "POST",
                     url: "{% url 'place-order' %}",
                     data: {
+                        coupon :  $("#ccode").val(),
                         paym: $("input[type='radio'][name='payment']:checked").val(),
                         add_id: $("input[type='radio'][name='address']:checked").val(),
                         csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -405,20 +426,15 @@
     
                         } else if (response.Placed == false) {
                             swal("Address missing", "Add delivery address", "error");
+                        }else if (response.minimum) {
+                            swal("Invalid Coupon", "Coupon needs minimum puechase of : "+minimum, "error");
+                        }else if (response.invalidCoupon) {
+                            swal("Invalid Coupon", "Check applied coupon", "error");
                         }
     
                     }
                 });
-                return false; //<---- move it here
-                
-            }else{
-                
-                swal("Address is not delected", "Select an delivery address.").then( function(){window.location.reload()} )
-                e.preventDefault();
-            }
-
-        
-
+                return false; 
         }
     </script>
       <!-- payment cdn scripts -->
@@ -444,6 +460,7 @@
                         type: "POST",
                         url: "{% url 'place-order' %}",
                         data: {
+                            coupon :  $("#ccode").val(),
                             paym: $("input[type='radio'][name='payment']:checked").val(),
                             add_id: $("input[type='radio'][name='address']:checked").val(),
                             payment_id : response.razorpay_payment_id,
@@ -453,6 +470,10 @@
                         success: (response) => {
                             if (response.Placed) {
                                 swal("Order placed", "will be deliveried soon", "success").then(function () { window.location="{% url 'my-orders' %}" })
+                            }else if (response.invalidCoupon) {
+                                swal("Invalid Coupon", "Check applied coupon", "error");
+                            }else if (response.minimum) {
+                                swal("Invalid Coupon", "Coupon needs minimum puechase of : "+minimum, "error");
                             } else {
                                 swal("Payment failed", "Try again.").then( function(){window.location.reload()} )
                                 
@@ -491,32 +512,76 @@
                 swal("Payment failed", "Order pending", "error").then(function () { window.location.reload() })
         });
         document.getElementById('rzp-button1').onclick = function(e){
-            if (document.querySelector( 'input[name="address"]:checked')){
                 rzp1.open();
                 e.preventDefault();
-            }else{
-                e.preventDefault();
-                swal("Address is not delected", "Select an delivery address.").then( function(){window.location.reload()} )
-            }
         }
         </script>
+        
       
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
    
-    <!-- Contact Javascript File -->
-    <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
-    <script src="{% static 'mail/contact.js' %}"></script>
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        function coup(){
+            L = document.getElementById('ccode').value.length
+            if(L > 0){
+                document.getElementById('coupbtn').removeAttribute('disabled')
+            } else{
+                document.getElementById('coupbtn').setAttribute("disabled", true);
+            }
+            
+        }
+
+        function add_coup(){
+            L = document.getElementById('ccode').value.length
+            if(L > 0){
+                APLYcoupon()
+            }else if (! document.querySelector( 'input[name="address"]:checked'))
+            {
+                e.preventDefault();
+                swal("Address is not delected", "Select an delivery address.").then( function(){window.location.reload()} )
+            }
+            else{
+                return true;
+            }
+        }
+
+       function APLYcoupon(){
+        $.ajax({
+            url: "{% url 'apply-coupon' %}",
+            data: {
+                code :document.getElementById('ccode').value,
+              },
+              success: (response) => {
+                if (response.offer) {
+                    swal("Coupon applied", response.offer, "success");  
+                    document.getElementById('coupondiv').style.display="flex";
+                    document.getElementById('aplyed').style.display="block";
+                    document.getElementById('saved').innerHTML ="₹  "+ response.Tdis+ " /-";
+                    document.getElementById('total').innerHTML= "₹  "+ response.ttl+ " /-";
+                    return true;
+                   
+                } else if (response.invalid){
+                    document.getElementById('aplyed').style.display="none";
+                    swal("Invalid coupon code",'Pleace try again', "error").then( function(){window.location.reload()} )
+                    return false
+                    
+                } else if (response.limit){
+                    document.getElementById('aplyed').style.display="none";
+                    swal("Coupon not applied",response.limit, "error").then( function(){window.location.reload()} )
+                    return false
+                }
+            }
+        })
+        
+        };
+    </script>
 
 </body>
 

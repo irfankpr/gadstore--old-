@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
 from profiles.models import cart, address
+from orders.models import Coupons
 
 
 # Create your views here.
@@ -16,9 +17,10 @@ def chkout(request):
     items = cart.objects.filter(user_id_id=request.user.id)
     total = 0
     add = address.objects.filter(user_id=request.user.id)
+    coup = Coupons.objects.all()
     for i in items:
         total = total + i.total
-    return render(request, 'checkout.html', {'items': items, 'ttl': total, 'address': add})
+    return render(request, 'checkout.html', {'items': items, 'ttl': total, 'address': add, 'coupons': coup})
 
 
 @login_required(login_url='/')
@@ -28,22 +30,39 @@ def place_order(request):
         return JsonResponse({'placed': False})
     if request.POST['paym'] == 'COD':
         citems = cart.objects.filter(user_id_id=request.user.id)
+        Gtotal = 0
+        for c in citems:
+            Gtotal = Gtotal + c.total
         add_id = request.POST['add_id']
         add = address.objects.get(id=add_id)
         for c in citems:
+            Dis = 0
+            if request.POST.get('coupon'):
+                coupon = Coupons.objects.get(Coupon_code=request.POST['coupon'])
+                Dis = (c.total * coupon.discount_rate) / 100
+                print('>>>>>>>>>>>>>>>>>>', Dis)
             orders(user=c.user_id, product=c.product_id, quantity=c.count, address=add, status='Placed',
-                   Total=c.total, payment='COD').save()
+                   Total=c.total-Dis, payment='COD').save()
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'Placed': True})
     elif request.POST['paym'] == 'razorpay':
         citems = cart.objects.filter(user_id_id=request.user.id)
+        Gtotal =0
+        for c in citems:
+            Gtotal = Gtotal + c.total
+        print(Gtotal,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         add_id = request.POST['add_id']
         payment_id = request.POST['payment_id']
         add = address.objects.get(id=add_id)
         for c in citems:
+            Dis = 0
+            if request.POST.get('coupon'):
+                coupon = Coupons.objects.get(Coupon_code=request.POST['coupon'])
+                Dis = (c.total * coupon.discount_rate) / 100
+                print('>>>>>>>>>>>>>>>>>>',Dis)
             orders(user=c.user_id, product=c.product_id, payment_id=payment_id, quantity=c.count, address=add,
                    status='Placed',
-                   Total=c.total, payment='Razorpay').save()
+                   Total=c.total-Dis, payment='Razorpay').save()
             products.objects.filter(id=c.product_id_id).update(available_stock=F('available_stock') - c.count)
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'Placed': True})
@@ -54,7 +73,6 @@ def order_up(request):
     if request.method == 'POST':
         stt = request.POST['status']
         ord = request.POST['order']
-        print(stt, '........................................', ord)
         o = orders.objects.get(id=ord)
         o.status = stt
         o.save()
@@ -75,3 +93,35 @@ def return_order(request, id):
     o.status = "Returned"
     o.save()
     return redirect('my-orders')
+
+
+def applycoupon(request):
+    try:
+        if request.method == 'GET':
+            if 'code' in request.GET:
+                code = request.GET['code']
+                if Coupons.objects.filter(Coupon_code=code).exists():
+                    coupon = Coupons.objects.get(Coupon_code=code)
+                    crt = cart.objects.filter(user_id_id=request.user.id)
+                    tottal = 0
+                    for c in crt:
+                        tottal = tottal + c.total
+                    if tottal < coupon.minimum:
+                        limit = 'This coupon needs minimum purchase of ₹ ' + str(coupon.minimum)
+                        return JsonResponse({'limit': limit})
+                    else:
+                        Tdis = 0
+                        for c in crt:
+                            Dis = (c.total * coupon.discount_rate) / 100
+                            Tdis = Tdis + Dis
+                            c.discount = round(Dis, 2)
+                            c.save()
+                        offer = 'You have got  ' + str(coupon.discount_rate) + ' % OFF'
+                        return JsonResponse({'offer': offer, 'Tdis': Tdis, 'ttl': tottal - Tdis})
+                else:
+                    return JsonResponse({'invalid': True})
+            else:
+                return JsonResponse({'nocode': True})
+
+    except:
+        pass

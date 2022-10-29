@@ -8,9 +8,10 @@ from profiles.models import userprofiles, address
 
 
 class Coupons(models.Model):
-    Coupon_code = models.CharField(max_length=100)
-    minimum = models.FloatField(default=False)
-    discount_rate = models.FloatField()
+    Coupon_code = models.CharField(max_length=100,unique=True)
+    minimum = models.FloatField(default=0)
+    maxlimit = models.FloatField(default=0)
+    discount_rate = models.FloatField(default=0)
     discount_type = models.CharField(max_length=50, default='FLAT', choices=(('FLAT', 'FLAT'), ('UPTO', 'UPTO')))
 
 
@@ -25,6 +26,5 @@ class orders(models.Model):
     status = models.CharField(max_length=50, default='Pending')
     payment_id = models.CharField(max_length=500, null=True)
     Offer_applied = models.CharField(max_length=100, blank=True)
-    Coupon_applied = models.ForeignKey(Coupons, on_delete=models.CASCADE, null=True)
     discount_rate = models.FloatField(default=0)
 

@@ -67,7 +67,6 @@ def add_cart(request):
     id = request.GET['proid']
 
     if cart.objects.filter(user_id_id=request.user.id, product_id_id=id).exists():
-        print('exists ......................................................................')
         return JsonResponse({'added': False})
     obj = cart()
     obj.user_id = userprofiles.objects.get(id=request.user.id)
@@ -75,7 +74,6 @@ def add_cart(request):
     pr = products.objects.get(id=id)
     obj.total = pr.price
     obj.save()
-    print('added ......................................................................')
     return  JsonResponse ({'added': True})
 
 def cart_dlt(request, id):

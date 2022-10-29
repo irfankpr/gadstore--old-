@@ -9,5 +9,6 @@ urlpatterns = [
     path('order-up', views.order_up, name='order-up'),
     path('cancel-order/<int:id>/', views.cancel_order, name='cancel-order'),
     path('return-order/<int:id>/', views.return_order, name='return-order'),
+    path('apply-coupon', views.applycoupon, name='apply-coupon'),
 
 ]
