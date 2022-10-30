@@ -43,7 +43,7 @@ def signin(request):
                 messages.error(request, 'e-mail already exist')
                 return redirect('/sign')
             if passw2 == passw1:
-                if 'refid' in request.POST:
+                if request.POST.get("refid"):
                     refid = request.POST['refid']
                     ref = userprofiles.objects.filter(ref_id=refid)
                     if ref:
@@ -153,7 +153,7 @@ def shop(request):
             count = cart.objects.filter(user_id=request.user.id).count()
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
-            paging = Paginator(prds, 3)
+            paging = Paginator(prds, 12)
             page = request.GET.get('page')
             paged = paging.get_page(page)
             prd_count = prds.count()
@@ -167,7 +167,7 @@ def shop(request):
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
             subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
             prds = products.objects.filter()
-            paging = Paginator(prds, 3)
+            paging = Paginator(prds, 12)
             page = request.GET.get('page')
             paged = paging.get_page(page)
             prd_count = prds.count()
@@ -203,7 +203,7 @@ def dtl(request, id):
     count = cart.objects.filter(user_id=request.user.id).count()
     prd = products.objects.filter(id=id)
     d = products.objects.get(id=id)
-    like = products.objects.filter(category_id=d.category_id)
+    like = products.objects.filter(category_id=d.category_id)[:7]
     images = prodtct_image.objects.filter(prodtct_name_id=id)
     return render(request, 'detail.html', {'product': prd, 'count': count, 'Like': like, 'images': images})
 
@@ -211,7 +211,7 @@ def dtl(request, id):
 @never_cache
 def landing(request):
     count = cart.objects.filter(user_id=request.user.id).count()
-    new = products.objects.all().order_by('-added_date')[:8]
+    new = products.objects.all().order_by('-added_date')[:12]
     cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
     subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
     return render(request, 'gadstore.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'products',
     'admins',
     'orders',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'GADstore.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gadstore',
+        'NAME': 'GADstore',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'localhost',

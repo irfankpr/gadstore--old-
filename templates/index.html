@@ -1,4 +1,5 @@
 {% load static %}
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,7 +64,7 @@
                         <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
                         <a href="{% url 'my-orders' %}" class="dropdown-item mt-4 text-warning" type="button">My orders</a>
                         <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
+                        
                         <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
                     </div>
                 </div>
@@ -78,24 +79,26 @@
     <div class="container-fluid bg-dark mb-30 topper">
         <div class="row px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
-                <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+                <a class="btn d-flex align-items-center justify-content-between bg-primary h-100 w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
                     <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
                 <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
-                    <div class="navbar-nav w-100">
+                    <div class="navbar-nav w-100 bglight">
                         {% for c in cat %}
-                        <div class="nav-item dropdown dropright">
-                            <a class="nav-link dropdown-toggle text-dark btn btn-outline-waring" data-toggle="dropdown">{{ c.category_name }}<i class="fa fa-angle-right float-right mt-1"></i></a>
-                            
-                                    <div class="dropdown-menu position-absolute rounded border-0 m-0"> 
-                                        {% for s in subcat %}
-                                {% if s.parent_cat_id == c.id %}
-                                        <a on="srch('{{ s.sub_cat_name }}')" class="dropdown-item btn btn-outline-waring">   {{ s.sub_cat_name }}   </a>
-                                        {% endif %}
-                            {% endfor %}
-                                    </div>
-                                
+                        <div class="nav-item dropdown dropright border-0 btn h6 p-0 m-0 btn-outline-warning">
+                            <div class="nav-item dropdown justify-content-between align-middle">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{c.category_name}}<span class="material-symbols-outlined">
+                                    arrow_drop_down
+                                    </span></a>
+                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                                    {% for s in subcat %}
+                                    {% if s.parent_cat_id == c.id %}
+                                    <a href="shop?key={{s.slug}}" class="dropdown-item ">{{s.sub_cat_name}}</a>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                              </div>
                         </div>
                         {% endfor %}
                     </div>
@@ -113,7 +116,7 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url 'home' %}" class="nav-item nav-link active">Home</a>
-                            <a href="products" class="nav-item nav-link">Shop</a>
+                            <a href="{% url 'shop' %}" class="nav-item nav-link">Shop</a>
                             <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
@@ -122,7 +125,7 @@
                                     <a href="checkout.html" class="dropdown-item">Checkout</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="#Contact" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                             <a href="{% url 'my-wallet' %}" class="btn my-auto mx-3 ">
@@ -252,15 +255,18 @@
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
         <div class="row px-xl-5 pb-3">
             {% for c in cat %}
-            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                <a class="text-decoration-none" href="">
+            <div class="col-lg-3 col-md-4 col-sm-6 p-1 position-relative">
+                <a class="text-decoration-none" href="shop?key={{ c.category_name }}">
                     <div class="cat-item d-flex align-items-center mb-4">
                         <div class="overflow-hidden" style="width: 100px; height: 100px;">
                             <img class="img-thumbnail h-100" src="{{ c.category_image.url}}" style="object-fit: cover;" >
                         </div>
                         <div class="flex-fill pl-3">
                             <h6 class="h5">{{ c.category_name }}</h6>
-                            <small class="text-body">{{ c.cat_count }}</small>
+                            <small class="text-body col">Items in category : <span class="h6">{{ c.count }}</span></small><br>
+                            {% if c.offer %}
+                            <p class=" col font-weight-bolder text-danger">&nbsp;{{c.offer_rate|floatformat:"0"}}&nbsp;%&nbsp;OFF on {{c.category_name}}</span></small>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
@@ -280,7 +286,10 @@
             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4" onclick="window.location = '{% url 'detail' p.id %}'">
                     <div class="product-img  position-relative overflow-hidden">
-                        <a class="bg-danger position-absolute text-light bolder py-1 px-2 rounded m-2 h6">20% OFF</a>
+                        {% if p.Offer %}<a class="bg-danger position-absolute text-light bolder py-1 px-2 border border-light rounded m-3 h6">{{p.Disrate}}% OFF</a>
+                        {% elif p.category.offer %}
+                        <a class="bg-danger position-absolute text-light bolder py-1 px-2 border border-light rounded m-3 h6">{{ p.category.offer_rate|floatformat:"0"}} % OFF</a>
+                        {% endif %}
                         <img class="img-fluid w-100" src="{{ p.thumbnail.url}}" alt="">
                         <div class="product-action">
                             <a class="btn btn-outline-dark btn-square" onclick=" addcart({{p.id}}) " ><i class="fa fa-shopping-cart"></i></a>
@@ -291,7 +300,16 @@
                     <div class="text-center py-4">
                         <span class="h6 d-inline-block text-truncate col">{{ p.Product_name }}</span>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5 class="text-success mx-2" >₹ {{p.price}} /-</h5><h6 class="text-muted ml-2"><del class="text-danger mx-2">₹ {{ p.MRP }} /-</del></h6>
+                            <h6 class="text-muted ml-2"><del class="text-danger mx-2">₹ {{ p.MRP }} /-</del></h6>
+                            {% if p.Offer %} 
+                            <h5 class="text-success mx-2" >₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h5>
+                        {% elif p.category.offer %}
+                        <h5 class="text-success mx-2" >₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h5>
+                        {% else %}
+                        <h5 class="text-success mx-2" >₹ {{p.price}} /-</h5>
+                        {% endif %}
+                            
+                    
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <small class="fa fa-star text-primary mr-1"></small>
@@ -558,7 +576,7 @@
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5" id="Contact">
                 <img src="{% static 'images/b-ylogo.svg' %}" class="col-8 mt-0 mb-4" alt="">
                 <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor. Rebum tempor no vero est magna amet no</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>

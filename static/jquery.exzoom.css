@@ -43,8 +43,8 @@
         .exzoom .exzoom_nav .exzoom_nav_inner span.current {
           border: 1px solid #f60; }
         .exzoom .exzoom_nav .exzoom_nav_inner span img {
-          max-width: 100%;
-          max-height: 100%;
+          max-width: 200%;
+          max-height: 200%;
           position: relative; }
   .exzoom .exzoom_btn {
     position: relative;
@@ -94,4 +94,4 @@
         text-align: center;
         float: left; }
         .exzoom .exzoom_img_ul_outer .exzoom_img_ul li img {
-          width: 100%; }
+          width: 10%; }

@@ -56,7 +56,7 @@ class userprofiles(AbstractBaseUser):
     people = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'phone'
-    REQUIRED_FIELDS = ['first_name', 'last_name', ]
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', ]
 
     objects = MyAccountManager()
 

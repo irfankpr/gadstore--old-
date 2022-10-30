@@ -1,13 +1,13 @@
 import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q, Sum
+from django.db.models import Count, Q, Sum, F
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
-from orders.models import orders,Coupons
+from orders.models import orders, Coupons
 from profiles.models import userprofiles, cart
 from products.models import categories, products, sub_categories, prodtct_image
 
@@ -26,11 +26,11 @@ def login(request):
             Phone = request.POST['phone']
             password = request.POST['Password']
             print(Phone, password)
-            usr = authenticate(request, email=Phone, password=password, is_staff=True, is_admin=True)
+            usr = authenticate(request, phone=Phone, password=password, is_staff=True, is_admin=True)
             if usr is not None:
                 auth.login(request, usr)
                 res = redirect('adminhome')
-                user = userprofiles.objects.get(email=Phone)
+                user = userprofiles.objects.get(phone=Phone)
                 res.set_cookie('username', user.first_name + usr.last_name)
                 res.set_cookie('password', password)
                 request.session['username'] = user.first_name + usr.last_name
@@ -103,6 +103,7 @@ def product_up(request):
         obj.products_dyl = request.POST['hilights']
         obj.products_desc = request.POST['desc']
         obj.MRP = request.POST['mrp']
+        obj.available_stock = request.POST['stock']
         obj.price = request.POST['price']
         obj.category = categories.objects.get(id=request.POST['cat'])
         if 'thumbnail' in request:
@@ -240,14 +241,15 @@ def sub_up(request):
 @never_cache
 def order(request):
     ord = orders.objects.all().order_by('-date')
-    return render(request, 'admin/Coupons.html', {'orders': ord})
+    return render(request, 'admin/orders.html', {'orders': ord})
 
 
 @login_required(login_url='/')
 @never_cache
 def Couponspage(request):
     coupons = Coupons.objects.all()
-    return render(request, 'admin/Coupons.html',{'coupons':coupons})
+    return render(request, 'admin/Coupons.html', {'coupons': coupons})
+
 
 @login_required(login_url='/')
 def addcoupon(request):
@@ -263,7 +265,29 @@ def addcoupon(request):
     return redirect('Coupons')
 
 
-def dlt_coupon(request,id):
-    if request.method=="GET":
+def dlt_coupon(request, id):
+    if request.method == "GET":
         Coupons.objects.filter(id=id).delete()
         return redirect('Coupons')
+
+
+@never_cache
+def Offers(request):
+    if request.method == "GET":
+        cat = categories.objects.all()
+        return render(request, 'admin/Offers.html', {'cat': cat})
+
+
+def addoffers(request):
+    if request.method == "POST":
+        id = request.POST['cat']
+        cat = categories.objects.get(id=id)
+        cat.offer = True
+        cat.offer_tittle = request.POST['tittle']
+        rate = request.POST['rate']
+        cat.offer_rate = rate
+        cat.maxlimit = request.POST['limit']
+        cat.save()
+        products.objects.filter(category_id=id).update(Dis=((F('MRP') * rate) / 100))
+        messages.error(request, 'New offer added')
+        return redirect('Offers')

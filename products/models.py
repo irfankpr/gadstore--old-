@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
@@ -8,6 +9,10 @@ class categories(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(blank=True)
     category_image = models.ImageField(upload_to='products/category_images', blank=False)
+    offer = models.BooleanField(default=False)
+    offer_tittle = models.CharField(max_length=100,null=True)
+    offer_rate = models.FloatField(null=True)
+    maxlimit = models.FloatField(null=True)
 
 
 class sub_categories(models.Model):
@@ -27,8 +32,12 @@ class products(models.Model):
     added_date = models.DateTimeField(auto_now_add=True)
     available_stock = models.BigIntegerField()
     category = models.ForeignKey(categories, on_delete=models.CASCADE,null=True)
-    sub_category = models.ForeignKey(sub_categories, on_delete=models.CASCADE, null=True)
+    sub_category =models.TextField(null=True)
+    Offer = models.BooleanField(default=False)
+    Dis = models.FloatField(default=0)
+    Disrate = models.FloatField(default=0)
 
 class prodtct_image(models.Model):
     prodtct_name = models.ForeignKey(products, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='products/products_images', blank=False)
+

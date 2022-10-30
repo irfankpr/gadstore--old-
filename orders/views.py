@@ -37,12 +37,16 @@ def place_order(request):
         add = address.objects.get(id=add_id)
         for c in citems:
             Dis = 0
+            coupdis=None
+            ordrADD=add.full_name + ", " + add.phone + ", " + add.postal_PIN + ", " + add.address
             if request.POST.get('coupon'):
                 coupon = Coupons.objects.get(Coupon_code=request.POST['coupon'])
                 Dis = (c.total * coupon.discount_rate) / 100
-                print('>>>>>>>>>>>>>>>>>>', Dis)
-            orders(user=c.user_id, product=c.product_id, quantity=c.count, address=add, status='Placed',
-                   Total=c.total-Dis, payment='COD').save()
+                if Dis > coupon.maxlimit:
+                    Dis = coupon.maxlimit
+                coupdis = coupon.Coupon_code+" :-  discount rate of  "+coupon.discount_rate+"  for minimum purchase  "+coupon.minimum+"  with maxlimit of  "+coupon.maxlimit
+            orders(user=c.user_id, product=c.product_id,coupon_applied=coupdis ,quantity=c.count, status='Placed',
+                   Total=c.total-Dis,address=ordrADD ,payment='COD',discount_price=Dis).save()
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'Placed': True})
     elif request.POST['paym'] == 'razorpay':
@@ -50,17 +54,21 @@ def place_order(request):
         Gtotal =0
         for c in citems:
             Gtotal = Gtotal + c.total
-        print(Gtotal,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
         add_id = request.POST['add_id']
         payment_id = request.POST['payment_id']
         add = address.objects.get(id=add_id)
         for c in citems:
             Dis = 0
+            coupdis = None
+            ordrADD =add.full_name+", "+add.phone+", "+add.postal_PIN+", "+add.address
             if request.POST.get('coupon'):
                 coupon = Coupons.objects.get(Coupon_code=request.POST['coupon'])
                 Dis = (c.total * coupon.discount_rate) / 100
-                print('>>>>>>>>>>>>>>>>>>',Dis)
-            orders(user=c.user_id, product=c.product_id, payment_id=payment_id, quantity=c.count, address=add,
+                if Dis > coupon.maxlimit:
+                    Dis = coupon.maxlimit
+                coupdis = coupon.Coupon_code + " :-  discount rate of  " + coupon.discount_rate + "  for minimum purchase  " + coupon.minimum + "  with maxlimit of  " + coupon.maxlimit
+            orders(user=c.user_id, product=c.product_id,address=ordrADD,coupon_applied=coupdis ,payment_id=payment_id,discount_price=Dis, quantity=c.count,
                    status='Placed',
                    Total=c.total-Dis, payment='Razorpay').save()
             products.objects.filter(id=c.product_id_id).update(available_stock=F('available_stock') - c.count)

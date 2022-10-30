@@ -169,7 +169,7 @@
                             <div class="input-group">
                                 <input oninput="coup()" type="text"  class="form-control border-1 border-dark p-4" id="ccode" placeholder="Coupon Code" list="Coupons">
                                 <div class="input-group-append">
-                                    <button onclick="APLYcoupon()" id="coupbtn" disabled class="btn btn-primarybtn btn-warning btn-outline-dark">Apply Coupon</button>
+                                    <button onclick="APLYcoupon()" id="coupbtn" disabled class="btn btn-primarybtn btn-warning btn-outline-dark">Validate Coupon</button>
                                 </div>
                                 <p id="aplyed" class="text-success h6 m-0 p-0 col-12 text-center text-monospace "  style="display:none;">Coupon applied</p>
                             </div>
@@ -235,7 +235,7 @@
                             </div>
                             {% if items %}
                             <button type="button" disabled id="placebtn"
-                                class="btn btn-block btn-primary font-weight-bold py-3" onclick="add_coup()" data-toggle="modal">Place
+                                class="btn btn-block btn-primary font-weight-bold py-3" onclick="return add_coup()" data-toggle="modal">Place
                                 Order</button>
                                 {% endif %}
 
@@ -539,17 +539,19 @@
         }
 
         function add_coup(){
-            L = document.getElementById('ccode').value.length
-            if(L > 0){
-                APLYcoupon()
-            }else if (! document.querySelector( 'input[name="address"]:checked'))
+            if (! document.querySelector( 'input[name="address"]:checked'))
             {
-                e.preventDefault();
                 swal("Address is not delected", "Select an delivery address.").then( function(){window.location.reload()} )
+                e.preventDefault();
+                return false
             }
             else{
-                return true;
+                L = document.getElementById('ccode').value.length
+                if(L > 0){
+                    APLYcoupon()
+                }
             }
+            
         }
 
        function APLYcoupon(){

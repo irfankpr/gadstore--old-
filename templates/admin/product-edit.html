@@ -357,7 +357,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="col-sm-5 " id="sub" style="display: none;" >
+                                        <div class="col-sm-5 " id="cats" style="display: none;" >
                                             <label class="float-left text-left ">Change category</label>
                                             <select name="cat" class="form-control border border-secondary mb-5 mt-1" id="sl" disabled >
                                                 {% for c in cat %}
@@ -413,8 +413,9 @@
                                     document.getElementById('inp6').removeAttribute('readonly');
                                     document.getElementById('sl').removeAttribute('disabled');
                                     document.getElementById('img').removeAttribute('disabled');
+                                    document.getElementById('cats').style.display='block';
                                     document.getElementById('subb').style.display='block';
-                                    document.getElementById('thumb').style.display='block';
+                                    document.getElementById('thum').style.display='block';
                                 }
                         </script>
 
