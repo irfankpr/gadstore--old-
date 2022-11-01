@@ -19,6 +19,7 @@
     <meta name="keywords"
         content="bootstrap, bootstrap admin template, admin theme, admin dashboard, dashboard template, admin template, responsive" />
     <meta name="author" content="codedthemes" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <!-- Favicon icon -->
     <link rel="icon" href=" {% static 'admin/images/favicon.ico" type="image/x-icon' %}">
     <!-- Google font-->
@@ -44,7 +45,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     
 </head>
-
 <body>
     <!-- Pre-loader start -->
     <div class="theme-loader">
@@ -183,16 +183,7 @@
                         <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
                         <div class="pcoded-inner-navbar main-menu">
 
-                            <div class="p-15 p-b-0">
-                                <form class="form-material">
-                                    <div class="form-group form-primary">
-                                        <input type="text" name="footer-email" class="form-control" required="">
-                                        <span class="form-bar"></span>
-                                        <label class="float-label"><i class="fa fa-search m-r-10"></i>Search
-                                            Friend</label>
-                                    </div>
-                                </form>
-                            </div>
+                           
                             <div class="pcoded-navigation-label" data-i18n="nav.category.navigation">Options</div>
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class="active">
@@ -368,7 +359,7 @@
 
                                             <!--  sale analytics start -->
                                             <div class="col-xl-8 col-md-12 m-0">
-                                                <div class="card d-flex p-0 m-0 col" >
+                                                <div class="card  p-0 m-0 col" >
                                                     <div class="card-header">
                                                         <h5>This month sales Analytics</h5>
                                                         <div class="card-header-right">
@@ -383,8 +374,8 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div  class="card-block container row col-12 m-0 p-0  align-middle">
-                                                        <canvas id="line-chart" width="800" height="450"  class="container row col-12 position-inherit"></canvas>
+                                                    <div class="card-block container row col-12 m-0 p-0  align-middle" >
+                                                        <canvas id="line-chart"   class="container w-100 row col-12 position-inherit"></canvas>
                                                         <script>
                                                             new Chart(document.getElementById("line-chart"), {
                                                                 type: 'line',
@@ -421,16 +412,30 @@
                                                                     
                                                                   title: {
                                                                     display: true,
-                                                                    text: " This month sales repost",
+                                                                    text: " This month sales reports",
                                                                   }
                                                                 }
                                                               });
                                                         </script>
                                                      
-                                                       
+                    
                                                     </div>
+                                                    <form action="{% url 'down-exel' %}">
+                                                    <div class="col-12 container-fluid row justify-content-center my-5">
+                                                        <span class="text-muted align-middle h6">From :</span>
+                                                        <input class="col-3 mx-3 p-1 btn btn-outline-dark" id="fDate" name="fDate" type="date" required>
+                                                        <span class="text-muted mx-3 align-middle h6">To :</span>
+                                                        <input class="col-3 p-1 btn btn-outline-dark" id="tooDate" name="tDate" type="date" required >
+                                                        <button type="submit"  class=" h4 btn btn-outline-success mx-5"><i class="bi h6 bi-cloud-download-fill"></i></button>
+                                                   
+                                                    </div>
+                                                </form>
                                                 </div>
+                                               
+                                               
                                             </div>
+                                           
+                                        
                                             <div class="col-xl-4 col-md-12 mt-0">
                                                 <div class="card">
                                                     <div class="card-block">
@@ -448,11 +453,11 @@ var xValues = [ {% for m in months reversed %} getMonthName( {{ m.date__date__mo
 var yValues = [ {% for m in months reversed %} {% if  m.sales  %}{{ m.sales }}, {% else %} 0,   {% endif %} {% endfor %} ];
 var barColors = [
   "#ffb927",
-  "#b91d47",
+  "#CF0A0A",
   "#00ffff",
-  "#e8c3b9",
+  "#404258",
   "#1e7145",
-  "00ABB3",
+  "#A66CFF",
 ];
 
 new Chart("myChart", {
@@ -615,9 +620,46 @@ new Chart("myChart", {
     </div>
     </div>
     <!-- Warning Section Starts -->
-  <script>
-    
-  </script>
+  <!-- <script>
+    function exel(){
+            var fdate = new Date($('#fDate').val());
+            var fday = fdate.getDate();
+            var fmonth = fdate.getMonth() + 1;
+            var fyear = fdate.getFullYear();
+            fday = ([fyear,fmonth,fday].join('-'));
+            alert(fday)
+
+            var tdate = new Date($('#tooDate').val());
+            var tday = fdate.getDate();
+            var tmonth = fdate.getMonth() + 1;
+            var tyear = fdate.getFullYear();
+            tday = ([tyear,tmonth,tday].join('-'));
+            alert(tday)
+
+            $.ajax({
+                url: "{% url 'down-exel' %}",
+                data: {
+                    Fdate: fday,
+                    Tdate: tday,
+                  },
+                  success: (response) => {
+                    if (response.removeProduct) {
+                        alert("Product Removed from cart")
+                        location.reload()
+                    } else {
+                        document.getElementById(proId).innerHTML = quantity + count
+                        c =  parseInt(document.getElementById(proId).innerHTML)
+                        document.getElementById(pt).value ="₹ "+ response.total
+                        document.getElementById(sc).innerHTML=document.getElementById(proId).innerHTML
+                        document.getElementById(st).innerHTML= document.getElementById(pt).value
+                       
+                        
+                    }
+                }
+            })
+        
+    }
+  </script> -->
     <!-- Required Jquery -->
     <script type="text/javascript" src="{% static 'admin/js/jquery/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'admin/js/jquery-ui/jquery-ui.min.js' %} "></script>

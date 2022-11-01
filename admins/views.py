@@ -3,6 +3,7 @@ import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q, Sum, F
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
@@ -179,8 +180,8 @@ def adm_products(request):
         cat = categories.objects.all()
         if 'key' in request.GET:
             q = Q()
-            q = Q(Product_name__icontains=request.GET.get('key') | Q(
-                category__category_name__icontains=request.GET.get('key')))
+            q = Q(Product_name__icontains=request.GET.get('key')) | Q(
+                category__category_name__icontains=request.GET.get('key'))
             product = products.objects.filter(q)
             p = render(request, 'admin/products.html', {'product': product, 'cat': cat, 'key': request.GET.get('key')})
             return p
@@ -307,9 +308,92 @@ def addPoffers(request):
     if request.method == "POST":
         id = request.POST['product']
         prd = products.objects.get(id=id)
-        prd.Offer= True
-        offer = int (request.POST['Offer'])
+        prd.Offer = True
+        offer = int(request.POST['Offer'])
         prd.Disrate = offer
-        prd.Dis = int( (prd.MRP * offer)/100 )
+        prd.Dis = int((prd.MRP * offer) / 100)
         prd.save()
+        messages.error(request, 'New offer added')
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+def dlt_offer(request):
+    if request.method == "GET":
+        id = request.GET.get('id')
+        print(id)
+        if request.GET.get('off') == 'prd':
+            prd = products.objects.get(id=id)
+            prd.Offer = False
+            prd.Disrate = 0
+            prd.Dis = 0
+            prd.save()
+        elif request.GET.get('off') == 'cat':
+            cat = categories.objects.get(id=id)
+            cat.offer = False
+            cat.offer_rate = 0
+            cat.offer_tittle = None
+            cat.maxlimit = 0
+            cat.save()
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+def download_excel_data(request):
+    try:
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="sales_report.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Sales report')  # this will make a sheet named Users Data
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+        columns = ['No', 'Product', 'Mrp', 'Price', 'Discount_price', 'Final_price', 'Quantity', 'Total',
+                   'Payment', 'Payment_id', 'Coupon_applied', "Offer_applies", 'Customer_name', 'Customer_phone',
+                   'Customer_e-mail', 'Address', 'Order_date',
+                   'Deliver_date', 'Order_status', ]
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+            ws.col(col_num).width = 6000  # at 0 row 0 column
+
+        font_style = xlwt.XFStyle()
+        too = request.GET['tDate']
+        frm = request.GET['fDate']
+
+        rows = orders.objects.filter(date__range=(frm, too)).order_by('date')
+        for o in rows:
+            row_num += 1
+            ws.write(row_num, 0, row_num, font_style)
+            ws.write(row_num, 1, o.product.Product_name, font_style)
+            ws.write(row_num, 2, o.product.MRP, font_style)
+            ws.write(row_num, 3, o.product.price, font_style)
+            ws.write(row_num, 4, int(o.product.Dis), font_style)
+            ws.write(row_num, 5, o.product.price - int(o.product.Dis), font_style)
+            ws.write(row_num, 6, o.quantity, font_style)
+            ws.write(row_num, 7, o.Total, font_style)
+            ws.write(row_num, 8, o.payment, font_style)
+            ws.write(row_num, 9, o.payment_id, font_style)
+            ws.write(row_num, 10, o.coupon_applied, font_style)
+            ws.write(row_num, 11, o.Offer_applied, font_style)
+            ws.write(row_num, 12, o.user.first_name + " " + o.user.last_name, font_style)
+            ws.write(row_num, 13, o.user.phone, font_style)
+            ws.write(row_num, 14, o.user.email, font_style)
+            ws.write(row_num, 15, o.address, font_style)
+            ws.write(row_num, 16, str(o.date), font_style)
+            if o.delivered_date is None:
+                Ddate = o.status
+            else:
+                Ddate = o.delivered_date.replace(tzinfo=None)
+            ws.write(row_num, 17, Ddate, font_style)
+            ws.write(row_num, 18, o.status, font_style)
+
+        wb.save(response)
+
+        return response
+    except:
+        messages.error(request, 'something went wrong try again')
         return redirect(request.META.get('HTTP_REFERER'))

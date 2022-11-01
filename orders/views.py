@@ -1,7 +1,9 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 import razorpay
-from products.models import products
+from products.models import products, categories
 from orders.models import orders
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -30,47 +32,63 @@ def place_order(request):
         return JsonResponse({'placed': False})
     if request.POST['paym'] == 'COD':
         citems = cart.objects.filter(user_id_id=request.user.id)
-        Gtotal = 0
-        for c in citems:
-            Gtotal = Gtotal + c.total
         add_id = request.POST['add_id']
         add = address.objects.get(id=add_id)
         for c in citems:
             Dis = 0
-            coupdis=None
-            ordrADD=add.full_name + ", " + add.phone + ", " + add.postal_PIN + ", " + add.address
+            coupdis = None
+            offer = None
+            if c.product_id.Offer:
+                prd = products.objects.get(id=c.product_id_id)
+                offer = "Product offer by :  " + str(prd.Disrate) + " %  , Total off on this order :  " + str(int(
+                    (c.total * prd.Disrate) / 100))
+            elif c.product_id.category.offer:
+                cat = categories.objects.get(id=c.product_id.category_id)
+                offer = "Category offer by :  " + str(cat.offer_rate) + " %  , Total off on this order :  " + str(int(
+                    (c.total * cat.offer_rate) / 100))
+            ordrADD = add.full_name + ", " + add.phone + ", " + add.postal_PIN + ", " + add.address
             if request.POST.get('coupon'):
                 coupon = Coupons.objects.get(Coupon_code=request.POST['coupon'])
                 Dis = (c.total * coupon.discount_rate) / 100
                 if Dis > coupon.maxlimit:
                     Dis = coupon.maxlimit
-                coupdis = coupon.Coupon_code+" :-  discount rate of  "+coupon.discount_rate+"  for minimum purchase  "+coupon.minimum+"  with maxlimit of  "+coupon.maxlimit
-            orders(user=c.user_id, product=c.product_id,coupon_applied=coupdis ,quantity=c.count, status='Placed',
-                   Total=c.total-Dis,address=ordrADD ,payment='COD',discount_price=Dis).save()
+                coupdis = coupon.Coupon_code + " :-  discount rate of  " + str(
+                    coupon.discount_rate) + "  for minimum purchase  " + str(
+                    coupon.minimum) + "  with maxlimit of  " + str(coupon.maxlimit)
+            orders(user=c.user_id, product=c.product_id, coupon_applied=coupdis, quantity=c.count, status='Placed',
+                   Total=c.total - Dis, address=ordrADD, payment='COD', discount_price=Dis, Offer_applied=offer).save()
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'Placed': True})
     elif request.POST['paym'] == 'razorpay':
         citems = cart.objects.filter(user_id_id=request.user.id)
-        Gtotal =0
-        for c in citems:
-            Gtotal = Gtotal + c.total
-
         add_id = request.POST['add_id']
         payment_id = request.POST['payment_id']
         add = address.objects.get(id=add_id)
         for c in citems:
             Dis = 0
             coupdis = None
-            ordrADD =add.full_name+", "+add.phone+", "+add.postal_PIN+", "+add.address
+            offer = None
+            if c.product_id.Offer:
+                prd = products.objects.get(id=c.product_id_id)
+                offer = "Product offer by :  " + str(prd.Disrate) + " %  , Total off on this order :  " + str(int(
+                    (c.total * prd.Disrate) / 100))
+            elif c.product_id.category.offer:
+                cat = categories.objects.get(id=c.product_id.category_id)
+                offer = "Category offer by :  " + str(cat.offer_rate) + " %  , Total off on this order :  " + str(int(
+                    (c.total * cat.offer_rate) / 100))
+            ordrADD = add.full_name + ", " + add.phone + ", " + add.postal_PIN + ", " + add.address
             if request.POST.get('coupon'):
                 coupon = Coupons.objects.get(Coupon_code=request.POST['coupon'])
                 Dis = (c.total * coupon.discount_rate) / 100
                 if Dis > coupon.maxlimit:
                     Dis = coupon.maxlimit
-                coupdis = coupon.Coupon_code + " :-  discount rate of  " + coupon.discount_rate + "  for minimum purchase  " + coupon.minimum + "  with maxlimit of  " + coupon.maxlimit
-            orders(user=c.user_id, product=c.product_id,address=ordrADD,coupon_applied=coupdis ,payment_id=payment_id,discount_price=Dis, quantity=c.count,
-                   status='Placed',
-                   Total=c.total-Dis, payment='Razorpay').save()
+                coupdis = coupon.Coupon_code + " :-  discount rate of  " + str(
+                    coupon.discount_rate) + "  for minimum purchase  " + str(
+                    coupon.minimum) + "  with maxlimit of  " + str(coupon.maxlimit)
+            orders(user=c.user_id, product=c.product_id, coupon_applied=coupdis, quantity=c.count, status='Placed',
+                   Total=c.total - Dis, address=ordrADD, payment='Razorpay', payment_id=payment_id, discount_price=Dis,
+                   Offer_applied=offer).save()
+
             products.objects.filter(id=c.product_id_id).update(available_stock=F('available_stock') - c.count)
         cart.objects.filter(user_id_id=request.user.id).delete()
         return JsonResponse({'Placed': True})
@@ -82,6 +100,10 @@ def order_up(request):
         stt = request.POST['status']
         ord = request.POST['order']
         o = orders.objects.get(id=ord)
+        if stt == "Delivered":
+            o.delivered_date = datetime.datetime.now()
+        if stt == "Cancelled":
+            products.obects.filter(id=o.product_id).update(available_stock=F('available_stock') + o.quantity)
         o.status = stt
         o.save()
         return JsonResponse({'ordered': True})

@@ -27,3 +27,4 @@ class orders(models.Model):
     Offer_applied = models.TextField( null=True)
     coupon_applied = models.TextField(null=True)
     discount_price = models.FloatField(default=0)
+    delivered_date = models.DateTimeField(null=True)

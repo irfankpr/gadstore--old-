@@ -170,14 +170,14 @@
                             </div>
                             <div class="pcoded-navigation-label" data-i18n="nav.category.navigation">Layout</div>
                             <ul class="pcoded-item pcoded-left-item">
-                                <li class="active">
-                                    <a href="" class="waves-effect waves-dark">
+                                <li class="">
+                                    <a href="{% url 'adminhome' %}" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Dashboard</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
-                                <li class="">
+                                <li class="active">
                                     <a href="{% url 'category' %}" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Categories</span>
@@ -199,9 +199,23 @@
                                     </a>
                                 </li>
                                 <li class="">
-                                    <a href="{% url 'orders' %}" class="waves-effect waves-dark">
+                                    <a href="{% url 'allorders' %}" class="waves-effect waves-dark">
                                         <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Orders</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="{% url 'Coupons' %}" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Coupons</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="{% url 'Offers' %}" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Offers</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
@@ -251,11 +265,11 @@
                                         </div>
                                         
                                         <img src="{{ c.category_image.url }}" height="250px" width="250px" class="m-5" >
-                                        <div class="form-group row justify-content-cemter">
+                                        <div class="form-group row justify-content-cemter" id="img" hidden>
     
                                             <label class="col-sm-e col-form-label">Update Category image</label>
                                             <div class="col-10">
-                                                <input type="file" name="catimg" class="form-control" disabled id="img">
+                                                <input type="file" name="catimg" class="form-control" >
                                             </div>
                                         </div>
                                         
@@ -335,12 +349,13 @@
                             </table>
                         </div>
                     </div>
-                   
+                    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <script>
                                 function edit(){
+                                    Swal.fire('Edit mode enabeled','Now you can edit the product')
                                     document.getElementById('inp1').removeAttribute('readonly');
                                     document.getElementById('inp2').removeAttribute('readonly');
-                                    document.getElementById('img').removeAttribute('disabled');
+                                    document.getElementById('img').removeAttribute('hidden');
                                     document.getElementById('sub').style.display='block'
                                 }
                         </script>
