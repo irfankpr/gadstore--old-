@@ -1,14 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
-from django.contrib.auth.models import auth
 from profiles.models import userprofiles, cart, address
-from OTP.views import otpgen
-from products.models import categories, products, sub_categories
 from django.shortcuts import render
 
 
@@ -38,10 +34,8 @@ def newaddress(request):
         obj.postal_PIN = pin
         obj.address = add
         obj.save()
-        if 'chkout' in request.POST:
-            return redirect('chkout')
-        else:
-            return redirect('my-profile')
+        print(request.META.get('HTTP_REFERER'))
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 @never_cache

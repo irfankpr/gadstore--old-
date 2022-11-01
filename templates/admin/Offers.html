@@ -243,12 +243,13 @@
                                     {% endfor %}
                                 </div>
                                 <div class="col-12 border">
-                                    <div class="col-6 container row border border-secondary">
-                                        <h3 class="p-0 my-4 mx-auto">Special title treatment</h3>
-                                        <p class="">With supporting text below as a natural lead-in to
-                                            additional contentdfvjn dkfjm dfj vn kd d jhb kdsf
-                                            sd fkj dsnodfj mds lkjdfs dknhd <b>sd kjhsduibnsndfuysdgh sidebar_toggledskj
-                                                hsdbnfd </b>.</p>
+                                   
+                                    <div class="col p-0 m-0 container row justify-content-between">
+                                        {% for o in  offers %}
+                                        <div class="col-6">
+                                        <div class="col-12 border border-secondary">
+                                            <h5 class="p-0 my-4 col text-primary text-center h5">{{o.offer_tittle}}</h5>
+                                        <p class="h6 font-weight-bolder my-4">Discount by {{o.offer_rate}} % for all products in the category {{o.category_name}}</b>.</p>
                                         <div class="form-group form-default col-12  ">
                                             <div class="btn-group col-12  d-flex justify-content-between" data-toggle="buttons">
 
@@ -263,6 +264,10 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        </div>
+                                    </div>
+                                        {% endfor %}
+                                        
 
 
                                     </div>
@@ -292,7 +297,7 @@
                                         action="{% url 'addoffer' %}" enctype='multipart/form-data'>
                                         {% csrf_token %}
                                         <div class="form-group form-default">
-                                            <input type="text" name="tittle" class="form-control" required="">
+                                            <input type="text" name="Tittke" class="form-control" required="">
                                             <span class="form-bar"></span>
                                             <label class="float-label">Offer tittle</label>
                                         </div>

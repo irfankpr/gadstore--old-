@@ -27,4 +27,5 @@ urlpatterns = [
     path('admin/delete-coupon/<int:id>/', views.dlt_coupon, name="delete-coupon"),
     path('admin/Offers', views.Offers, name="Offers"),
     path('admin/addoffer', views.addoffers, name="addoffer"),
+    path('admin/add-product-offer', views.addPoffers, name="add-product-offer"),
 ]

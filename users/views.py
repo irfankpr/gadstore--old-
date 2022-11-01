@@ -135,6 +135,8 @@ def home(request):
         count = cart.objects.filter(user_id=request.user.id).count()
         new = products.objects.all().order_by('-added_date')[:12]
         cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
+        for c in cat:
+            c.prds = products.objects.filter(category=c.id).count()
         subcat = sub_categories.objects.all().annotate(subcat_count=Count('sub_cat_name')).order_by('sub_cat_name')
         return render(request, 'index.html', {'cat': cat, 'new': new, 'subcat': subcat, 'count': count})
     else:
@@ -148,7 +150,8 @@ def shop(request):
         if 'key' in request.GET:
             key = request.GET['key']
             q = Q()
-            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key)| Q(category__category_name=key)
+            q &= Q(Product_name__icontains=key) | Q(products_dyl__icontains=key) | Q(products_desc__icontains=key) | Q(
+                category__category_name__icontains=key)
             prds = products.objects.filter(q)
             count = cart.objects.filter(user_id=request.user.id).count()
             cat = categories.objects.all().annotate(cat_count=Count('category_name')).order_by('category_name')
@@ -172,7 +175,8 @@ def shop(request):
             paged = paging.get_page(page)
             prd_count = prds.count()
             return render(request, 'shop.html',
-                          {'products': paged, 'prd_count':prd_count ,'key': '', 'cat': cat, 'subcat': subcat, 'count': count})
+                          {'products': paged, 'prd_count': prd_count, 'key': '', 'cat': cat, 'subcat': subcat,
+                           'count': count})
 
 
 @never_cache

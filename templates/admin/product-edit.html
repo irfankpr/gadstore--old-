@@ -4,14 +4,7 @@
 
 <head>
     <title>Mega Able bootstrap admin template by codedthemes </title>
-    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 10]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <!-- Meta -->
-    <meta charset="utf-8">
+     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description"
@@ -156,7 +149,7 @@
                 <div class="pcoded-wrapper">
                     <nav class="pcoded-navbar">
                         <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
-                        <div class="pcoded-inner-navbar main-menu">
+                        <div class="pcoded-inner-navbar main-menu ">
 
                             <div class="p-15 p-b-0">
                                 <form class="form-material">
@@ -168,7 +161,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="pcoded-navigation-label" data-i18n="nav.category.navigation">Layout</div>
+                            {% comment %} <div class="pcoded-navigation-label" data-i18n="nav.category.navigation">Layout</div> {% endcomment %}
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class="">
                                     <a href="{% url 'adminhome' %}" class="waves-effect waves-dark">
@@ -199,97 +192,7 @@
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
-                                <li class="pcoded-hasmenu">
-                                    <a href="javascript:void(0)" class="waves-effect waves-dark">
-                                        <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
-                                        <span class="pcoded-mtext"
-                                            data-i18n="nav.basic-components.main">Components</span>
-                                        <span class="pcoded-mcaret"></span>
-                                    </a>
-                                    <ul class="pcoded-submenu">
-                                        <li class=" ">
-                                            <a href="accordion.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.alert">Accordion</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="breadcrumb.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.breadcrumbs">Breadcrumbs</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="button.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.alert">Button</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="tabs.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.breadcrumbs">Tabs</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="color.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.alert">Color</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="label-badge.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.breadcrumbs">Label Badge</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="tooltip.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.alert">Tooltip</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="typography.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.breadcrumbs">Typography</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="notification.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.alert">Notification</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                        <li class=" ">
-                                            <a href="icon-themify.html" class="waves-effect waves-dark">
-                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
-                                                <span class="pcoded-mtext"
-                                                    data-i18n="nav.basic-components.breadcrumbs">Themify</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
+                                
                             </ul>
                             <!-- <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Forms &amp; Tables</div>
                             
@@ -302,36 +205,69 @@
                         </div>
                     </nav>
                     <div class="pcoded-content d-flex row justify-content-center">
-                        <div class="col-8 container-fluid row mb-5 mx-0 ">
+                        <div class="col-8 container-fluid row mb-5 mx-0  ">
                             {% for msg in messages %}
                                         <h4 class="col-12 p-0 my-2 text-info text-center font-weight-bold"> {{msg}}
                                         </h4>
                                         {% endfor %}
                             <!-- Basic Form Inputs card start -->
-                            <div class="card col-12 container-fluid ,-0 p-0 justify-content-center text-center">
+                            <div class="card col-12 container-fluid ,-0 p-0 justify-content-center text-center border border-primary mt-3">
                                 <div class="card-header">
                                     <h3>Product details</h3>
                                 </div>
+                               
                                 <div class="card-block">
-                                    <div class="col-12 d-flex mx-0 my-5 p-0">
-                                        <h3 class="sub-title col-10">You can aslo edit products details here.</h3>
-                                        <input type="button" value="Edit Product" class="btn btn-outline-primary" onclick="edit()">
+                                    <div class="col-12 d-flex justify-content-between mx-0 my-5 p-0">
+                                        <button type="button" class="btn btn-danger h4 bolder rounded" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Add New offer to this product</button>
+                            <!-- add offer modal start-->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title text-center text-dark"  id="exampleModalLabel">{{prd.Product_name}}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
                                     </div>
-                                    {% for p in prd %}
+                                    <div class="modal-body p-5">
+                                      <form action="{% url 'add-product-offer' %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                          <input type="hidden" name="product" value="{{prd.id}}">
+                                        </div>
+                                        <div class="form-group">
+                                          <input type="number" class="form-control border border-warning my-4" id="recipient-name"  name="Offer" placeholder="Offer rate in percentage">
+                                        </div>
+                                          <button type="submit" class="btn btn-info mx-auto">Add OFFER</button>
+                                      </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                      
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                               <!-- add offer modal end-->
+                                        <h3 class=" text-center h5 text-danger ">Update and Add offers to products</h3>
+                                        <input type="button" value="Update Product" class="btn  btn-info" onclick="edit()">
+                                    </div>
+                                  
                                     <form action="{% url 'product-up' %}" method="POST" enctype='multipart/form-data'>
                                         {% csrf_token %}
-                                        <img src="{{ p.thumbnail.url }}" height="220px" width="220px" class="m-5" style="object-fit: scale-down;" >
+                                        <img src="{{ prd.thumbnail.url }}" height="220px" width="220px" class="m-5" style="object-fit: scale-down;" >
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label h6 ">Name</label>
                                             <div class="col-sm-10">
-                                                <input type="number" value="{{p.id}}" name="pid" hidden>
-                                                <input type="text" name="pname" value="{{ p.Product_name }}" class="form-control" readonly id="inp1">
+                                                <input type="number" value="{{prd.id}}" name="pid" hidden>
+                                                <input type="text" name="pname" value="{{ prd.Product_name }}" class="form-control" readonly id="inp1">
                                             </div>
                                         </div>
                                         <div class="form-group row text-danger">
                                             <label class="col-sm-2 col-form-label  h6">MRP ₹ :</label>
                                             <div class="col-sm-3">
-                                                <input type="text" name="mrp" value="{{ p.MRP }}" class="form-control text-danger" readonly id="inp2">
+                                                <input type="text" name="mrp" value="{{ prd.MRP }}" class="form-control text-danger" readonly id="inp2">
                                             </div>
                                         </div>
                                         <div class="form-group row text-danger">
@@ -368,12 +304,12 @@
                                         
                                         <div class="form-group form-default mb-5">
                                             <label class="float-label h6">Product Details (highlights)</label>
-                                            <textarea class="form-control" required=""  name="hilights"  cols="10" rows="5"  readonly id="inp5">{{ p.products_dyl }}</textarea>
+                                            <textarea class="form-control" required=""  name="hilights"  cols="10" rows="5"  readonly id="inp5">{{ prd.products_dyl }}</textarea>
                                             <span class="form-bar"></span>
                                         </div>
                                         <div class="form-group form-default">
                                             <label class="float-label h6">Description (Detailed)</label>
-                                            <textarea class="form-control" required="" name ="desc" cols="10" rows="5" readonly id="inp6">{{ p.products_desc }}</textarea>
+                                            <textarea class="form-control" required="" name ="desc" cols="10" rows="5" readonly id="inp6">{{ prd.products_desc }}</textarea>
                                             <span class="form-bar"></span>
                                         </div>
                                         
@@ -392,7 +328,7 @@
                                         <button class="sub-title btn btn-outline-primary mt-5" id="subb" type="submit" style="display: none;"  onclick="return confirm( 'Confirm to submit changes' )" >submit changes</button>
                                     </div>
                                     </form>
-                                    {% endfor %}
+                             
                                     <div class="row">
 
                                     </div>
@@ -403,8 +339,10 @@
                             </div>
                         </div>
                     </div>
+                    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <script>
                                 function edit(){
+                                    Swal.fire('Edit mood enabeled','Now you can edit the product')
                                     document.getElementById('inp1').removeAttribute('readonly');
                                     document.getElementById('inp2').removeAttribute('readonly');
                                     document.getElementById('inp3').removeAttribute('readonly');
@@ -416,6 +354,7 @@
                                     document.getElementById('cats').style.display='block';
                                     document.getElementById('subb').style.display='block';
                                     document.getElementById('thum').style.display='block';
+                                    
                                 }
                         </script>
 

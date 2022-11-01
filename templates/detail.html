@@ -1,4 +1,5 @@
 {% load static %}
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -136,7 +137,7 @@
                             <img class=" w-100" src="{{ p.thumbnail.url }}" id="myimage" alt="Image"  style="object-fit: fill;" >
                         </div>
                             {% for i in images %}
-                        <div class="carousel-item" onmouseenter"zoom('#myimage{{forloop.counter}}')">
+                        <div class="carousel-item" onmouseenter="zoom('#myimage{{forloop.counter}}')">
                             <img class="w-100 " src="{{i.image.url}}" alt="Image" id="myimage{{forloop.counter}}"  style="object-fit: fill;" >
                         </div> 
                         {% endfor %}
@@ -165,7 +166,13 @@
                         <small class="pt-1">(99 Reviews)</small>
                     </div>
                     <h3 class="font-weight-semi-bold mb-4 text-danger col float-left"><del>₹ {{ p.MRP }} /-</del></h3>
-                    <h3 class="font-weight-semi-bold mb-4 text-success col">₹ {{ p.price }}/-</h3>
+                    {% if p.Offer %} 
+                    <h3 class="font-weight-semi-bold mb-4 text-success col">₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h3>
+                {% elif p.category.offer %}
+                <h3 class="font-weight-semi-bold mb-4 text-success col">₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h3>
+                {% else %}
+                <h3 class="font-weight-semi-bold mb-4 text-success col" >₹ {{p.price}} /-</h3>
+                {% endif %}
                     <p class="mb-4 h6">{{ p.products_dyl }}</p>
 
 
@@ -330,6 +337,10 @@
                     {% for p in Like %}
                     <div class="product-item bg-light" onclick="window.location = '{% url 'detail' p.id %}'">
                         <div class="product-img position-relative overflow-hidden">
+                            {% if p.Offer %}<a class="bg-danger position-absolute text-light bolder py-1 px-2 border border-light rounded m-3 h6">{{p.Disrate}}% OFF</a>
+                        {% elif p.category.offer %}
+                        <a class="bg-danger position-absolute text-light bolder py-1 px-2 border border-light rounded m-3 h6">{{ p.category.offer_rate|floatformat:"0"}} % OFF</a>
+                        {% endif %}
                             <img class="img-fluid w-100" src="{{ p.thumbnail.url }}" alt="">
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square" onclick="addtocart(p.id)"><i
@@ -341,8 +352,15 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">{{p.Product_name}}</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5 class="text-success">{{p.price}}</h5>
+                                {% if p.Offer %} 
+                            <h5 class="text-success" >₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h5>
+                        {% elif p.category.offer %}
+                        <h5 class="text-success" >₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h5>
+                        {% else %}
+                        <h5 class="text-success" >₹ {{p.price}} /-</h5>
+                        {% endif %}
                                 <h6 class="text-muted ml-2 text-danger"><del>{{p.MRP}}</del></h6>
+                                
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>

@@ -263,9 +263,9 @@
                         </div>
                         <div class="flex-fill pl-3">
                             <h6 class="h5">{{ c.category_name }}</h6>
-                            <small class="text-body col">Items in category : <span class="h6">{{ c.count }}</span></small><br>
+                            <small class="text-body col">Items in category : <span class="h6">{{ c.prds }}</span></small><br>
                             {% if c.offer %}
-                            <p class=" col font-weight-bolder text-danger">&nbsp;{{c.offer_rate|floatformat:"0"}}&nbsp;%&nbsp;OFF on {{c.category_name}}</span></small>
+                            <p class=" col font-weight-bolder text-danger">&nbsp;{{c.offer_rate|floatformat:"0"}}&nbsp;%&nbsp;OFF every products</span></small>
                             {% endif %}
                         </div>
                     </div>
@@ -302,7 +302,7 @@
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h6 class="text-muted ml-2"><del class="text-danger mx-2">₹ {{ p.MRP }} /-</del></h6>
                             {% if p.Offer %} 
-                            <h5 class="text-success mx-2" >₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h5>
+                            <h5 class="text-success mx-2" >₹ {{p.MRP|sub:p.Dis |floatformat:"0"}} /-</h5>
                         {% elif p.category.offer %}
                         <h5 class="text-success mx-2" >₹ {{p.MRP|sub:p.Dis|floatformat:"0"}} /-</h5>
                         {% else %}

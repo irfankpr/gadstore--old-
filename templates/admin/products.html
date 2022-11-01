@@ -231,12 +231,16 @@
                                 </div>
                                 <div class="mobile-search waves-effect waves-light d-flex m-0 p-0">
                                     <div class="header-search col-9 ">
+                                        <form action="">
                                         <div class="main-search morphsearch-search col-7">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Search products">
+                                               
+                                                <input type="text" value="{{key}}" name="key" class="form-control" placeholder="Search products">
                                                 <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                            
                                             </div>
                                         </div>
+                                    </form>
                                     </div>
                                     <div class="col-2 m-0 p-0"><a href="addnewproduct" class="btn btn-outline-info">Add new product</a></div>
                                     {% for msg in messages %}

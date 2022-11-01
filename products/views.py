@@ -62,7 +62,6 @@ def addsubcat(request):
         return redirect('category')
 
 
-
 def add_cart(request):
     id = request.GET['proid']
 
@@ -72,9 +71,15 @@ def add_cart(request):
     obj.user_id = userprofiles.objects.get(id=request.user.id)
     obj.product_id = products.objects.get(id=id)
     pr = products.objects.get(id=id)
-    obj.total = pr.price
+    if pr.Offer:
+        obj.total = pr.MRP - pr.Dis
+    elif pr.category.offer:
+        obj.total = pr.MRP - pr.Dis
+    else:
+        obj.total = pr.price
     obj.save()
-    return  JsonResponse ({'added': True})
+    return JsonResponse({'added': True})
+
 
 def cart_dlt(request, id):
     if request.method == 'GET':
@@ -83,15 +88,33 @@ def cart_dlt(request, id):
 
 
 def cart_count(request):
+    print(request.build_absolute_uri, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    print(request.get_full_path, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    print(request.path, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     if request.method == 'GET':
         c = request.GET['count']
         id = request.GET['cart']
         cart.objects.filter(id=id).update(count=F('count') + c)
         item = cart.objects.get(id=id)
         pr = products.objects.get(id=item.product_id_id)
-        cart.objects.filter(id=id).update(total=F('total') + pr.price)
+        if c == "1":
+            if pr.Offer:
+                cart.objects.filter(id=id).update(total=F('total') + int(pr.MRP - pr.Dis))
+            elif pr.category.offer:
+                cart.objects.filter(id=id).update(total=F('total') + int(pr.MRP - pr.Dis))
+            else:
+                cart.objects.filter(id=id).update(total=F('total') + pr.price)
+        else:
+            if pr.Offer:
+                cart.objects.filter(id=id).update(total=F('total') - int(pr.MRP - pr.Dis))
+            elif pr.category.offer:
+                cart.objects.filter(id=id).update(total=F('total') - int(pr.MRP - pr.Dis))
+            else:
+                cart.objects.filter(id=id).update(total=F('total') - pr.price)
+
         if cart.objects.filter(count=0):
             cart.objects.filter(count=0).delete()
             return JsonResponse({'removeProduct': True})
         else:
-            return JsonResponse({'price': pr.price})
+            it = cart.objects.get(id=id)
+            return JsonResponse({'total': it.total})

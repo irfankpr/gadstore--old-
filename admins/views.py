@@ -1,4 +1,5 @@
 import datetime
+import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q, Sum, F
@@ -128,7 +129,7 @@ def deleteproduct(request, id):
 @login_required(login_url='admin')
 @never_cache
 def product_dtl(request, pid):
-    prd = products.objects.filter(id=pid)
+    prd = products.objects.get(id=pid)
     cat = categories.objects.all()
     sub = sub_categories.objects.all()
     return render(request, "admin/product-edit.html", {'prd': prd, 'cat': cat, 'sub': sub})
@@ -174,10 +175,19 @@ def category(request):
 @never_cache
 def adm_products(request):
     if request.method == "GET":
-        product = products.objects.filter()
+
         cat = categories.objects.all()
-        p = render(request, 'admin/products.html', {'product': product, 'cat': cat})
-        return p
+        if 'key' in request.GET:
+            q = Q()
+            q = Q(Product_name__icontains=request.GET.get('key') | Q(
+                category__category_name__icontains=request.GET.get('key')))
+            product = products.objects.filter(q)
+            p = render(request, 'admin/products.html', {'product': product, 'cat': cat, 'key': request.GET.get('key')})
+            return p
+        else:
+            product = products.objects.filter()
+            p = render(request, 'admin/products.html', {'product': product, 'cat': cat})
+            return p
 
 
 @login_required(login_url='admin')
@@ -274,8 +284,8 @@ def dlt_coupon(request, id):
 @never_cache
 def Offers(request):
     if request.method == "GET":
-        cat = categories.objects.all()
-        return render(request, 'admin/Offers.html', {'cat': cat})
+        off = categories.objects.filter(offer=True)
+        return render(request, 'admin/Offers.html', {'offers': off})
 
 
 def addoffers(request):
@@ -291,3 +301,15 @@ def addoffers(request):
         products.objects.filter(category_id=id).update(Dis=((F('MRP') * rate) / 100))
         messages.error(request, 'New offer added')
         return redirect('Offers')
+
+
+def addPoffers(request):
+    if request.method == "POST":
+        id = request.POST['product']
+        prd = products.objects.get(id=id)
+        prd.Offer= True
+        offer = int (request.POST['Offer'])
+        prd.Disrate = offer
+        prd.Dis = int( (prd.MRP * offer)/100 )
+        prd.save()
+        return redirect(request.META.get('HTTP_REFERER'))
