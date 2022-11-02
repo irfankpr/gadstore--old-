@@ -29,6 +29,6 @@ urlpatterns = [
     path('admin/addoffer', views.addoffers, name="addoffer"),
     path('admin/add-product-offer', views.addPoffers, name="add-product-offer"),
     path('admin/dlt-offer', views.dlt_offer, name="dlt-offer"),
-    path('admin/down-exel', views.download_excel_data, name="down-exel"),
+    path('admin/down-exel', views.download, name="down-exel"),
 
 ]

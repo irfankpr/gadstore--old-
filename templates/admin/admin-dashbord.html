@@ -259,8 +259,8 @@
                                                     <div class="card-block">
                                                         <div class="row align-items-center">
                                                             <div class="col-8">
-                                                                <h4 class="text-c-purple">$30200</h4>
-                                                                <h6 class="text-muted m-b-0">All Earnings</h6>
+                                                                <h4 class="text-c-purple">{{todayords.count}}</h4>
+                                                                <h6 class="text-muted m-b-0">{{today}}</h6>
                                                             </div>
                                                             <div class="col-4 text-right">
                                                                 <i class="fa fa-bar-chart f-28"></i>
@@ -270,7 +270,7 @@
                                                     <div class="card-footer bg-c-purple">
                                                         <div class="row align-items-center">
                                                             <div class="col-9">
-                                                                <p class="text-white m-b-0">% change</p>
+                                                                <p class="text-white m-b-0">Today's orders</p>
                                                             </div>
                                                             <div class="col-3 text-right">
                                                                 <i class="fa fa-line-chart text-white f-16"></i>
@@ -285,8 +285,8 @@
                                                     <div class="card-block">
                                                         <div class="row align-items-center">
                                                             <div class="col-8">
-                                                                <h4 class="text-c-green">290+</h4>
-                                                                <h6 class="text-muted m-b-0">Page Views</h6>
+                                                                <h4 class="text-c-green">₹ {{todayords.rev}}</h4>
+                                                                <h6 class="text-muted m-b-0">{{today}}</h6>
                                                             </div>
                                                             <div class="col-4 text-right">
                                                                 <i class="fa fa-file-text-o f-28"></i>
@@ -296,7 +296,7 @@
                                                     <div class="card-footer bg-c-green">
                                                         <div class="row align-items-center">
                                                             <div class="col-9">
-                                                                <p class="text-white m-b-0">% change</p>
+                                                                <p class="text-white m-b-0">Today's revenue</p>
                                                             </div>
                                                             <div class="col-3 text-right">
                                                                 <i class="fa fa-line-chart text-white f-16"></i>
@@ -420,15 +420,33 @@
                                                      
                     
                                                     </div>
-                                                    <form action="{% url 'down-exel' %}">
-                                                    <div class="col-12 container-fluid row justify-content-center my-5">
+                                                    <form action="{% url 'down-exel' %}" class="d-flex justify-content-center col-12 my-5" target="_blank">
+                                                    <div class="col-12 container-fluid row justify-content-center">
                                                         <span class="text-muted align-middle h6">From :</span>
-                                                        <input class="col-3 mx-3 p-1 btn btn-outline-dark" id="fDate" name="fDate" type="date" required>
-                                                        <span class="text-muted mx-3 align-middle h6">To :</span>
-                                                        <input class="col-3 p-1 btn btn-outline-dark" id="tooDate" name="tDate" type="date" required >
-                                                        <button type="submit"  class=" h4 btn btn-outline-success mx-5"><i class="bi h6 bi-cloud-download-fill"></i></button>
-                                                   
+                                                        <input class="col-2 mx-3 p-1 btn btn-outline-dark" id="fDate" name="fDate" type="date" required>
+                                                        <span class="text-muted mx-2 align-middle h6">To :</span>
+                                                        <input class="col-2 p-1 btn btn-outline-dark" id="tooDate" name="tDate" type="date" required >
+                                                        <div class="btn-group p-0 mx-3"
+                                                                        data-toggle="buttons">
+
+                                                                        <label class="btn btn-outline-success active">
+                                                                            <input type="radio" name="type" checked
+                                                                                id="option2" value="XLS"
+                                                                                autocomplete="off">XLS
+                                                                        </label>
+
+                                                                        <label class="btn btn-outline-danger ">
+                                                                            <input type="radio" name="type" id="option3"
+                                                                                value="PDF" autocomplete="off">PDF
+                                                                        </label>
+                                                                       
+                                                                    </div>
                                                     </div>
+                                                    <button type="submit"
+                                                    class="font-weight-bolder  mx-4 btn btn-outline-success py-1"><span
+                                                        class="material-symbols-outlined">
+                                                        download_for_offline
+                                                    </span></button>
                                                 </form>
                                                 </div>
                                                

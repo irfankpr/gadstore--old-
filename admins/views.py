@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q, Sum, F
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import get_template
 from django.utils.text import slugify
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
@@ -12,6 +13,8 @@ from django.contrib.auth.models import auth
 from orders.models import orders, Coupons
 from profiles.models import userprofiles, cart
 from products.models import categories, products, sub_categories, prodtct_image
+from django.views.generic import View
+from admins.utils import render_to_pdf  # created in step 4
 
 
 @never_cache
@@ -153,19 +156,19 @@ def adminhome(request):
         sales = orders.objects.filter(date__month=today.month).values('date__date').annotate(
             sales=Count('id', filter=Q(status='Delivered'))).order_by(
             'date__date')
-
+        todayords = orders.objects.filter(date__date=today).annotate(rev=Sum('Total'))
         # monthly sales
         months = orders.objects.values('date__date__month').annotate(
             sales=Sum('Total', filter=Q(status='Delivered'))).order_by('-date__date__month')[:6]
 
         return render(request, 'admin/admin-dashbord.html',
-                      {'admins': admins, 'products': p, 'dates': dates, 'returns': returns, 'sales': sales,
-                       'months': months})
+                      {'admins': admins, 'products': p, 'dates': dates, 'returns': returns, 'sales': sales,'today':today.date,
+                       'todayords':todayords,'months': months})
     else:
         return redirect('admin')
 
 
-@login_required(login_url='admin')
+@login_required(login_url='/')
 @never_cache
 def category(request):
     cat = categories.objects.all()
@@ -285,8 +288,9 @@ def dlt_coupon(request, id):
 @never_cache
 def Offers(request):
     if request.method == "GET":
+        cat = categories.objects.all()
         off = categories.objects.filter(offer=True)
-        return render(request, 'admin/Offers.html', {'offers': off})
+        return render(request, 'admin/Offers.html', {'offers': off,'cat':cat})
 
 
 def addoffers(request):
@@ -334,6 +338,16 @@ def dlt_offer(request):
             cat.offer_tittle = None
             cat.maxlimit = 0
             cat.save()
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+def download(request):
+    if request.method == "GET":
+        if request.GET['type'] == 'PDF':
+            return GeneratePdf(request)
+        elif request.GET['type'] == 'XLS':
+            return download_excel_data(request)
+    else:
         return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -397,3 +411,33 @@ def download_excel_data(request):
     except:
         messages.error(request, 'something went wrong try again')
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+def GeneratePdf(request):
+    too = request.GET['tDate']
+    frm = request.GET['fDate']
+    ord = orders.objects.filter(date__range=(frm, too)).order_by('date')
+    prdc = orders.objects.filter(date__range=(frm, too)).values('product_id').annotate(
+        sales=Sum('Total', filter=Q(status='Delivered'))).order_by(
+        'date__date')
+
+    template = get_template('admin/sales_rep.html')
+    data = {
+        'today': datetime.date.today(),
+        'orders': ord,
+        'range': str(frm) + " - " + str(too),
+        'prdc': prdc,
+    }
+    html = template.render(data)
+    pdf = render_to_pdf('admin/sales_rep.html', data)
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "sales_rep.html_%s.pdf " % ('12341231')
+        content = "inline; filename='%s'" % (filename)
+
+        download = request.GET.get('download')
+        if download:
+            content = "attachment; filename='%s'" % (filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse(pdf, content_type='application/pdf')

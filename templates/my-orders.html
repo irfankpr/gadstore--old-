@@ -110,7 +110,9 @@
                             <td class=" align-middle text-success h5">₹&nbsp; {{o.Total}} /-</td>
                             <td class=" align-middle h5">{{o.quantity}}</td>
                             <td class=" align-middle h5">{{o.date.date}}</td>
-                            <td class=" align-middle h5">{{o.payment}}</td>
+                            <td rowspan="2" class=" align-middle h5">{{o.payment}} <br>{% if  o.status == 'Delivered' %} <a class="btn btn-secondary" target="_blank" href="{% url 'invoice' o.id %}"><span class="material-symbols-outlined">
+                                description
+                                </span></a> {% endif %}</td>
                              <td rowspan="2" class="align-middle h5 font-weight-bolder text-info p-0 m-0" >
                                 {% if o.status == 'Delivered' %} 
                                 <a data-toggle="modal" data-target="#return{{forloop.counter}}" class="btn btn-outline-info rounded h5">Return</a>

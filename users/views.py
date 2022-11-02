@@ -1,9 +1,11 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q, F
+from django.db.models import Count, Q, F, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string, get_template
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import auth
@@ -12,6 +14,8 @@ from profiles.models import userprofiles, cart, walletTrans
 from OTP.views import otpgen
 from products.models import categories, products, sub_categories, prodtct_image
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
+
+from users.utils import render_to_pdf
 
 
 # Create your views here.
@@ -195,7 +199,7 @@ def cshop(request):
                                     {'products': prds, 'key': key, 'cat': cat, 'subcat': subcat, 'count': count})
             return HttpResponse(html)
 
-
+@login_required(login_url='log')
 @never_cache
 def cartv(request):
     crt = cart.objects.filter(user_id=request.user.id).order_by('product_id')
@@ -235,3 +239,25 @@ def wallet(request):
         trans = walletTrans.objects.filter(user_id=request.user.id).order_by('-date')
         count = cart.objects.filter(user_id=request.user.id).count()
         return render(request, 'wallet.html', {'count': count, 'trans': trans})
+
+
+def Generateinvoice(request, id):
+    ord = orders.objects.get(id=id)
+    template = get_template('admin/invoice_template.html')
+    data = {
+        'today': datetime.date.today(),
+        'order': ord,
+    }
+    html = template.render(data)
+    pdf = render_to_pdf('admin/invoice_template.html', data)
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "invoice_template.html_%s.pdf " % ('12341231')
+        content = "inline; filename='%s'" % (filename)
+
+        download = request.GET.get('download')
+        if download:
+            content = "attachment; filename='%s'" % (filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse(pdf, content_type='application/pdf')

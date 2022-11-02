@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -62,6 +63,8 @@ def addsubcat(request):
         return redirect('category')
 
 
+@login_required(login_url='log')
+@never_cache
 def add_cart(request):
     id = request.GET['proid']
 
