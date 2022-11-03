@@ -12,12 +12,12 @@ import profiles.models
 
 # Create your views here.
 class otpgen():
-    Otp = None
-    phone = None
+    Otp = 0
+    phone = 0
 
     def send_otp(phone):
         account_ssid = 'ACe6367b4e0523f007dac124700c291ac2'
-        auth_token = 'a1681456f114c9584c601772c727d846'
+        auth_token = '1e54bc0736bd08b3ad9fc74fb1244f09'
         target_number = '+91' + phone
         print(phone)
         twilio_number = '+19035679739'
