@@ -199,7 +199,7 @@ def cshop(request):
                                     {'products': prds, 'key': key, 'cat': cat, 'subcat': subcat, 'count': count})
             return HttpResponse(html)
 
-@login_required(login_url='log')
+
 @never_cache
 def cartv(request):
     crt = cart.objects.filter(user_id=request.user.id).order_by('product_id')

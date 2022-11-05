@@ -31,57 +31,8 @@
 </head>
 
 <body>
-      <!-- Topbar Start -->
-      <div class="container-fluid">
-       
-           
-        <div class="row container-fluid justify-content-between col-12 bg-light py-3 px-xl-5 d-none d-lg-flex">
-            <div class="col-lg-4">
-                <a href="" class="text-decoration-none">
-                    <img src="{% static 'images/b-ylogo.svg' %}" class="col-7 m-0" alt="">
-                </a>
-            </div>
-           
-            <div class="col-lg-1 col-6 text-right ">
-                <div class="btn-group mx-2">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle p-0 m-0" data-toggle="dropdown"><h3 class="material-symbols-outlined m-0 p-0 cursor-pointer">
-                        account_circle
-                        </h3></button>
-                    <div class="dropdown-menu dropdown-menu-right bg-dark rounded px-5 py-3">
-                        <a class="dropdown-item  text-warning" type="button" href="my-profile">Profile</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button" href="{% url 'cartv' %}">Cart</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button">Fav list</a>
-                        <a class="dropdown-item mt-4 text-warning" type="button">Orders</a>
-                        <a class="dropdown-item mt-4 text-dark bg-warning" href="usr-logout" type="button">Log out</a>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
-
-
-    <!-- Navbar Start -->
-
-    <!-- Navbar End -->
-
-
-    <!-- Breadcrumb Start -->
-    <div class="container-fluid topper">
-        <div class="row px-xl-5">
-            <div class="col-12">
-                <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active font-weight-bolder">My orders</span>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <!-- Breadcrumb End -->
-
-
+    {% include 'Components/topbar.html' %}
+   
     <!-- Cart Start -->
     <div class="container-fluid">
         <div class="row px-xl-5 justify-content-center">
