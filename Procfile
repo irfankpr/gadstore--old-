@@ -1,1 +1,1 @@
-web: gunicorn GADstore.wsgi
+web gunicorn GADstore.wsgi:apllication --log-file -
